@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ThemeToggle() {
   const [isLight, setIsLight] = useState(false);
 
+  const heightWidth = "35px !important";
+
   const darkStyles = {
+    height: heightWidth,
+    width: heightWidth,
     backgroundColor: "var(--color-static-light-background)",
     borderColor: "var(--color-static-light-border)",
     color: "var(--color-static-light-foreground)",
@@ -13,6 +17,8 @@ export default function ThemeToggle() {
     borderStyle: "solid",
   };
   const lightStyles = {
+    height: heightWidth,
+    width: heightWidth,
     backgroundColor: "var(--color-static-dark-background)",
     borderColor: "var(--color-static-dark-border)",
     color: "var(--color-static-dark-foreground)",
