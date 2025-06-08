@@ -1,59 +1,77 @@
-import fs from "fs/promises"; // Node.js promise-based file system API
-import path from "path"; // Cross-platform path utility
-import matter from "gray-matter"; // Parses frontmatter from Markdown/MDX files
+import fs from "fs/promises";
+import path from "path";
+import matter from "gray-matter";
 
-/**
- * Type definition for blog post metadata extracted from frontmatter.
- * These fields are critical for SEO and accessibility:
- * - `title` and `summary` help describe the page for users and crawlers
- * - `slug` is used in URLs
- * - `tags` support filtering and discoverability
- */
 export type PostMeta = {
+  author?: string;
   title: string;
   slug: string;
   summary: string;
   date: string;
   tags: string[];
-  // Optionally: add `image`, `image_alt`, `author`, `readingTime`, etc.
+  image?: string;
+  featured?: boolean;
 };
 
-// Define the folder where all MDX blog posts are stored
 const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
-/**
- * Reads all MDX blog files and extracts consistent, SEO-friendly metadata.
- * Returns a list of posts sorted by date (newest first).
- */
+// 🔒 Optional: Memoization
+// let cachedPosts: PostMeta[] | null = null;
+
 export async function getAllPosts(): Promise<PostMeta[]> {
+  // if (cachedPosts) return cachedPosts;
+
   const files = await fs.readdir(POSTS_DIR);
+  const seenSlugs = new Set<string>();
 
-  const posts: PostMeta[] = await Promise.all(
-    files
-      // Only process `.mdx` blog files
-      .filter((file) => file.endsWith(".mdx"))
-      .map(async (filename) => {
-        const filePath = path.join(POSTS_DIR, filename);
-        const fileContent = await fs.readFile(filePath, "utf8");
+  const posts: PostMeta[] = [];
 
-        // Parse frontmatter from the file
-        const { data } = matter(fileContent);
+  for (const filename of files.filter((file) => file.endsWith(".mdx"))) {
+    const filePath = path.join(POSTS_DIR, filename);
+    const fileContent = await fs.readFile(filePath, "utf8");
+    const { data, content } = matter(fileContent);
 
-        // Validate and normalize fields for SEO + accessibility
-        return {
-          title: data.title?.trim() || "Untitled Post",
-          slug: data.slug?.trim() || filename.replace(/\.mdx$/, ""),
-          summary: data.summary?.trim() || "No summary provided.",
-          date: data.date,
-          tags: Array.isArray(data.tags)
-            ? data.tags.map((tag: string) => tag.toLowerCase())
-            : [],
-        };
-      })
-  );
+    // 🔍 Extract values with fallback
+    const title = data.title?.trim();
+    const slug = data.slug?.trim() || filename.replace(/\.mdx$/, "");
+    const date = data.date;
+    const tags = Array.isArray(data.tags)
+      ? data.tags.map((tag: string) => tag.toLowerCase())
+      : [];
 
-  // Sort posts from newest to oldest based on `date`
-  return posts.sort(
+    // ❌ Validate required fields
+    if (!title || !date) {
+      throw new Error(
+        `Missing required frontmatter in ${filename}. "title" and "date" are required.`
+      );
+    }
+
+    // ❌ Check for slug collision
+    if (seenSlugs.has(slug)) {
+      throw new Error(
+        `Duplicate slug "${slug}" found in ${filename}. Slugs must be unique.`
+      );
+    }
+    seenSlugs.add(slug);
+
+    // ✅ Add post
+    posts.push({
+      title,
+      slug,
+      summary: data.summary?.trim() || content.slice(0, 200).trim() + "...",
+      date: new Date(date).toISOString(),
+      tags,
+      image: data.image || undefined,
+      author: data.author?.trim() || "Staff Writer",
+      featured: !!data.featured,
+    });
+  }
+
+  const sortedPosts = posts.sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+
+  // cachedPosts = sortedPosts;
+
+  return sortedPosts;
 }

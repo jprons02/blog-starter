@@ -26,7 +26,12 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         placeholder="Search blog posts..."
         value={value}
         onChange={handleChange}
-        className="w-full rounded-xl border border-gray-300 dark:border-zinc-700 px-4 py-3 text-sm bg-white dark:bg-zinc-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[--color-primary] transition"
+        style={{
+          backgroundColor: "var(--color-card-bg)",
+          border: "1px solid var(--color-card-border)",
+          color: "var(--color-card-text)",
+        }}
       />
     </div>
   );

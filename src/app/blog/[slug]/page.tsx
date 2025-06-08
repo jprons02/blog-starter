@@ -1,61 +1,60 @@
-import fs from "fs/promises"; // Node.js API for reading local files
-import path from "path"; // Utility for resolving file paths
-import matter from "gray-matter"; // Parses frontmatter from MDX content
-import Image from "next/image"; // Optimized image component from Next.js
-import { MDXRemote } from "next-mdx-remote/rsc"; // Renders MDX content server-side
+import fs from "fs/promises"; // Asynchronous file system access
+import path from "path"; // Cross-platform path manipulation
+import matter from "gray-matter"; // Parses frontmatter (YAML) from markdown files
+import Image from "next/image"; // Optimized image component for Next.js
+import { MDXRemote } from "next-mdx-remote/rsc"; // Renders MDX content server-side (RSC-compatible)
 
-/**
- * Server component that renders an individual blog post.
- * This file corresponds to the route /blog/[slug].
- */
+// 📌 Ensures the route is statically generated at build time
+export const dynamic = "force-static";
+
+// 📄 Renders a single blog post based on the MDX file matched by its slug
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>; // ⚠️ Bug workaround — should be non-promise in stable Next.js
 }) {
-  // 🧠 Await the `slug` from route parameters (required for dynamic routing)
   const { slug } = await params;
 
-  // 📁 Construct the path to the MDX file based on the slug
+  // Resolve and read the MDX file
   const filePath = path.join("content/posts", `${slug}.mdx`);
-
-  // 📄 Read the file contents as text
   const fileContent = await fs.readFile(filePath, "utf8");
 
-  // 🔍 Extract frontmatter and content from the MDX file
+  // Extract frontmatter and markdown content
   const { content, data } = matter(fileContent);
 
   return (
     <article className="prose prose-lg dark:prose-invert max-w-3xl mx-auto py-12 px-4">
-      {/* 🖼️ Render cover image if it exists in frontmatter */}
+      {/* 📷 Optional featured image */}
       {data.image && (
         <div className="mb-6">
           <Image
             src={data.image}
-            alt={data.title} // ✅ Accessible alt text using the post title (can be improved with `image_alt`)
+            alt={data.title}
             width={800}
             height={400}
             className="rounded-xl w-full h-auto object-cover"
-            priority // ✅ Optimize for loading performance
+            priority
           />
         </div>
       )}
 
-      {/* 📝 Blog post title as main heading — important for SEO & accessibility */}
-      <h1>{data.title}</h1>
-
-      {/* 🗓️ Post publish date */}
-      <p className="text-sm text-gray-500 dark:text-gray-400">
+      {/* 📝 Title and date */}
+      <h1 style={{ color: "var(--color-foreground)" }}>{data.title}</h1>
+      <p className="text-sm" style={{ color: "var(--color-muted-text)" }}>
         {new Date(data.date).toLocaleDateString()}
       </p>
 
-      {/* 🏷️ Tags — helpful for filtering and SEO keyword density */}
+      {/* 🏷️ Tags, if available */}
       {Array.isArray(data.tags) && (
         <div className="flex flex-wrap gap-2 my-4">
           {data.tags.map((tag: string) => (
             <span
               key={tag}
-              className="text-xs font-medium bg-blue-100 dark:bg-blue-800 dark:text-white text-blue-800 px-2 py-1 rounded-full uppercase tracking-wide"
+              className="text-xs font-medium px-2 py-1 rounded-full uppercase tracking-wide"
+              style={{
+                backgroundColor: "var(--color-tag-bg)",
+                color: "var(--color-tag-text)",
+              }}
             >
               #{tag}
             </span>
@@ -63,8 +62,39 @@ export default async function BlogPostPage({
         </div>
       )}
 
-      {/* 📚 Render the actual Markdown/MDX content of the blog post */}
-      <MDXRemote source={content} />
+      {/* 📚 Render markdown content */}
+      <div className="markdown-body text-base leading-relaxed">
+        <MDXRemote source={content} />
+      </div>
     </article>
   );
+}
+
+// 🧠 Generate SEO metadata from the MDX frontmatter
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>; // ⚠️ Same workaround as above
+}) {
+  const { slug } = await params;
+
+  const filePath = path.join("content/posts", `${slug}.mdx`);
+  const fileContent = await fs.readFile(filePath, "utf8");
+  const { data } = matter(fileContent);
+
+  return {
+    title: data.title,
+    description: data.summary || data.excerpt || "",
+    openGraph: {
+      title: data.title,
+      description: data.summary || data.excerpt || "",
+      images: data.image ? [{ url: data.image }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.title,
+      description: data.summary || data.excerpt || "",
+      images: data.image ? [data.image] : [],
+    },
+  };
 }

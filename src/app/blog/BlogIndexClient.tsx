@@ -3,114 +3,111 @@
 import { useState } from "react";
 import Fuse from "fuse.js";
 import Link from "next/link";
+import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
-
-type PostMeta = {
-  title: string;
-  slug: string;
-  summary: string;
-  date: string;
-  tags: string[];
-};
+import BlogCard from "@/app/components/BlogCard";
+import type { PostMeta } from "@/lib/posts";
 
 export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  // Initialize fuzzy search on title, summary, and tags
+  // 🔍 Initialize fuzzy search using title, summary, and tags
   const fuse = new Fuse(posts, {
     keys: ["title", "summary", "tags"],
     threshold: 0.3,
   });
 
-  // Filter by search query first, then tag
+  // 🧠 Filter posts by search query first
   let filtered = searchQuery
     ? fuse.search(searchQuery).map((r) => r.item)
     : posts;
 
+  // 🧼 Further filter by selected tag
   if (selectedTag) {
     filtered = filtered.filter((post) => post.tags?.includes(selectedTag));
   }
 
-  const filteredPosts = filtered;
+  // 💎 Separate featured post from the rest
+  const featured = filtered.find((p) => p.featured);
+  const postsWithoutFeatured = filtered.filter((p) => !p.featured);
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-12">
-      {/* Blog heading */}
-      <h1 className="text-4xl font-bold mb-6 dark:text-white text-gray-900">
-        Blog
-      </h1>
-
-      {/* Search bar */}
-      <SearchBar onSearch={setSearchQuery} />
-
-      {/* Active tag filter with reset */}
+    <main className="max-w-6xl mx-auto px-4 py-14">
+      {/* 🎯 Active tag filter display */}
       {selectedTag && (
         <div className="mb-6">
-          <span className="text-sm text-gray-600 dark:text-gray-300">
+          <span
+            className="text-sm"
+            style={{ color: "var(--color-muted-text)" }}
+          >
             Filtering by tag:
-            <span className="ml-1 font-semibold text-blue-600 dark:text-blue-400">
+            <span
+              className="ml-1 font-semibold"
+              style={{ color: "var(--color-foreground)" }}
+            >
               #{selectedTag}
             </span>
           </span>
           <button
             onClick={() => setSelectedTag(null)}
-            className="ml-4 text-sm text-blue-600 hover:underline"
+            className="ml-4 text-sm cursor-pointer"
+            style={{
+              color: "var(--color-primary)",
+              textDecoration: "underline",
+            }}
           >
             Clear filter
           </button>
         </div>
       )}
 
-      {/* Posts list */}
-      <div className="grid gap-8">
-        {filteredPosts.map((post) => (
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="block group"
-          >
-            <article className="rounded-2xl border border-gray-200 dark:border-zinc-700 p-6 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-shadow duration-300">
-              {/* Post title */}
-              <h2 className="text-2xl font-semibold text-blue-700 dark:text-blue-400 group-hover:underline">
-                {post.title}
+      {/* 🌟 Featured Post Hero */}
+      {featured && (
+        <Link
+          href={`/blog/${featured.slug}`}
+          className="block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all mb-6"
+        >
+          <div className="relative h-72 sm:h-96 w-full">
+            <Image
+              src={featured.image!}
+              alt={featured.title}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+              <h2
+                className="text-3xl sm:text-5xl font-bold mb-3"
+                style={{ color: "var(--color-static-dark-foreground" }}
+              >
+                {featured.title}
               </h2>
-
-              {/* Post date */}
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                {new Date(post.date).toLocaleDateString()}
+              <p
+                className="text-sm sm:text-base max-w-2xl line-clamp-3"
+                style={{ color: "var(--color-static-dark-muted-text)" }}
+              >
+                {featured.summary}
               </p>
+            </div>
+          </div>
+        </Link>
+      )}
 
-              {/* Summary for SEO and preview */}
-              <p className="text-gray-700 dark:text-gray-300 mt-3 line-clamp-3">
-                {post.summary}
-              </p>
+      {/* 🔍 Search Bar */}
+      <div className="mb-12">
+        <SearchBar onSearch={setSearchQuery} />
+      </div>
 
-              {/* Tags (clickable buttons that filter posts) */}
-              {Array.isArray(post.tags) && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {post.tags.map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedTag((prev) => (prev === tag ? null : tag));
-                      }}
-                      className={`text-xs font-medium px-2 py-1 rounded-full uppercase tracking-wide transition
-                        ${
-                          selectedTag === tag
-                            ? "bg-blue-700 text-white"
-                            : "bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-white"
-                        }`}
-                      aria-label={`Filter by ${tag}`}
-                    >
-                      #{tag}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </article>
-          </Link>
+      {/* 🧱 Blog Card Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {postsWithoutFeatured.map((post) => (
+          <BlogCard
+            key={post.slug}
+            post={post}
+            selectedTag={selectedTag}
+            onTagClick={setSelectedTag}
+          />
         ))}
       </div>
     </main>
