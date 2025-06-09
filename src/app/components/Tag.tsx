@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 type TagProps = {
   name: string;
   selected?: boolean;
@@ -29,7 +31,7 @@ export default function Tag({ name, selected, onClick }: TagProps) {
 
   return (
     <TagEl
-      onClick={(e: any) => {
+      onClick={(e: React.MouseEvent<HTMLButtonElement | HTMLSpanElement>) => {
         if (onClick) {
           e.preventDefault();
           onClick(name);
