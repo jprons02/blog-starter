@@ -1,7 +1,6 @@
-import { getAllPosts } from "@/lib/posts";
-import BlogIndexClient from "./BlogIndexClient";
+// This page redirects to the main blog index
+import { redirect } from "next/navigation";
 
-export default async function BlogIndexPage() {
-  const posts = await getAllPosts();
-  return <BlogIndexClient posts={posts} />;
+export default function BlogRedirect() {
+  redirect("/");
 }

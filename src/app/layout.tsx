@@ -1,5 +1,4 @@
 import "./globals.css";
-import ThemeToggle from "@/app/components/ToggleButtonLightDark";
 import NavBar from "@/app/components/NavBar";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 
@@ -30,10 +29,6 @@ export default function RootLayout({
       <body>
         <NavBar />
         {children}
-
-        <div className="fixed bottom-4 right-4 z-50">
-          <ThemeToggle />
-        </div>
       </body>
     </html>
   );

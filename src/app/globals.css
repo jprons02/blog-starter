@@ -13,10 +13,12 @@
   --color-static-dark-muted-text: #94a3b8;
   --color-static-dark-border: #334155;
   --color-static-dark-background: #0f172a;
+  --color-static-dark-primary: #00ff0a;
   --color-static-light-foreground: #111827;
   --color-static-light-muted-text: #6b7280;
   --color-static-light-border: #e5e7eb;
   --color-static-light-background: #f9fafb;
+  --color-static-light-primary: #b70086;
 
   /* Base Colors */
   --color-background: #0f172a;

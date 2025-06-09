@@ -6,34 +6,31 @@ import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
 import BlogCard from "@/app/components/BlogCard";
+//import FadeIn from "@/app/components/FadeIn";
 import type { PostMeta } from "@/lib/posts";
 
 export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  // 🔍 Initialize fuzzy search using title, summary, and tags
   const fuse = new Fuse(posts, {
     keys: ["title", "summary", "tags"],
     threshold: 0.3,
   });
 
-  // 🧠 Filter posts by search query first
   let filtered = searchQuery
     ? fuse.search(searchQuery).map((r) => r.item)
     : posts;
 
-  // 🧼 Further filter by selected tag
   if (selectedTag) {
     filtered = filtered.filter((post) => post.tags?.includes(selectedTag));
   }
 
-  // 💎 Separate featured post from the rest
   const featured = filtered.find((p) => p.featured);
   const postsWithoutFeatured = filtered.filter((p) => !p.featured);
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-14">
+    <main className="max-w-6xl mx-auto px-4 py-8">
       {/* 🎯 Active tag filter display */}
       {selectedTag && (
         <div className="mb-6">
@@ -51,7 +48,7 @@ export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
           </span>
           <button
             onClick={() => setSelectedTag(null)}
-            className="ml-4 text-sm cursor-pointer"
+            className="ml-4 text-sm cursor-pointer hover:brightness-70"
             style={{
               color: "var(--color-primary)",
               textDecoration: "underline",
@@ -66,7 +63,7 @@ export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
       {featured && (
         <Link
           href={`/blog/${featured.slug}`}
-          className="block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all mb-6"
+          className="block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
         >
           <div className="relative h-72 sm:h-96 w-full">
             <Image
@@ -79,7 +76,7 @@ export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
               <h2
                 className="text-3xl sm:text-5xl font-bold mb-3"
-                style={{ color: "var(--color-static-dark-foreground" }}
+                style={{ color: "var(--color-static-dark-foreground)" }}
               >
                 {featured.title}
               </h2>
@@ -95,7 +92,7 @@ export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
       )}
 
       {/* 🔍 Search Bar */}
-      <div className="mb-12">
+      <div className="mt-12 mb-1">
         <SearchBar onSearch={setSearchQuery} />
       </div>
 

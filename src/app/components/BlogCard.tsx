@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
+import Tag from "@/app/components/Tag";
 
 type Props = {
   post: PostMeta;
@@ -67,30 +68,13 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
         {Array.isArray(post.tags) && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {post.tags.map((tag) => {
-              const isSelected = selectedTag === tag;
               return (
-                <button
+                <Tag
                   key={tag}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onTagClick?.(tag);
-                  }}
-                  className="text-xs font-medium px-2 py-1 rounded-full uppercase tracking-wide
-  transition-all duration-300 ease-in-out cursor-pointer
-  hover:shadow-sm hover:brightness-110"
-                  style={{
-                    fontWeight: "600",
-                    fontSize: "0.65rem",
-                    backgroundColor: isSelected
-                      ? "var(--color-tag-accent-bg)"
-                      : "var(--color-tag-bg)",
-                    color: isSelected
-                      ? "var(--color-tag-accent-text)"
-                      : "var(--color-tag-text)",
-                  }}
-                >
-                  #{tag}
-                </button>
+                  name={tag}
+                  selected={selectedTag === tag}
+                  onClick={onTagClick}
+                />
               );
             })}
           </div>
