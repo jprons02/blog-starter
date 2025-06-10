@@ -6,6 +6,7 @@ import Tag from "@/app/components/Tag";
 import Link from "next/link";
 import FadeIn from "@/app/components/FadeIn";
 import { MDXRemote } from "next-mdx-remote/rsc"; // Renders MDX content server-side (RSC-compatible)
+import { ArrowLeft } from "lucide-react";
 
 // 📌 Ensures the route is statically generated at build time
 export const dynamic = "force-static";
@@ -29,9 +30,16 @@ export default async function BlogPostPage({
     <article className="max-w-3xl mx-auto py-12 px-4">
       <Link
         href="/"
-        className="text-sm text-primary hover:underline block mb-4"
+        className="inline-flex items-center text-sm font-medium transition-colors hover:underline mb-3"
+        style={{
+          color: "var(--color-muted-text)",
+        }}
       >
-        ← Back to all posts
+        <ArrowLeft
+          className="w-4 h-4 mr-1 transition-transform"
+          style={{ strokeWidth: 2 }}
+        />
+        <span style={{ color: "inherit" }}>Back to Blog</span>
       </Link>
       {/* 📷 Optional featured image */}
       {data.image && (
@@ -108,3 +116,12 @@ export async function generateMetadata({
     },
   };
 }
+
+/**
+ * <Link
+        href="/"
+        className="text-sm text-primary hover:underline block mb-4"
+      >
+        ← Back to all posts
+      </Link>
+ */

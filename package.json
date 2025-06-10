@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "enrich:seo": "ts-node scripts/enrich-frontmatter.ts"
+    "enrich:seo": "ts-node scripts/enrich-frontmatter.ts",
+    "generate:post": "ts-node scripts/generate-post.ts"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.8",

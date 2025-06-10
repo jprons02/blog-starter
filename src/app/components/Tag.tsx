@@ -23,10 +23,8 @@ export default function Tag({ name, selected, onClick }: TagProps) {
   const style = {
     fontWeight: 600,
     fontSize: "0.65rem",
-    backgroundColor: selected
-      ? "var(--color-tag-accent-bg)"
-      : "var(--color-tag-bg)",
-    color: selected ? "var(--color-tag-accent-text)" : "var(--color-tag-text)",
+    backgroundColor: selected ? "var(--color-primary)" : "var(--color-tag-bg)",
+    color: selected ? "var(--color-background)" : "var(--color-tag-text)",
   };
 
   return (
