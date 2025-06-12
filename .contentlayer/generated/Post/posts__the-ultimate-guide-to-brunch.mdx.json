@@ -1,0 +1,26 @@
+{
+  "title": "The Ultimate Guide to Brunch",
+  "summary": "Learn all about brunch and how to make it the highlight of your day with this comprehensive guide. Get insights into popular brunch dishes, etiquette, and hosting tips.",
+  "date": "2022-01-10T00:00:00.000Z",
+  "tags": [
+    "brunch",
+    "food",
+    "morning",
+    "guide"
+  ],
+  "image": "https://images.pexels.com/photos/1426715/pexels-photo-1426715.jpeg",
+  "body": {
+    "raw": "\n# The Ultimate Guide to Brunch\n\nBrunch is a delightful combination of breakfast and lunch, often enjoyed on lazy weekend mornings. In this guide, we'll explore the wonders of brunch, popular dishes, and tips for hosting the perfect brunch gathering.\n\n## What is Brunch?\n\nBrunch is a leisurely meal that is typically enjoyed between breakfast and lunch hours. It offers a relaxed and indulgent dining experience, featuring a delightful blend of sweet and savory dishes.\n\n## Popular Brunch Dishes\n\n1. Eggs Benedict\n2. Belgian Waffles\n3. Avocado Toast\n4. Smoked Salmon Bagels\n\n## Brunch Etiquette\n\n- Dress comfortably but tastefully\n- Offer a variety of food and drink options\n- Be a gracious host and mingle with guests\n\n## Hosting Tips\n\n- Plan a menu with a mix of breakfast and lunch items\n- Create a cozy ambiance with floral centerpieces\n- Serve a signature brunch cocktail\n\n> Tip: Add a pop of color to your brunch table with fresh fruit and edible flowers.\n",
+    "code": "var Component=(()=>{var u=Object.create;var r=Object.defineProperty;var f=Object.getOwnPropertyDescriptor;var g=Object.getOwnPropertyNames;var p=Object.getPrototypeOf,m=Object.prototype.hasOwnProperty;var b=(i,e)=>()=>(e||i((e={exports:{}}).exports,e),e.exports),y=(i,e)=>{for(var t in e)r(i,t,{get:e[t],enumerable:!0})},h=(i,e,t,o)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let l of g(e))!m.call(i,l)&&l!==t&&r(i,l,{get:()=>e[l],enumerable:!(o=f(e,l))||o.enumerable});return i};var x=(i,e,t)=>(t=i!=null?u(p(i)):{},h(e||!i||!i.__esModule?r(t,\"default\",{value:i,enumerable:!0}):t,i)),w=i=>h(r({},\"__esModule\",{value:!0}),i);var s=b((_,a)=>{a.exports=_jsx_runtime});var B={};y(B,{default:()=>d,frontmatter:()=>k});var n=x(s()),k={title:\"The Ultimate Guide to Brunch\",summary:\"Learn all about brunch and how to make it the highlight of your day with this comprehensive guide. Get insights into popular brunch dishes, etiquette, and hosting tips.\",tags:[\"brunch\",\"food\",\"morning\",\"guide\"],date:\"2022-01-10\",image:\"https://images.pexels.com/photos/1426715/pexels-photo-1426715.jpeg\"};function c(i){let e={blockquote:\"blockquote\",h1:\"h1\",h2:\"h2\",li:\"li\",ol:\"ol\",p:\"p\",ul:\"ul\",...i.components};return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(e.h1,{children:\"The Ultimate Guide to Brunch\"}),`\n`,(0,n.jsx)(e.p,{children:\"Brunch is a delightful combination of breakfast and lunch, often enjoyed on lazy weekend mornings. In this guide, we'll explore the wonders of brunch, popular dishes, and tips for hosting the perfect brunch gathering.\"}),`\n`,(0,n.jsx)(e.h2,{children:\"What is Brunch?\"}),`\n`,(0,n.jsx)(e.p,{children:\"Brunch is a leisurely meal that is typically enjoyed between breakfast and lunch hours. It offers a relaxed and indulgent dining experience, featuring a delightful blend of sweet and savory dishes.\"}),`\n`,(0,n.jsx)(e.h2,{children:\"Popular Brunch Dishes\"}),`\n`,(0,n.jsxs)(e.ol,{children:[`\n`,(0,n.jsx)(e.li,{children:\"Eggs Benedict\"}),`\n`,(0,n.jsx)(e.li,{children:\"Belgian Waffles\"}),`\n`,(0,n.jsx)(e.li,{children:\"Avocado Toast\"}),`\n`,(0,n.jsx)(e.li,{children:\"Smoked Salmon Bagels\"}),`\n`]}),`\n`,(0,n.jsx)(e.h2,{children:\"Brunch Etiquette\"}),`\n`,(0,n.jsxs)(e.ul,{children:[`\n`,(0,n.jsx)(e.li,{children:\"Dress comfortably but tastefully\"}),`\n`,(0,n.jsx)(e.li,{children:\"Offer a variety of food and drink options\"}),`\n`,(0,n.jsx)(e.li,{children:\"Be a gracious host and mingle with guests\"}),`\n`]}),`\n`,(0,n.jsx)(e.h2,{children:\"Hosting Tips\"}),`\n`,(0,n.jsxs)(e.ul,{children:[`\n`,(0,n.jsx)(e.li,{children:\"Plan a menu with a mix of breakfast and lunch items\"}),`\n`,(0,n.jsx)(e.li,{children:\"Create a cozy ambiance with floral centerpieces\"}),`\n`,(0,n.jsx)(e.li,{children:\"Serve a signature brunch cocktail\"}),`\n`]}),`\n`,(0,n.jsxs)(e.blockquote,{children:[`\n`,(0,n.jsx)(e.p,{children:\"Tip: Add a pop of color to your brunch table with fresh fruit and edible flowers.\"}),`\n`]})]})}function d(i={}){let{wrapper:e}=i.components||{};return e?(0,n.jsx)(e,{...i,children:(0,n.jsx)(c,{...i})}):c(i)}return w(B);})();\n;return Component;"
+  },
+  "_id": "posts/the-ultimate-guide-to-brunch.mdx",
+  "_raw": {
+    "sourceFilePath": "posts/the-ultimate-guide-to-brunch.mdx",
+    "sourceFileName": "the-ultimate-guide-to-brunch.mdx",
+    "sourceFileDir": "posts",
+    "contentType": "mdx",
+    "flattenedPath": "posts/the-ultimate-guide-to-brunch"
+  },
+  "type": "Post",
+  "url": "posts/the-ultimate-guide-to-brunch"
+}

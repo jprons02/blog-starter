@@ -1,21 +1,18 @@
-// This script is a CLI tool that prompts the user for a blog topic,
-// uses OpenAI to generate an SEO-optimized blog post in MDX format,
-// fetches 3 relevant images from the Pexels API (landscape only),
-// and saves the post to the `content/posts` directory in Contentlayer-compatible format.
+// generate-post.ts
+// CLI tool to create Contentlayer-compatible blog posts using OpenAI and Pexels
 
 import fs from "fs/promises";
 import path from "path";
-import matter from "gray-matter";
+import dotenv from "dotenv";
 import OpenAI from "openai";
 import readline from "readline";
-import dotenv from "dotenv";
 import fetch from "node-fetch";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 const POSTS_DIR = "content/posts";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
+const PEXELS_API_KEY = process.env.PEXELS_API_KEY!;
 
 function promptUser(query: string): Promise<string> {
   const rl = readline.createInterface({
@@ -23,37 +20,33 @@ function promptUser(query: string): Promise<string> {
     output: process.stdout,
   });
   return new Promise((resolve) =>
-    rl.question(query, (answer) => {
+    rl.question(query, (ans) => {
       rl.close();
-      resolve(answer);
+      resolve(ans);
     })
   );
 }
 
-function getTodayDate() {
+function getTodayDate(): string {
   return new Date().toISOString().split("T")[0];
 }
 
-async function generatePost(
-  topic: string
-): Promise<{ frontmatter: any; content: string }> {
+async function generatePost(topic: string) {
   const toolDefinition: OpenAI.Chat.Completions.ChatCompletionTool = {
     type: "function",
     function: {
       name: "generate_blog_post",
-      description:
-        "Create a structured, SEO-optimized blog post about a topic.",
+      description: "Create a structured blog post with metadata.",
       parameters: {
         type: "object",
         properties: {
           title: { type: "string" },
           summary: { type: "string" },
-          slug: { type: "string" },
           tags: { type: "array", items: { type: "string" } },
           date: { type: "string" },
           content: { type: "string" },
         },
-        required: ["title", "summary", "slug", "tags", "date", "content"],
+        required: ["title", "summary", "tags", "date", "content"],
       },
     },
   };
@@ -61,16 +54,15 @@ async function generatePost(
   const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
     {
       role: "user",
-      content: `Write a fully fleshed-out blog post on: "${topic}" that includes:
+      content: `Write a detailed MDX blog post on: "${topic}".
+Include:
+- SEO-friendly summary
+- Tags and ISO 8601 date
+- Short intro, 4+ sections, bullet and number list
+- A tip in a blockquote
+- Valid Markdown formatting for MDX
 
-- A strong H1 title
-- SEO-optimized summary, slug, tags, and date
-- A short introductory paragraph
-- At least 4 sections with H2s and H3s if needed
-- One bulleted list (\* or -) and one numbered list (1. 2. 3.)
-- One blockquote with a tip or insight
-- Natural language with helpful, informative tone
-- Well-structured Markdown with ul/li and MDX-safe formatting`,
+Do NOT include an H1 heading.`,
     },
   ];
 
@@ -81,96 +73,73 @@ async function generatePost(
     tool_choice: { type: "function", function: { name: "generate_blog_post" } },
   });
 
-  const toolCall = response.choices[0].message?.tool_calls?.[0];
-  if (!toolCall || !toolCall.function?.arguments) {
-    throw new Error("No tool_call or arguments returned by OpenAI.");
-  }
+  const args =
+    response.choices[0].message?.tool_calls?.[0]?.function?.arguments;
+  if (!args) throw new Error("OpenAI returned no arguments.");
 
-  const parsed = JSON.parse(toolCall.function.arguments);
-  const { title, summary, slug, tags, date, content: rawContent } = parsed;
-  const cleanedContent = rawContent.replace(/^# .*?\n+/i, "").trim();
-
-  return {
-    frontmatter: { title, summary, slug, tags, date },
-    content: `# ${title}\n\n${cleanedContent}`,
-  };
+  const { title, summary, tags, date, content } = JSON.parse(args);
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+  return { title, summary, tags, date, slug, content };
 }
 
-async function getPexelsImages(): Promise<{ url: string; alt: string }[]> {
-  const keyword = await promptUser(
-    "\n🔍 Enter 1-2 keywords to search for images on Pexels: "
-  );
+interface PexelsPhoto {
+  alt: string;
+  src: { original: string };
+  photographer: string;
+}
 
-  if (!PEXELS_API_KEY) {
-    console.error("❌ Missing PEXELS_API_KEY in .env.local");
-    return [];
-  }
-
-  interface PexelsPhoto {
-    alt: string;
-    src: { original: string };
-    photographer: string;
-  }
-
-  const response = await fetch(
+async function fetchImages(): Promise<{ url: string; alt: string }[]> {
+  const keyword = await promptUser("\n🔍 Keyword(s) for Pexels image: ");
+  const res = await fetch(
     `https://api.pexels.com/v1/search?query=${encodeURIComponent(
       keyword
-    )}&orientation=landscape&per_page=5`,
+    )}&orientation=landscape&per_page=3`,
     {
-      headers: {
-        Authorization: PEXELS_API_KEY,
-      },
+      headers: { Authorization: PEXELS_API_KEY },
     }
   );
-
-  if (!response.ok) {
-    console.error("❌ Failed to fetch images from Pexels API.");
-    return [];
-  }
-
-  const data = (await response.json()) as { photos: PexelsPhoto[] };
-
-  return data.photos.slice(0, 3).map((photo) => ({
-    url: photo.src.original,
-    alt: photo.alt || `Image from Pexels by ${photo.photographer}`,
+  const data = (await res.json()) as { photos: PexelsPhoto[] };
+  return data.photos.map((p) => ({
+    url: p.src.original,
+    alt: p.alt || `Image by ${p.photographer}`,
   }));
 }
 
-async function writePostFile(
+async function writePost(
   slug: string,
-  frontmatter: any,
+  meta: any,
   content: string,
   images: { url: string; alt: string }[]
 ) {
-  if (images.length > 0) {
-    frontmatter.image = images[0].url;
-  }
+  if (images[0]) meta.image = images[0].url;
 
-  const formatted = matter.stringify("", frontmatter);
+  const { title, summary, tags, date, image } = meta;
 
-  const commentLines = [
-    "{/* Suggested cover images: */",
-    "{/* Add an 'image: url' under the date above to include the image. */}",
-    ...images.map((img, i) => `{/* ${i + 1}. ${img.url} — ${img.alt} */}`),
+  const frontmatterLines = [
+    `title: ${JSON.stringify(title)}`,
+    `summary: ${JSON.stringify(summary)}`,
+    `tags: ${JSON.stringify(tags)}`,
+    `date: ${JSON.stringify(date)}`,
+    ...(image ? [`image: ${JSON.stringify(image)}`] : []),
   ];
 
-  const commentBlock = commentLines.join("\n");
-  const withFrontmatter = `${formatted}\n${commentBlock}\n\n${content}\n`;
+  const mdx = `---\n${frontmatterLines.join(
+    "\n"
+  )}\n---\n\n# ${title}\n\n${content.trim()}\n`;
 
   const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
-  await fs.writeFile(filePath, withFrontmatter);
-  console.log(`\u2728 Contentlayer-ready post saved: ${filePath}`);
+  await fs.writeFile(filePath, mdx);
+  console.log(`✅ Saved: ${filePath}`);
 }
 
 async function run() {
-  const topic = await promptUser("\u270D\uFE0F Blog topic: ");
-  try {
-    const { frontmatter, content } = await generatePost(topic);
-    const images = await getPexelsImages();
-    await writePostFile(frontmatter.slug, frontmatter, content, images);
-  } catch (err) {
-    console.error("\u274C Error:", err);
-  }
+  const topic = await promptUser("📝 Blog topic: ");
+  const post = await generatePost(topic);
+  const images = await fetchImages();
+  await writePost(post.slug, post, post.content, images);
 }
 
 run();

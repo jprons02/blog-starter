@@ -17,8 +17,8 @@ export default function AboutPage() {
           style={{ color: "var(--color-muted-text)" }}
         >
           This is a premium, production-ready headless blog starter kit built
-          with modern technologies and designed for speed, SEO, and
-          customization.
+          with modern technologies, focused on performance, SEO, and
+          flexibility.
         </p>
       </FadeIn>
 
@@ -36,31 +36,30 @@ export default function AboutPage() {
           >
             <li>
               <strong>Next.js (App Router):</strong> File-based routing, server
-              components, and layout management.
+              components, and layout system.
             </li>
             <li>
-              <strong>TypeScript:</strong> Strong typing for maintainability and
-              tooling support.
+              <strong>TypeScript:</strong> Static typing for developer safety
+              and IntelliSense support.
             </li>
             <li>
-              <strong>Tailwind CSS:</strong> Utility-first styling for fast UI
-              development, using a custom theme built with CSS variables for
-              colors, spacing, and dark mode.
+              <strong>Tailwind CSS:</strong> Utility-first styling with a custom
+              theme using CSS variables for dark/light mode.
             </li>
             <li>
-              <strong>Framer Motion:</strong> Smooth, declarative animations for
-              menus, components, and transitions.
+              <strong>Framer Motion:</strong> Smooth animations for UI
+              transitions.
             </li>
             <li>
-              <strong>Lucide React Icons:</strong> Clean, modern icon system.
+              <strong>Lucide Icons:</strong> Clean and modern icon system.
             </li>
             <li>
-              <strong>Dark Mode:</strong> Tailwind’s <code>dark:</code> class
-              plus toggle component.
+              <strong>Dark Mode:</strong> Built-in toggle powered by Tailwind’s{" "}
+              <code>dark:</code> class.
             </li>
             <li>
-              <strong>Responsive Design:</strong> Mobile-first layouts using
-              Tailwind utilities.
+              <strong>Responsive Design:</strong> Mobile-first layouts by
+              default.
             </li>
           </ul>
         </section>
@@ -72,31 +71,31 @@ export default function AboutPage() {
             className="text-2xl font-semibold mb-4"
             style={{ color: "var(--color-foreground)" }}
           >
-            🧠 Back-end
+            🧠 Content Management
           </h2>
           <ul
             className="list-disc list-inside space-y-2"
             style={{ color: "var(--color-muted-text)" }}
           >
             <li>
-              <strong>MDX v2:</strong> Blog content written in Markdown + JSX
-              for rich formatting and custom components.
+              <strong>Contentlayer v2:</strong> Type-safe MDX compiler with
+              custom schema, hot reload, and live data generation.
             </li>
             <li>
-              <strong>gray-matter:</strong> Parses frontmatter metadata from MDX
-              files.
+              <strong>MDX v2:</strong> Markdown + JSX support with custom
+              components.
             </li>
             <li>
-              <strong>File System Routing:</strong> Posts are stored as{" "}
-              <code>.mdx</code> files in <code>content/posts/</code>.
+              <strong>Prism Highlighting:</strong> For beautiful
+              syntax-highlighted code blocks.
             </li>
             <li>
-              <strong>Dynamic Routing:</strong> Slug-based routes dynamically
-              render each post.
+              <strong>Filesystem Source:</strong> Posts are stored in{" "}
+              <code>content/posts/</code> and compiled automatically.
             </li>
             <li>
-              <strong>Static Generation:</strong> Prebuilt at compile time via
-              `force-static`.
+              <strong>Static Generation:</strong> All posts are pre-rendered at
+              build time for maximum performance.
             </li>
           </ul>
         </section>
@@ -108,7 +107,7 @@ export default function AboutPage() {
             className="text-2xl font-semibold mb-4"
             style={{ color: "var(--color-foreground)" }}
           >
-            🧰 Tools & Plugins
+            🧰 Tools & Enhancements
           </h2>
           <ul
             className="list-disc list-inside space-y-2"
@@ -119,23 +118,17 @@ export default function AboutPage() {
               component testing.
             </li>
             <li>
-              <strong>Lucide Icons:</strong> Simple, modern icon set.
+              <strong>SEO Meta:</strong> Open Graph + Twitter card metadata via
+              <code>generateMetadata</code> functions.
             </li>
             <li>
-              <strong>ContentLayer or gray-matter:</strong> Optional content
-              schema tools.
+              <strong>Vercel Deployment:</strong> Works out of the box with
+              Vercel.
             </li>
             <li>
-              <strong>SEO Setup:</strong> Custom Head tags or via{" "}
-              <code>next-seo</code>.
-            </li>
-            <li>
-              <strong>Deployment:</strong> Vercel-compatible out of the box.
-            </li>
-            <li>
-              <strong>AI SEO Automation:</strong> Includes a custom script using
-              the OpenAI API to auto-generate and enrich frontmatter (title,
-              slug, summary, tags) for MDX posts based on content.
+              <strong>AI Post Generator:</strong> CLI script uses OpenAI and
+              Pexels API to generate complete MDX posts with metadata and cover
+              images.
             </li>
           </ul>
         </section>

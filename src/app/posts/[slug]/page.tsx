@@ -1,20 +1,21 @@
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
-import { useMDXComponent } from "next-contentlayer2/hooks";
+import { getMDXComponent } from "next-contentlayer2/hooks";
 import Image from "next/image";
 import Tag from "@/app/components/Tag";
 import StickyBackButton from "@/app/components/StickyBackButton";
 import FadeInWrapper from "@/app/components/FadeInWrapper";
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { slug: string };
+export default async function PostPage(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const post = allPosts.find((p) => p.url === `/blog/${params.slug}`);
+  const params = await props.params;
+  const post = allPosts.find(
+    (post) => post._raw.flattenedPath === `posts/${params.slug}`
+  );
   if (!post) return notFound();
 
-  const MDXContent = useMDXComponent(post.body.code);
+  const Content = getMDXComponent(post.body.code);
 
   return (
     <>
@@ -52,7 +53,7 @@ export default async function BlogPostPage({
 
         <FadeInWrapper>
           <div className="markdown-body text-base leading-relaxed">
-            <MDXContent />
+            <Content />
           </div>
         </FadeInWrapper>
       </article>
@@ -61,12 +62,13 @@ export default async function BlogPostPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
 }) {
-  const post = allPosts.find((p) => p.url === `/blog/${params.slug}`);
+  const params = await props.params;
+  const post = allPosts.find(
+    (post) => post._raw.flattenedPath === `posts/${params.slug}`
+  );
   if (!post) return {};
 
   return {
@@ -85,3 +87,34 @@ export async function generateMetadata({
     },
   };
 }
+
+/*
+import { allPosts } from "contentlayer/generated";
+import { getMDXComponent } from "next-contentlayer2/hooks";
+
+interface PostPageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function PostPage(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const params = await props.params;
+  const post = allPosts.find(
+    (post) => post._raw.flattenedPath === `posts/${params.slug}`
+  );
+
+  if (!post?.body.code) {
+    return <div>No post here!</div>;
+  }
+  const Content = getMDXComponent(post.body.code);
+  return (
+    <div>
+      {post.title}
+      <Content />
+    </div>
+  );
+}
+*/

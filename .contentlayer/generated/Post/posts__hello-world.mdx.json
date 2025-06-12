@@ -19,5 +19,5 @@
     "flattenedPath": "posts/hello-world"
   },
   "type": "Post",
-  "url": "/blog/hello-world"
+  "url": "posts/hello-world"
 }

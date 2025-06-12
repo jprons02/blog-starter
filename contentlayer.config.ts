@@ -3,7 +3,7 @@ import rehypePrism from "rehype-prism-plus";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `posts/**/*.mdx`,
+  filePathPattern: `**/*.mdx`,
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
@@ -17,8 +17,7 @@ export const Post = defineDocumentType(() => ({
   computedFields: {
     url: {
       type: "string",
-      resolve: (post) =>
-        `/blog/${post._raw.flattenedPath.replace(/^posts\//, "")}`,
+      resolve: (post) => post._raw.flattenedPath,
     },
   },
 }));

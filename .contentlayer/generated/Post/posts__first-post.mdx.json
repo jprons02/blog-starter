@@ -22,5 +22,5 @@
     "flattenedPath": "posts/first-post"
   },
   "type": "Post",
-  "url": "/blog/first-post"
+  "url": "posts/first-post"
 }
