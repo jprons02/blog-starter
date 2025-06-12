@@ -1,0 +1,27 @@
+{
+  "title": "Learning to Debug Without Crying",
+  "summary": "Every dev hits a wall — here’s how to deal with bugs, log smarter, and stop blaming yourself for semicolons.",
+  "date": "2024-11-03T00:00:00.000Z",
+  "tags": [
+    "debugging",
+    "mindset",
+    "productivity"
+  ],
+  "slug": "learning-to-debug",
+  "image": "https://images.unsplash.com/photo-1607706189992-eae578626c86?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "author": "Julia",
+  "body": {
+    "raw": "\nThe bug isn't always where you think it is. Learn how to debug step-by-step, how to avoid rabbit holes, and when to ask for help (hint: sooner than you think).\n",
+    "code": "var Component=(()=>{var g=Object.create;var i=Object.defineProperty;var m=Object.getOwnPropertyDescriptor;var c=Object.getOwnPropertyNames;var f=Object.getPrototypeOf,p=Object.prototype.hasOwnProperty;var b=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),w=(t,e)=>{for(var o in e)i(t,o,{get:e[o],enumerable:!0})},s=(t,e,o,r)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let n of c(e))!p.call(t,n)&&n!==o&&i(t,n,{get:()=>e[n],enumerable:!(r=m(e,n))||r.enumerable});return t};var x=(t,e,o)=>(o=t!=null?g(f(t)):{},s(e||!t||!t.__esModule?i(o,\"default\",{value:t,enumerable:!0}):o,t)),y=t=>s(i({},\"__esModule\",{value:!0}),t);var h=b((j,u)=>{u.exports=_jsx_runtime});var M={};w(M,{default:()=>d,frontmatter:()=>D});var a=x(h()),D={author:\"Julia\",title:\"Learning to Debug Without Crying\",slug:\"learning-to-debug\",summary:\"Every dev hits a wall \\u2014 here\\u2019s how to deal with bugs, log smarter, and stop blaming yourself for semicolons.\",date:\"2024-11-03\",tags:[\"debugging\",\"mindset\",\"productivity\"],image:\"https://images.unsplash.com/photo-1607706189992-eae578626c86?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"};function l(t){let e={p:\"p\",...t.components};return(0,a.jsx)(e.p,{children:\"The bug isn't always where you think it is. Learn how to debug step-by-step, how to avoid rabbit holes, and when to ask for help (hint: sooner than you think).\"})}function d(t={}){let{wrapper:e}=t.components||{};return e?(0,a.jsx)(e,{...t,children:(0,a.jsx)(l,{...t})}):l(t)}return y(M);})();\n;return Component;"
+  },
+  "_id": "posts/learning-to-debug.mdx",
+  "_raw": {
+    "sourceFilePath": "posts/learning-to-debug.mdx",
+    "sourceFileName": "learning-to-debug.mdx",
+    "sourceFileDir": "posts",
+    "contentType": "mdx",
+    "flattenedPath": "posts/learning-to-debug"
+  },
+  "type": "Post",
+  "url": "/blog/learning-to-debug"
+}

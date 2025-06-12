@@ -1,10 +1,23 @@
 import type { NextConfig } from "next";
+import { withContentlayer } from "next-contentlayer2";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: ["images.unsplash.com", "images.pexels.com", "pixabay.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.pexels.com",
+      },
+      {
+        protocol: "https",
+        hostname: "pixabay.com",
+      },
+    ],
   },
 };
 
-export default nextConfig;
+export default withContentlayer(nextConfig);

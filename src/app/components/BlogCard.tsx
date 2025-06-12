@@ -34,11 +34,11 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
         />
       )}
 
-      <div className="p-6">
+      <div className="pt-3 pb-6 px-6">
         {/* Date + Author */}
         <p
-          className="text-xs font-medium uppercase tracking-wide mb-2"
-          style={{ color: "var(--color-muted-text)" }}
+          className="font-medium uppercase tracking-wide mb-4"
+          style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
         >
           {new Date(post.date).toLocaleDateString(undefined, {
             year: "numeric",

@@ -1,0 +1,27 @@
+{
+  "title": "My First Post",
+  "summary": "This is the first blog post.",
+  "date": "2025-06-01T00:00:00.000Z",
+  "tags": [
+    "nextjs",
+    "mdx",
+    "design"
+  ],
+  "slug": "first-post",
+  "image": "https://images.unsplash.com/photo-1626360289074-6fcf08e68f28?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "author": "Kathy",
+  "body": {
+    "raw": "\n# Hello World\n\nNow with tags!\n",
+    "code": "var Component=(()=>{var h=Object.create;var r=Object.defineProperty;var l=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var d=Object.getPrototypeOf,p=Object.prototype.hasOwnProperty;var g=(t,s)=>()=>(s||t((s={exports:{}}).exports,s),s.exports),j=(t,s)=>{for(var n in s)r(t,n,{get:s[n],enumerable:!0})},a=(t,s,n,i)=>{if(s&&typeof s==\"object\"||typeof s==\"function\")for(let o of u(s))!p.call(t,o)&&o!==n&&r(t,o,{get:()=>s[o],enumerable:!(i=l(s,o))||i.enumerable});return t};var w=(t,s,n)=>(n=t!=null?h(d(t)):{},a(s||!t||!t.__esModule?r(n,\"default\",{value:t,enumerable:!0}):n,t)),M=t=>a(r({},\"__esModule\",{value:!0}),t);var x=g((b,f)=>{f.exports=_jsx_runtime});var D={};j(D,{default:()=>m,frontmatter:()=>_});var e=w(x()),_={author:\"Kathy\",title:\"My First Post\",date:\"2025-06-01\",slug:\"first-post\",summary:\"This is the first blog post.\",tags:[\"nextjs\",\"mdx\",\"design\"],image:\"https://images.unsplash.com/photo-1626360289074-6fcf08e68f28?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D\"};function c(t){let s={h1:\"h1\",p:\"p\",...t.components};return(0,e.jsxs)(e.Fragment,{children:[(0,e.jsx)(s.h1,{children:\"Hello World\"}),`\n`,(0,e.jsx)(s.p,{children:\"Now with tags!\"})]})}function m(t={}){let{wrapper:s}=t.components||{};return s?(0,e.jsx)(s,{...t,children:(0,e.jsx)(c,{...t})}):c(t)}return M(D);})();\n;return Component;"
+  },
+  "_id": "posts/first-post.mdx",
+  "_raw": {
+    "sourceFilePath": "posts/first-post.mdx",
+    "sourceFileName": "first-post.mdx",
+    "sourceFileDir": "posts",
+    "contentType": "mdx",
+    "flattenedPath": "posts/first-post"
+  },
+  "type": "Post",
+  "url": "/blog/first-post"
+}
