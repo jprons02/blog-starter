@@ -17,7 +17,6 @@ export type Post = {
   summary: string
   date: IsoDateTimeString
   tags?: string[] | undefined
-  slug: string
   image?: string | undefined
   author?: string | undefined
   featured?: boolean | undefined

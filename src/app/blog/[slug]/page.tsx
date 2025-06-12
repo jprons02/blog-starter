@@ -11,7 +11,7 @@ export default async function BlogPostPage({
 }: {
   params: { slug: string };
 }) {
-  const post = allPosts.find((p) => p.slug === params.slug);
+  const post = allPosts.find((p) => p.url === `/blog/${params.slug}`);
   if (!post) return notFound();
 
   const MDXContent = useMDXComponent(post.body.code);
@@ -66,7 +66,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-  const post = allPosts.find((p) => p.slug === params.slug);
+  const post = allPosts.find((p) => p.url === `/blog/${params.slug}`);
   if (!post) return {};
 
   return {

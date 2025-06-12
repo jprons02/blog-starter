@@ -10,15 +10,15 @@ var Post = defineDocumentType(() => ({
     summary: { type: "string", required: true },
     date: { type: "date", required: true },
     tags: { type: "list", of: { type: "string" } },
-    slug: { type: "string", required: true },
     image: { type: "string", required: false },
     author: { type: "string", required: false },
     featured: { type: "boolean", required: false }
+    // ✅ REMOVE `slug` field — it’s now handled automatically
   },
   computedFields: {
     url: {
       type: "string",
-      resolve: (post) => `/blog/${post.slug}`
+      resolve: (post) => post._raw.flattenedPath
     }
   }
 }));
@@ -33,4 +33,4 @@ export {
   Post,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-6U5JRDRB.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-I5CK4LW4.mjs.map

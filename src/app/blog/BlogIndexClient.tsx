@@ -7,9 +7,13 @@ import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
 import BlogCard from "@/app/components/BlogCard";
 //import FadeIn from "@/app/components/FadeIn";
-import type { PostMeta } from "@/lib/posts";
+import type { Post } from "contentlayer/generated";
 
-export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
+type Props = {
+  posts: Post[];
+};
+
+export default function BlogIndexClient({ posts }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -62,7 +66,7 @@ export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
       {/* 🌟 Featured Post Hero */}
       {featured && (
         <Link
-          href={`/blog/${featured.slug}`}
+          href={featured.url}
           className="block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
         >
           <div className="relative h-72 sm:h-96 w-full">
@@ -100,7 +104,7 @@ export default function BlogIndexClient({ posts }: { posts: PostMeta[] }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {postsWithoutFeatured.map((post) => (
           <BlogCard
-            key={post.slug}
+            key={post.url}
             post={post}
             selectedTag={selectedTag}
             onTagClick={setSelectedTag}

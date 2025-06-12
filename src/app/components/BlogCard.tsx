@@ -2,19 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import type { PostMeta } from "@/lib/posts";
 import Tag from "@/app/components/Tag";
+import type { Post } from "contentlayer/generated";
 
 type Props = {
-  post: PostMeta;
-  onTagClick?: (tag: string) => void;
+  post: Post; // ✅ Single post, not an array
   selectedTag?: string | null;
+  onTagClick?: (tag: string) => void;
 };
 
 export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={post.url}
       className="group block rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
       style={{
         backgroundColor: "var(--color-card-bg)",

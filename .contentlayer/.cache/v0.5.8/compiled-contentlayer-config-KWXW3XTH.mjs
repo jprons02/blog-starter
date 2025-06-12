@@ -1,7 +1,7 @@
+// contentlayer.config.ts
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import rehypePrism from "rehype-prism-plus";
-
-export const Post = defineDocumentType(() => ({
+var Post = defineDocumentType(() => ({
   name: "Post",
   filePathPattern: `posts/**/*.mdx`,
   contentType: "mdx",
@@ -12,21 +12,24 @@ export const Post = defineDocumentType(() => ({
     tags: { type: "list", of: { type: "string" } },
     image: { type: "string", required: false },
     author: { type: "string", required: false },
-    featured: { type: "boolean", required: false },
+    featured: { type: "boolean", required: false }
   },
   computedFields: {
     url: {
       type: "string",
-      resolve: (post) =>
-        `/blog/${post._raw.flattenedPath.replace(/^posts\//, "")}`,
-    },
-  },
+      resolve: (post) => `/blog/${post._raw.flattenedPath.replace(/^posts\//, "")}`
+    }
+  }
 }));
-
-export default makeSource({
+var contentlayer_config_default = makeSource({
   contentDirPath: "content",
   documentTypes: [Post],
   mdx: {
-    rehypePlugins: [rehypePrism],
-  },
+    rehypePlugins: [rehypePrism]
+  }
 });
+export {
+  Post,
+  contentlayer_config_default as default
+};
+//# sourceMappingURL=compiled-contentlayer-config-KWXW3XTH.mjs.map

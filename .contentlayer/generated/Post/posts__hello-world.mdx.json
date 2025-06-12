@@ -5,7 +5,6 @@
   "tags": [
     "intro"
   ],
-  "slug": "hello-world",
   "image": "https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   "body": {
     "raw": "\n# Hello from Contentlayer2\n\nHere’s a post rendered with **MDX** and **Prism code highlighting**:\n\n```js\nconsole.log(\"Syntax highlighting works! OMG so coooooool.\");\n```\n",
