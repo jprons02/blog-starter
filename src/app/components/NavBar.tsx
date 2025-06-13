@@ -47,7 +47,7 @@ export default function NavBar() {
         {/* Desktop Nav + ThemeToggle */}
         <div className="hidden md:flex items-center gap-6 ml-auto">
           <ul className="flex items-center gap-6 text-sm font-medium">
-            {["about", "contact"].map((page) => (
+            {["about"].map((page) => (
               <li key={page}>
                 <Link
                   href={`/${page}`}
@@ -99,7 +99,7 @@ export default function NavBar() {
                 borderTop: "1px solid var(--color-border)",
               }}
             >
-              {["about", "contact"].map((page) => (
+              {["about"].map((page) => (
                 <Link
                   key={page}
                   href={`/${page}`}

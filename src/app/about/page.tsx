@@ -54,8 +54,9 @@ export default function AboutPage() {
               <strong>Lucide Icons:</strong> Clean and modern icon system.
             </li>
             <li>
-              <strong>Dark Mode:</strong> Built-in toggle powered by Tailwind’s{" "}
-              <code>dark:</code> class.
+              <strong>Dark Mode:</strong> Custom toggle using CSS variables and
+              a <code>.light</code> class on the <code>&lt;html&gt;</code>{" "}
+              element.
             </li>
             <li>
               <strong>Responsive Design:</strong> Mobile-first layouts by

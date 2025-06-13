@@ -6,7 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
 import BlogCard from "@/app/components/BlogCard";
-//import FadeIn from "@/app/components/FadeIn";
+import FadeIn from "@/app/components/FadeIn";
+//import FadeInWrapper from "@/app/components/FadeInWrapper";
 import type { Post } from "contentlayer/generated";
 
 type Props = {
@@ -65,50 +66,55 @@ export default function BlogIndexClient({ posts }: Props) {
 
       {/* 🌟 Featured Post Hero */}
       {featured && (
-        <Link
-          href={featured.url}
-          className="group block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
-        >
-          <div className="relative h-72 sm:h-96 w-full group-hover:brightness-110 transition">
-            <Image
-              src={featured.image!}
-              alt={featured.title}
-              fill
-              className="object-cover group-hover:brightness-110 transition"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
-              <h2
-                className="text-3xl sm:text-5xl font-bold mb-3 group-hover:underline"
-                style={{ color: "var(--color-static-dark-foreground)" }}
-              >
-                {featured.title}
-              </h2>
-              <p
-                className="text-sm sm:text-base max-w-2xl line-clamp-3"
-                style={{ color: "var(--color-static-dark-muted-text)" }}
-              >
-                {featured.summary}
-              </p>
+        <FadeIn>
+          <Link
+            href={featured.url}
+            className="group block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
+          >
+            <div className="relative h-72 sm:h-96 w-full group-hover:brightness-110 transition">
+              <Image
+                src={featured.image!}
+                alt={featured.title}
+                fill
+                className="object-cover group-hover:brightness-110 transition"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+                <h2
+                  className="text-3xl sm:text-5xl font-bold mb-3 group-hover:underline"
+                  style={{ color: "var(--color-static-dark-foreground)" }}
+                >
+                  {featured.title}
+                </h2>
+                <p
+                  className="text-sm sm:text-base max-w-2xl line-clamp-3"
+                  style={{ color: "var(--color-static-dark-muted-text)" }}
+                >
+                  {featured.summary}
+                </p>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </FadeIn>
       )}
 
       {/* 🔍 Search Bar */}
-      <div className="mt-12 mb-1">
-        <SearchBar onSearch={setSearchQuery} />
-      </div>
+      <FadeIn delay={2.5 * 100}>
+        <div className="mt-12 mb-1">
+          <SearchBar onSearch={setSearchQuery} />
+        </div>
+      </FadeIn>
 
       {/* 🧱 Blog Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {postsWithoutFeatured.map((post) => (
-          <BlogCard
-            key={post.url}
-            post={post}
-            selectedTag={selectedTag}
-            onTagClick={setSelectedTag}
-          />
+          <FadeIn key={post.url} delay={2.5 * 100}>
+            <BlogCard
+              post={post}
+              selectedTag={selectedTag}
+              onTagClick={setSelectedTag}
+            />
+          </FadeIn>
         ))}
       </div>
     </main>

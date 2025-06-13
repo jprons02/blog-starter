@@ -91,6 +91,14 @@
   color: var(--color-foreground);
 }
 
+code {
+  background-color: var(--color-muted-bg);
+  color: var(--color-accent);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+}
+
 /* =====================
    Markdown Styles
    ===================== */

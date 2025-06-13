@@ -4,7 +4,7 @@ import { getMDXComponent } from "next-contentlayer2/hooks";
 import Image from "next/image";
 import Tag from "@/app/components/Tag";
 import StickyBackButton from "@/app/components/StickyBackButton";
-import FadeInWrapper from "@/app/components/FadeInWrapper";
+import FadeIn from "@/app/components/FadeIn";
 
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
@@ -21,7 +21,7 @@ export default async function PostPage(props: {
     <>
       <article className="max-w-3xl mx-auto py-12 px-4">
         {post.image && (
-          <FadeInWrapper>
+          <FadeIn>
             <div className="mb-4">
               <Image
                 src={post.image}
@@ -32,30 +32,30 @@ export default async function PostPage(props: {
                 priority
               />
             </div>
-          </FadeInWrapper>
+          </FadeIn>
         )}
 
-        <FadeInWrapper>
+        <FadeIn>
           <p className="text-sm" style={{ color: "var(--color-muted-text)" }}>
             {new Date(post.date).toLocaleDateString()}
           </p>
-        </FadeInWrapper>
+        </FadeIn>
 
         {Array.isArray(post.tags) && (
-          <FadeInWrapper>
+          <FadeIn>
             <div className="flex flex-wrap gap-2 mt-2 mb-6">
               {post.tags.map((tag: string) => (
                 <Tag key={tag} name={tag} />
               ))}
             </div>
-          </FadeInWrapper>
+          </FadeIn>
         )}
 
-        <FadeInWrapper>
+        <FadeIn>
           <div className="markdown-body text-base leading-relaxed">
             <Content />
           </div>
-        </FadeInWrapper>
+        </FadeIn>
       </article>
       <StickyBackButton />
     </>
@@ -87,34 +87,3 @@ export async function generateMetadata(props: {
     },
   };
 }
-
-/*
-import { allPosts } from "contentlayer/generated";
-import { getMDXComponent } from "next-contentlayer2/hooks";
-
-interface PostPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function PostPage(props: {
-  params: Promise<{ slug: string }>;
-}) {
-  const params = await props.params;
-  const post = allPosts.find(
-    (post) => post._raw.flattenedPath === `posts/${params.slug}`
-  );
-
-  if (!post?.body.code) {
-    return <div>No post here!</div>;
-  }
-  const Content = getMDXComponent(post.body.code);
-  return (
-    <div>
-      {post.title}
-      <Content />
-    </div>
-  );
-}
-*/
