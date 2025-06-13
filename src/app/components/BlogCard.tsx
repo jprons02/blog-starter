@@ -30,7 +30,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           alt={post.title}
           width={800}
           height={400}
-          className="w-full h-48 object-cover"
+          className="w-full h-48 object-cover group-hover:brightness-110 transition"
         />
       )}
 

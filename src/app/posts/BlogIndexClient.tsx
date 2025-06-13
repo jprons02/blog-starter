@@ -67,19 +67,19 @@ export default function BlogIndexClient({ posts }: Props) {
       {featured && (
         <Link
           href={featured.url}
-          className="block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
+          className="group block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
         >
-          <div className="relative h-72 sm:h-96 w-full">
+          <div className="relative h-72 sm:h-96 w-full group-hover:brightness-110 transition">
             <Image
               src={featured.image!}
               alt={featured.title}
               fill
-              className="object-cover"
+              className="object-cover group-hover:brightness-110 transition"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
               <h2
-                className="text-3xl sm:text-5xl font-bold mb-3"
+                className="text-3xl sm:text-5xl font-bold mb-3 group-hover:underline"
                 style={{ color: "var(--color-static-dark-foreground)" }}
               >
                 {featured.title}
