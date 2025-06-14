@@ -18,14 +18,18 @@ export default function BlogIndexClient({ posts }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const fuse = new Fuse(posts, {
+  const sortedPosts = [...posts].sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
+  const fuse = new Fuse(sortedPosts, {
     keys: ["title", "summary", "tags"],
     threshold: 0.3,
   });
 
   let filtered = searchQuery
     ? fuse.search(searchQuery).map((r) => r.item)
-    : posts;
+    : sortedPosts;
 
   if (selectedTag) {
     filtered = filtered.filter((post) => post.tags?.includes(selectedTag));
