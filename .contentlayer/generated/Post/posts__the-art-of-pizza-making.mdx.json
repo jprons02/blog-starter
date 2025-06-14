@@ -1,0 +1,25 @@
+{
+  "title": "The Art of Pizza Making",
+  "summary": "Discover the secrets of creating the perfect pizza at home. From selecting the freshest ingredients to mastering the art of dough making, this guide will take your pizza game to the next level.",
+  "date": "2022-02-23T00:00:00.000Z",
+  "tags": [
+    "food",
+    "cooking",
+    "pizza"
+  ],
+  "image": "https://images.pexels.com/photos/365459/pexels-photo-365459.jpeg",
+  "body": {
+    "raw": "\n# The Art of Pizza Making\n\nPizza is one of the most beloved and iconic dishes worldwide. Its popularity knows no bounds, and for good reason. In this blog post, we'll explore the art of pizza making, from the traditional Neapolitan style to the modern gourmet variations.\n\n### Section 1: History of Pizza\n\n- The Origins\n- Evolution of Pizza Styles\n\n### Section 2: Ingredients and Preparation\n\n1. Selecting the Best Flour\n2. Choosing Fresh Toppings\n3. Crafting the Perfect Sauce\n\n### Section 3: The Dough\n\n- The Importance of Dough Handling\n- Tips for a Perfect Dough Rise\n- Proving and Shaping Techniques\n\n### Section 4: Baking and Serving\n\n- Oven vs. Pizza Stone\n- Perfecting the Baking Process\n- Creative Serving Ideas\n\n> Pro Tip: For a crispy crust, preheat your oven and pizza stone at maximum temperature for at least 30 minutes before baking your pizza.\n",
+    "code": "var Component=(()=>{var g=Object.create;var r=Object.defineProperty;var p=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var m=Object.getPrototypeOf,f=Object.prototype.hasOwnProperty;var z=(i,e)=>()=>(e||i((e={exports:{}}).exports,e),e.exports),x=(i,e)=>{for(var t in e)r(i,t,{get:e[t],enumerable:!0})},a=(i,e,t,l)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let o of u(e))!f.call(i,o)&&o!==t&&r(i,o,{get:()=>e[o],enumerable:!(l=p(e,o))||l.enumerable});return i};var k=(i,e,t)=>(t=i!=null?g(m(i)):{},a(e||!i||!i.__esModule?r(t,\"default\",{value:i,enumerable:!0}):t,i)),P=i=>a(r({},\"__esModule\",{value:!0}),i);var s=z((T,h)=>{h.exports=_jsx_runtime});var S={};x(S,{default:()=>d,frontmatter:()=>v});var n=k(s()),v={title:\"The Art of Pizza Making\",summary:\"Discover the secrets of creating the perfect pizza at home. From selecting the freshest ingredients to mastering the art of dough making, this guide will take your pizza game to the next level.\",tags:[\"food\",\"cooking\",\"pizza\"],date:\"2022-02-23T00:00:00Z\",image:\"https://images.pexels.com/photos/365459/pexels-photo-365459.jpeg\"};function c(i){let e={blockquote:\"blockquote\",h1:\"h1\",h3:\"h3\",li:\"li\",ol:\"ol\",p:\"p\",ul:\"ul\",...i.components};return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(e.h1,{children:\"The Art of Pizza Making\"}),`\n`,(0,n.jsx)(e.p,{children:\"Pizza is one of the most beloved and iconic dishes worldwide. Its popularity knows no bounds, and for good reason. In this blog post, we'll explore the art of pizza making, from the traditional Neapolitan style to the modern gourmet variations.\"}),`\n`,(0,n.jsx)(e.h3,{children:\"Section 1: History of Pizza\"}),`\n`,(0,n.jsxs)(e.ul,{children:[`\n`,(0,n.jsx)(e.li,{children:\"The Origins\"}),`\n`,(0,n.jsx)(e.li,{children:\"Evolution of Pizza Styles\"}),`\n`]}),`\n`,(0,n.jsx)(e.h3,{children:\"Section 2: Ingredients and Preparation\"}),`\n`,(0,n.jsxs)(e.ol,{children:[`\n`,(0,n.jsx)(e.li,{children:\"Selecting the Best Flour\"}),`\n`,(0,n.jsx)(e.li,{children:\"Choosing Fresh Toppings\"}),`\n`,(0,n.jsx)(e.li,{children:\"Crafting the Perfect Sauce\"}),`\n`]}),`\n`,(0,n.jsx)(e.h3,{children:\"Section 3: The Dough\"}),`\n`,(0,n.jsxs)(e.ul,{children:[`\n`,(0,n.jsx)(e.li,{children:\"The Importance of Dough Handling\"}),`\n`,(0,n.jsx)(e.li,{children:\"Tips for a Perfect Dough Rise\"}),`\n`,(0,n.jsx)(e.li,{children:\"Proving and Shaping Techniques\"}),`\n`]}),`\n`,(0,n.jsx)(e.h3,{children:\"Section 4: Baking and Serving\"}),`\n`,(0,n.jsxs)(e.ul,{children:[`\n`,(0,n.jsx)(e.li,{children:\"Oven vs. Pizza Stone\"}),`\n`,(0,n.jsx)(e.li,{children:\"Perfecting the Baking Process\"}),`\n`,(0,n.jsx)(e.li,{children:\"Creative Serving Ideas\"}),`\n`]}),`\n`,(0,n.jsxs)(e.blockquote,{children:[`\n`,(0,n.jsx)(e.p,{children:\"Pro Tip: For a crispy crust, preheat your oven and pizza stone at maximum temperature for at least 30 minutes before baking your pizza.\"}),`\n`]})]})}function d(i={}){let{wrapper:e}=i.components||{};return e?(0,n.jsx)(e,{...i,children:(0,n.jsx)(c,{...i})}):c(i)}return P(S);})();\n;return Component;"
+  },
+  "_id": "posts/the-art-of-pizza-making.mdx",
+  "_raw": {
+    "sourceFilePath": "posts/the-art-of-pizza-making.mdx",
+    "sourceFileName": "the-art-of-pizza-making.mdx",
+    "sourceFileDir": "posts",
+    "contentType": "mdx",
+    "flattenedPath": "posts/the-art-of-pizza-making"
+  },
+  "type": "Post",
+  "url": "posts/the-art-of-pizza-making"
+}

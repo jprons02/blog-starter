@@ -115,7 +115,7 @@ export default function AboutPage() {
             style={{ color: "var(--color-muted-text)" }}
           >
             <li>
-              <strong>Jest + React Testing Library:</strong> For unit and
+              <strong>Vitest + React Testing Library:</strong> For unit and
               component testing.
             </li>
             <li>

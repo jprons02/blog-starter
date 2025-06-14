@@ -11,7 +11,8 @@ export default function StickyBackButton() {
       onClick={() => router.back()}
       className="
         cursor-pointer
-        fixed bottom-4 right-4 z-50
+        fixed right-4 bottom-[14%] sm:right-6 z-50
+        sm:bottom-[5%] sm:right-6 z-50
         px-4 py-2
         rounded-full
         flex items-center gap-2
@@ -20,7 +21,7 @@ export default function StickyBackButton() {
         hover:bg-background/50
         transition
         backdrop-blur
-        sm:bottom-6 sm:right-6
+        
       "
       style={{
         backgroundColor: "var(--color-muted-bg)",

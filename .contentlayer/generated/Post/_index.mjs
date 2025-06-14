@@ -3,9 +3,13 @@
 import posts__allAboutCoffeeMdx from './posts__all-about-coffee.mdx.json' with { type: 'json' }
 import posts__darkModeVsLightModeMdx from './posts__dark-mode-vs-light-mode.mdx.json' with { type: 'json' }
 import posts__theArtOfBowlingMdx from './posts__the-art-of-bowling.mdx.json' with { type: 'json' }
+import posts__theArtOfPizzaMakingMdx from './posts__the-art-of-pizza-making.mdx.json' with { type: 'json' }
 import posts__theUltimateGuideToBrunchMdx from './posts__the-ultimate-guide-to-brunch.mdx.json' with { type: 'json' }
+import posts__theUltimateGuideToMakingPerfectGingerbreadCookiesMdx from './posts__the-ultimate-guide-to-making-perfect-gingerbread-cookies.mdx.json' with { type: 'json' }
+import posts__theWonderfulWorldOfSoccerMdx from './posts__the-wonderful-world-of-soccer.mdx.json' with { type: 'json' }
 import posts__understandingGovernmentAssistanceProgramsMdx from './posts__understanding-government-assistance-programs.mdx.json' with { type: 'json' }
 import posts__understandingTheSafelinkGovernmentProgramMdx from './posts__understanding-the-safelink-government-program.mdx.json' with { type: 'json' }
 import posts__understandingUnemploymentBenefitsMdx from './posts__understanding-unemployment-benefits.mdx.json' with { type: 'json' }
+import posts__walkingForFatLossMdx from './posts__walking-for-fat-loss.mdx.json' with { type: 'json' }
 
-export const allPosts = [posts__allAboutCoffeeMdx, posts__darkModeVsLightModeMdx, posts__theArtOfBowlingMdx, posts__theUltimateGuideToBrunchMdx, posts__understandingGovernmentAssistanceProgramsMdx, posts__understandingTheSafelinkGovernmentProgramMdx, posts__understandingUnemploymentBenefitsMdx]
+export const allPosts = [posts__allAboutCoffeeMdx, posts__darkModeVsLightModeMdx, posts__theArtOfBowlingMdx, posts__theArtOfPizzaMakingMdx, posts__theUltimateGuideToBrunchMdx, posts__theUltimateGuideToMakingPerfectGingerbreadCookiesMdx, posts__theWonderfulWorldOfSoccerMdx, posts__understandingGovernmentAssistanceProgramsMdx, posts__understandingTheSafelinkGovernmentProgramMdx, posts__understandingUnemploymentBenefitsMdx, posts__walkingForFatLossMdx]

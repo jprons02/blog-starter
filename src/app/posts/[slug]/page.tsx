@@ -62,28 +62,29 @@ export default async function PostPage(props: {
   );
 }
 
-export async function generateMetadata(props: {
+// Dynamically generates SEO metadata for individual blog posts
+// using Contentlayer data and a reusable metadata helper.
+// Includes Open Graph and Twitter card support.
+import { getPostMeta } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
   params: Promise<{ slug: string }>;
 }) {
-  const params = await props.params;
+  const { slug } = await params;
+
+  // Find the matching post from Contentlayer using the flattenedPath format (e.g., 'posts/my-post')
   const post = allPosts.find(
-    (post) => post._raw.flattenedPath === `posts/${params.slug}`
+    (post) => post._raw.flattenedPath === `posts/${slug}`
   );
   if (!post) return {};
 
-  return {
-    title: post.title,
-    description: post.summary || "",
-    openGraph: {
-      title: post.title,
-      description: post.summary || "",
-      images: post.image ? [{ url: post.image }] : [],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.summary || "",
-      images: post.image ? [post.image] : [],
-    },
-  };
+  // Generate SEO metadata using a reusable helper
+  return getPostMeta({
+    title: post.title, // Post title for <title> tag, Open Graph, and Twitter
+    description: post.summary || "", // Post summary for meta description
+    slug: post._raw.flattenedPath.replace(/^posts\//, ""), // Slug used to build canonical and OG URLs
+    image: post.image, // Optional cover image for OG/Twitter cards
+  });
 }

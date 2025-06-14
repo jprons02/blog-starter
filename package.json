@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "enrich:seo": "ts-node scripts/enrich-frontmatter.ts",
-    "generate:post": "ts-node scripts/generate-post.ts",
+    "test": "vitest",
+    "generate:post": "npx ts-node src/scripts/generate-post.ts",
     "build:content": "contentlayer2 build"
   },
   "dependencies": {
@@ -31,15 +31,21 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^20.17.57",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
+    "jsdom": "^26.1.0",
     "postcss": "^8.5.4",
     "tailwindcss": "^4.1.8",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.3"
   }
 }
