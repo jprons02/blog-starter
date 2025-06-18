@@ -15,14 +15,7 @@ export default function TagPageClient({ posts, tag }: Props) {
   const router = useRouter();
 
   const handleClearFilter = () => {
-    if (
-      document.referrer &&
-      !document.referrer.includes(window.location.href)
-    ) {
-      router.back();
-    } else {
-      router.push("/tags");
-    }
+    router.push("/tags");
   };
   return (
     <main className="max-w-6xl mx-auto px-4 py-12">

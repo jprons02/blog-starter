@@ -14,7 +14,11 @@ type Props = {
 export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
   return (
     <Link
-      href={post.url}
+      href={
+        selectedTag
+          ? `${post.url}?fromTag=${encodeURIComponent(selectedTag)}`
+          : post.url
+      }
       className="group block rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
       style={{
         backgroundColor: "var(--color-card-bg)",

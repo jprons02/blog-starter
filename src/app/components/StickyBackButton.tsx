@@ -1,16 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function StickyBackButton() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromTag = searchParams.get("fromTag");
+
+  console.log("fromTag:", fromTag);
+
   const handleClick = () => {
-    if (
-      document.referrer &&
-      !document.referrer.includes(window.location.href)
-    ) {
-      router.back();
+    if (fromTag) {
+      router.push(`/tags`);
     } else {
       router.push("/");
     }
