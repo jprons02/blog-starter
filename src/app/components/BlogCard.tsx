@@ -72,7 +72,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
                 <Tag
                   key={tag}
                   name={tag}
-                  selected={selectedTag === tag}
+                  selected={selectedTag?.toLowerCase() === tag.toLowerCase()}
                   onClick={onTagClick}
                 />
               );

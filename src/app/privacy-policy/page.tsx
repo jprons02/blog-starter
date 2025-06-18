@@ -3,8 +3,13 @@ export default function PrivacyPolicyPage() {
   const contactEmail =
     process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@example.com";
   return (
-    <main className="max-w-3xl mx-auto px-4 py-16 privacy-policy">
-      <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
+    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 privacy-policy">
+      <h1
+        className="text-3xl font-bold mb-6"
+        style={{ color: "var(--color-primary)" }}
+      >
+        Privacy Policy
+      </h1>
 
       <p className="text-sm text-muted mb-8">Last updated: June 17, 2025</p>
 

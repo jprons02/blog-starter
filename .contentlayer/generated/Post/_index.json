@@ -26,7 +26,7 @@
       "flattenedPath": "posts/emergency-rental-assistance-what-it-is-and-how-to-apply-before-it-s-gone"
     },
     "type": "Post",
-    "url": "posts/emergency-rental-assistance-what-it-is-and-how-to-apply-before-it-s-gone"
+    "url": "/posts/emergency-rental-assistance-what-it-is-and-how-to-apply-before-it-s-gone"
   },
   {
     "title": "Free Cell Phones and Wireless Plans: Do You Qualify for Lifeline or ACP",
@@ -56,7 +56,7 @@
       "flattenedPath": "posts/free-cell-phones-and-wireless-plans-do-you-qualify-for-lifeline-or-acp"
     },
     "type": "Post",
-    "url": "posts/free-cell-phones-and-wireless-plans-do-you-qualify-for-lifeline-or-acp"
+    "url": "/posts/free-cell-phones-and-wireless-plans-do-you-qualify-for-lifeline-or-acp"
   },
   {
     "title": "How to Apply for SNAP Benefits (Food Stamps) Without the Confusion",
@@ -84,7 +84,7 @@
       "flattenedPath": "posts/how-to-apply-for-snap-benefits-food-stamps-without-the-confusion"
     },
     "type": "Post",
-    "url": "posts/how-to-apply-for-snap-benefits-food-stamps-without-the-confusion"
+    "url": "/posts/how-to-apply-for-snap-benefits-food-stamps-without-the-confusion"
   },
   {
     "title": "How to Get Free or Discounted Internet Through Federal Programs",
@@ -113,7 +113,7 @@
       "flattenedPath": "posts/how-to-get-free-or-discounted-internet-through-federal-programs"
     },
     "type": "Post",
-    "url": "posts/how-to-get-free-or-discounted-internet-through-federal-programs"
+    "url": "/posts/how-to-get-free-or-discounted-internet-through-federal-programs"
   },
   {
     "title": "How to Get Help with Utility Bills: LIHEAP and Other Resources",
@@ -142,7 +142,7 @@
       "flattenedPath": "posts/how-to-get-help-with-utility-bills-liheap-and-other-resources"
     },
     "type": "Post",
-    "url": "posts/how-to-get-help-with-utility-bills-liheap-and-other-resources"
+    "url": "/posts/how-to-get-help-with-utility-bills-liheap-and-other-resources"
   },
   {
     "title": "Medicaid 101: How Low-Income Health Coverage Works in Your State",
@@ -171,7 +171,7 @@
       "flattenedPath": "posts/medicaid-101-how-low-income-health-coverage-works-in-your-state"
     },
     "type": "Post",
-    "url": "posts/medicaid-101-how-low-income-health-coverage-works-in-your-state"
+    "url": "/posts/medicaid-101-how-low-income-health-coverage-works-in-your-state"
   },
   {
     "title": "Section 8 Housing Explained: How to Get Help Paying Rent",
@@ -199,7 +199,7 @@
       "flattenedPath": "posts/section-8-housing-explained-how-to-get-help-paying-rent"
     },
     "type": "Post",
-    "url": "posts/section-8-housing-explained-how-to-get-help-paying-rent"
+    "url": "/posts/section-8-housing-explained-how-to-get-help-paying-rent"
   },
   {
     "title": "Single Parent? These Government Programs Can Help With Food, Rent, and More",
@@ -229,7 +229,7 @@
       "flattenedPath": "posts/single-parent-these-government-programs-can-help-with-food-rent-and-more"
     },
     "type": "Post",
-    "url": "posts/single-parent-these-government-programs-can-help-with-food-rent-and-more"
+    "url": "/posts/single-parent-these-government-programs-can-help-with-food-rent-and-more"
   },
   {
     "title": "SSI vs SSDI: Understanding Disability Benefits Without the Jargon",
@@ -258,7 +258,7 @@
       "flattenedPath": "posts/ssi-vs-ssdi-understanding-disability-benefits-without-the-jargon"
     },
     "type": "Post",
-    "url": "posts/ssi-vs-ssdi-understanding-disability-benefits-without-the-jargon"
+    "url": "/posts/ssi-vs-ssdi-understanding-disability-benefits-without-the-jargon"
   },
   {
     "title": "WIC vs SNAP: What's the Difference and Can You Get Both",
@@ -287,6 +287,6 @@
       "flattenedPath": "posts/wic-vs-snap-what-s-the-difference-and-can-you-get-both"
     },
     "type": "Post",
-    "url": "posts/wic-vs-snap-what-s-the-difference-and-can-you-get-both"
+    "url": "/posts/wic-vs-snap-what-s-the-difference-and-can-you-get-both"
   }
 ]

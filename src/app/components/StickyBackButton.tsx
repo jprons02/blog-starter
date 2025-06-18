@@ -5,10 +5,20 @@ import { ArrowLeft } from "lucide-react";
 
 export default function StickyBackButton() {
   const router = useRouter();
+  const handleClick = () => {
+    if (
+      document.referrer &&
+      !document.referrer.includes(window.location.href)
+    ) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
 
   return (
     <button
-      onClick={() => router.back()}
+      onClick={handleClick}
       className="
         cursor-pointer
         fixed right-4 bottom-[14%] sm:right-6 z-50

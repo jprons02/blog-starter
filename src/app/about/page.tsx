@@ -1,139 +1,58 @@
-"use client";
-
-import FadeIn from "@/app/components/FadeIn";
+import { siteTitle } from "@/lib/constants";
 
 export default function AboutPage() {
   return (
-    <main className="max-w-3xl mx-auto px-4 py-16">
-      <FadeIn>
-        <h1
-          className="text-4xl font-bold mb-4"
-          style={{ color: "var(--color-primary)" }}
-        >
-          About This Blog Starter
-        </h1>
-        <p
-          className="text-base mb-10 leading-relaxed"
-          style={{ color: "var(--color-muted-text)" }}
-        >
-          This is a premium, production-ready headless blog starter kit built
-          with modern technologies, focused on performance, SEO, and
-          flexibility.
+    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
+      <h1
+        className="text-3xl font-bold mb-6"
+        style={{ color: "var(--color-primary)" }}
+      >
+        About Us
+      </h1>
+
+      <section
+        className="space-y-6 text-base leading-relaxed"
+        style={{ color: "var(--color-muted-text)" }}
+      >
+        <p>
+          At <strong>{siteTitle}</strong>, we believe access to help
+          shouldn&apos;t come with confusion, paperwork headaches, or dead ends.
         </p>
-      </FadeIn>
 
-      <FadeIn>
-        <section className="mb-12">
-          <h2
-            className="text-2xl font-semibold mb-4"
-            style={{ color: "var(--color-foreground)" }}
-          >
-            🖼️ Front-end
-          </h2>
-          <ul
-            className="list-disc list-inside space-y-2"
-            style={{ color: "var(--color-muted-text)" }}
-          >
-            <li>
-              <strong>Next.js (App Router):</strong> File-based routing, server
-              components, and layout system.
-            </li>
-            <li>
-              <strong>TypeScript:</strong> Static typing for developer safety
-              and IntelliSense support.
-            </li>
-            <li>
-              <strong>Tailwind CSS:</strong> Utility-first styling with a custom
-              theme using CSS variables for dark/light mode.
-            </li>
-            <li>
-              <strong>Framer Motion:</strong> Smooth animations for UI
-              transitions.
-            </li>
-            <li>
-              <strong>Lucide Icons:</strong> Clean and modern icon system.
-            </li>
-            <li>
-              <strong>Dark Mode:</strong> Custom toggle using CSS variables and
-              a <code>.light</code> class on the <code>&lt;html&gt;</code>{" "}
-              element.
-            </li>
-            <li>
-              <strong>Responsive Design:</strong> Mobile-first layouts by
-              default.
-            </li>
-          </ul>
-        </section>
-      </FadeIn>
+        <p>
+          Navigating government support programs can feel overwhelming. Whether
+          it&apos;s food stamps, housing assistance, low-cost internet, or help
+          with medical expenses, the options are there — but the process
+          isn&apos;t always clear.
+        </p>
 
-      <FadeIn>
-        <section className="mb-12">
-          <h2
-            className="text-2xl font-semibold mb-4"
-            style={{ color: "var(--color-foreground)" }}
-          >
-            🧠 Content Management
-          </h2>
-          <ul
-            className="list-disc list-inside space-y-2"
-            style={{ color: "var(--color-muted-text)" }}
-          >
-            <li>
-              <strong>Contentlayer v2:</strong> Type-safe MDX compiler with
-              custom schema, hot reload, and live data generation.
-            </li>
-            <li>
-              <strong>MDX v2:</strong> Markdown + JSX support with custom
-              components.
-            </li>
-            <li>
-              <strong>Prism Highlighting:</strong> For beautiful
-              syntax-highlighted code blocks.
-            </li>
-            <li>
-              <strong>Filesystem Source:</strong> Posts are stored in{" "}
-              <code>content/posts/</code> and compiled automatically.
-            </li>
-            <li>
-              <strong>Static Generation:</strong> All posts are pre-rendered at
-              build time for maximum performance.
-            </li>
-          </ul>
-        </section>
-      </FadeIn>
+        <p>
+          That&apos;s where we come in. We created this site to make government
+          assistance easier to understand and more approachable. Our goal is to
+          guide individuals and families through <em>what programs exist</em>,{" "}
+          <em>who qualifies</em>, and <em>how to apply</em> — without jargon or
+          red tape.
+        </p>
 
-      <FadeIn>
-        <section>
-          <h2
-            className="text-2xl font-semibold mb-4"
-            style={{ color: "var(--color-foreground)" }}
-          >
-            🧰 Tools & Enhancements
-          </h2>
-          <ul
-            className="list-disc list-inside space-y-2"
-            style={{ color: "var(--color-muted-text)" }}
-          >
-            <li>
-              <strong>Vitest + React Testing Library:</strong> For unit and
-              component testing.
-            </li>
-            <li>
-              <strong>SEO Meta:</strong> Open Graph + Twitter card metadata via
-              <code>generateMetadata</code> functions.
-            </li>
-            <li>
-              <strong>Vercel Deployment:</strong> Works out of the box with
-              Vercel.
-            </li>
-            <li>
-              <strong>AI Post Generator:</strong> CLI script uses OpenAI and
-              Pexels API to generate complete MDX posts with metadata and cover
-              images.
-            </li>
-          </ul>
-        </section>
-      </FadeIn>
+        <ul className="list-disc pl-5 sm:pl-10">
+          <li>Food & nutrition programs (SNAP, school lunches)</li>
+          <li>Internet assistance (Affordable Connectivity Program)</li>
+          <li>Utility relief & rent support</li>
+          <li>Medical & child care help</li>
+          <li>Phone programs like Lifeline</li>
+          <li>Education and job training resources</li>
+        </ul>
+
+        <p>
+          We&apos;re not a government agency — just a small team dedicated to
+          helping people find the right programs with confidence and clarity.
+        </p>
+
+        <p>
+          If you&apos;re struggling or just want to explore your options,
+          we&apos;re here to help point you in the right direction.
+        </p>
+      </section>
     </main>
   );
 }

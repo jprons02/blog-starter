@@ -1,4 +1,4 @@
-import { siteUrl } from "./constants";
+import { siteUrl, siteTitle, siteDescription } from "./constants";
 
 export type SEOProps = {
   title: string;
@@ -8,16 +8,14 @@ export type SEOProps = {
   type?: "website" | "article";
 };
 
-const BASE_URL = siteUrl;
-
-export function getPostMeta({
-  title,
-  description,
+export function getPageMeta({
+  title = siteTitle,
+  description = siteDescription,
   slug = "",
-  image = `${BASE_URL}/default-og.jpg`,
+  image = `${siteUrl}/default-og.jpg`,
   type = "article",
 }: SEOProps) {
-  const url = `${BASE_URL}/blog/${slug}`;
+  const url = `${siteUrl}/blog/${slug}`;
 
   return {
     title,
@@ -35,6 +33,5 @@ export function getPostMeta({
       description,
       images: [image],
     },
-    metadataBase: new URL(BASE_URL),
   };
 }

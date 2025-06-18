@@ -7,67 +7,50 @@ import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
 import BlogCard from "@/app/components/BlogCard";
 import FadeIn from "@/app/components/FadeIn";
-//import FadeInWrapper from "@/app/components/FadeInWrapper";
+import TagFilterDisplay from "@/app/components/TagFilterDisplay";
+import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
 import type { Post } from "contentlayer/generated";
 
 type Props = {
   posts: Post[];
+  initialTag?: string;
 };
 
-export default function BlogIndexClient({ posts }: Props) {
+export default function BlogIndexClient({ posts, initialTag }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(
+    initialTag || null
+  );
 
-  const sortedPosts = [...posts].sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  // Sort posts by date (newest first)
+  const sortedPosts = sortPosts(posts);
 
+  // Set up Fuse.js for fuzzy search across title, summary, and tags
   const fuse = new Fuse(sortedPosts, {
     keys: ["title", "summary", "tags"],
     threshold: 0.3,
   });
 
+  // Filter posts based on search query and selected tag
   let filtered = searchQuery
     ? fuse.search(searchQuery).map((r) => r.item)
     : sortedPosts;
 
   if (selectedTag) {
-    filtered = filtered.filter((post) => post.tags?.includes(selectedTag));
+    filtered = filterPostsByTag(filtered, selectedTag);
   }
 
-  const featured = filtered.find((p) => p.featured);
-  const postsWithoutFeatured = filtered.filter((p) => !p.featured);
-
-  console.log("Featured Post:", featured);
+  // Split featured post from the rest
+  const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
-      {/* 🎯 Active tag filter display */}
+      {/* 🎯 Show active tag filter display */}
       {selectedTag && (
-        <div className="mb-6">
-          <span
-            className="text-sm"
-            style={{ color: "var(--color-muted-text)" }}
-          >
-            Filtering by tag:
-            <span
-              className="ml-1 font-semibold"
-              style={{ color: "var(--color-foreground)" }}
-            >
-              #{selectedTag}
-            </span>
-          </span>
-          <button
-            onClick={() => setSelectedTag(null)}
-            className="ml-4 text-sm cursor-pointer hover:brightness-70"
-            style={{
-              color: "var(--color-primary)",
-              textDecoration: "underline",
-            }}
-          >
-            Clear filter
-          </button>
-        </div>
+        <TagFilterDisplay
+          tag={selectedTag}
+          onClear={() => setSelectedTag(null)}
+        />
       )}
 
       {/* 🌟 Featured Post Hero */}
@@ -120,16 +103,16 @@ export default function BlogIndexClient({ posts }: Props) {
       )}
 
       {/* 🔍 Search Bar */}
-      <FadeIn delay={2.5 * 100}>
+      <FadeIn delay={250}>
         <div className="mt-12 mb-1">
           <SearchBar onSearch={setSearchQuery} />
         </div>
       </FadeIn>
 
       {/* 🧱 Blog Card Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
         {postsWithoutFeatured.map((post) => (
-          <FadeIn key={post.url} delay={2.5 * 100}>
+          <FadeIn key={post.url} delay={250}>
             <BlogCard
               post={post}
               selectedTag={selectedTag}

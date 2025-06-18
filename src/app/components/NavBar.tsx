@@ -7,6 +7,12 @@ import ThemeToggle from "@/app/components/ToggleButtonLightDark";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
+const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "Tags", href: "/tags" },
+  { label: "About", href: "/about" },
+];
+
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLight, setIsLight] = useState(false);
@@ -17,46 +23,38 @@ export default function NavBar() {
 
   return (
     <nav
-      style={{
-        color: "var(--color-foreground)",
-      }}
-      className="w-full top-0 z-40 "
+      style={{ color: "var(--color-foreground)" }}
+      className="w-full top-0 z-40"
     >
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Brand / Logo */}
+        {/* Logo */}
         <Link
           href="/"
           className="text-xl font-bold hover:opacity-90 transition"
           style={{ color: "var(--color-primary)", lineHeight: "0" }}
         >
-          <div className="inline-block">
-            <Image
-              src={
-                isLight
-                  ? "/logo/blog_logo_dark.svg"
-                  : "/logo/blog_logo_light.svg"
-              }
-              alt="Blog Logo Dark"
-              width={36}
-              height={36}
-              priority
-            />
-          </div>
+          <Image
+            src={
+              isLight ? "/logo/blog_logo_dark.svg" : "/logo/blog_logo_light.svg"
+            }
+            alt="Blog Logo"
+            width={36}
+            height={36}
+            priority
+          />
         </Link>
 
-        {/* Desktop Nav + ThemeToggle */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6 ml-auto">
           <ul className="flex items-center gap-6 text-sm font-medium">
-            {["about"].map((page) => (
-              <li key={page}>
+            {NAV_ITEMS.map(({ label, href }) => (
+              <li key={href}>
                 <Link
-                  href={`/${page}`}
+                  href={href}
                   className="transition-colors duration-200"
-                  style={{
-                    color: "var(--color-foreground)",
-                  }}
+                  style={{ color: "var(--color-foreground)" }}
                 >
-                  {page.charAt(0).toUpperCase() + page.slice(1)}
+                  {label}
                 </Link>
               </li>
             ))}
@@ -64,16 +62,13 @@ export default function NavBar() {
           <ThemeToggle isLight={isLight} setIsLight={setIsLight} />
         </div>
 
-        {/* Mobile: ThemeToggle + Hamburger */}
+        {/* Mobile Toggle */}
         <div className="md:hidden flex items-center gap-2 ml-auto">
           <ThemeToggle isLight={isLight} setIsLight={setIsLight} />
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded transition"
-            style={{
-              color: "var(--color-foreground)",
-              backgroundColor: "transparent",
-            }}
+            style={{ backgroundColor: "transparent" }}
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -81,7 +76,7 @@ export default function NavBar() {
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile Nav */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -99,17 +94,15 @@ export default function NavBar() {
                 borderTop: "1px solid var(--color-border)",
               }}
             >
-              {["about"].map((page) => (
+              {NAV_ITEMS.map(({ label, href }) => (
                 <Link
-                  key={page}
-                  href={`/${page}`}
+                  key={href}
+                  href={href}
                   className="block text-sm font-medium transition"
-                  style={{
-                    color: "var(--color-muted-text)",
-                  }}
+                  style={{ color: "var(--color-muted-text)" }}
                   onClick={() => setIsOpen(false)}
                 >
-                  {page.charAt(0).toUpperCase() + page.slice(1)}
+                  {label}
                 </Link>
               ))}
             </div>
@@ -119,14 +112,3 @@ export default function NavBar() {
     </nav>
   );
 }
-
-/*
-    <nav
-      style={{
-        backgroundColor: "var(--color-muted-bg)",
-        borderBottom: "1px solid var(--color-border)",
-        color: "var(--color-foreground)",
-      }}
-      className="w-full sticky top-0 z-40 shadow-sm"
-    >
-*/
