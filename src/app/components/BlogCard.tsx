@@ -42,7 +42,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
         >
           {new Date(post.date).toLocaleDateString(undefined, {
             year: "numeric",
-            month: "long",
+            month: "short",
             day: "numeric",
           })}{" "}
           • {post.author?.toUpperCase() || "STAFF"}

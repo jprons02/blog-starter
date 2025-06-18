@@ -12,7 +12,9 @@ var Post = defineDocumentType(() => ({
     tags: { type: "list", of: { type: "string" } },
     image: { type: "string", required: false },
     author: { type: "string", required: false },
-    featured: { type: "boolean", required: false }
+    featured: { type: "boolean", required: false },
+    imageCreditName: { type: "string", required: false },
+    imageCreditUrl: { type: "string", required: false }
   },
   computedFields: {
     url: {
@@ -32,4 +34,4 @@ export {
   Post,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-3UOPINYR.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-4NL5GSZV.mjs.map

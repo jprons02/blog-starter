@@ -28,11 +28,23 @@ export async function generatePost(topic: string) {
 Include:
 - SEO-friendly summary
 - Tags and ISO 8601 date
-- Short intro, 4+ sections, bullet and number list
-- A tip in a blockquote
-- Valid Markdown formatting for MDX
+- Short intro, at least 4 structured sections with H2s
+- One bullet list and one numbered list
+- A practical tip in a blockquote
+- Mention 2-3 external sources or organizations with a URL that support your claims (e.g., .gov, .org, .edu, or high-authority .com sites)
 
-Do NOT include an H1 heading.`,
+**At the end, you MUST include the following exactly as shown (formatting is required):**
+
+***
+
+###### References
+[Source Name - Title](https://example.com)\
+[Another Source - Title](https://example.org)\
+
+**Do NOT skip the horizontal rule ("***"), the H6 heading ("###### References"), or the single backslash at the end of each link to create a line break. These are required.**
+
+- Use valid MDX Markdown formatting
+- Do NOT include an H1 heading.`,
     },
   ];
 

@@ -1,10 +1,18 @@
 import "./globals.css";
 import NavBar from "@/app/components/NavBar";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import Footer from "@/app/components/Footer";
+import { Poppins, Inter, JetBrains_Mono } from "next/font/google";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-sans",
+const poppins = Poppins({
+  variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["600"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-body",
   display: "swap",
 });
 
@@ -22,13 +30,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${jetbrainsMono.variable}`}
+      className={`${poppins.variable} ${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head />
       <body>
         <NavBar />
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -13,6 +13,8 @@ export const Post = defineDocumentType(() => ({
     image: { type: "string", required: false },
     author: { type: "string", required: false },
     featured: { type: "boolean", required: false },
+    imageCreditName: { type: "string", required: false },
+    imageCreditUrl: { type: "string", required: false },
   },
   computedFields: {
     url: {

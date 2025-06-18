@@ -38,6 +38,8 @@ export default function BlogIndexClient({ posts }: Props) {
   const featured = filtered.find((p) => p.featured);
   const postsWithoutFeatured = filtered.filter((p) => !p.featured);
 
+  console.log("Featured Post:", featured);
+
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
       {/* 🎯 Active tag filter display */}
@@ -75,7 +77,7 @@ export default function BlogIndexClient({ posts }: Props) {
             href={featured.url}
             className="group block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
           >
-            <div className="relative h-72 sm:h-96 w-full group-hover:brightness-110 transition">
+            <div className="relative h-auto min-h-[22rem] sm:h-96 w-full group-hover:brightness-110 transition">
               <Image
                 src={featured.image!}
                 alt={featured.title}
@@ -91,10 +93,25 @@ export default function BlogIndexClient({ posts }: Props) {
                   {featured.title}
                 </h2>
                 <p
-                  className="text-sm sm:text-base max-w-2xl line-clamp-3"
-                  style={{ color: "var(--color-static-dark-muted-text)" }}
+                  className="text-sm sm:text-base max-w-2xl line-clamp-4 sm:line-clamp-3 featured-summary"
+                  style={{ color: "#bac2cd" }}
                 >
                   {featured.summary}
+                </p>
+                <p
+                  className="uppercase tracking-wide mt-4 featured-meta"
+                  style={{
+                    color: "#bac2cd",
+                    fontSize: "0.65rem",
+                  }}
+                >
+                  {new Date(featured.date).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                  &nbsp;&nbsp;•&nbsp;&nbsp;
+                  {featured.author?.toUpperCase() || "STAFF"}
                 </p>
               </div>
             </div>

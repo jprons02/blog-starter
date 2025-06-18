@@ -20,6 +20,8 @@ export type Post = {
   image?: string | undefined
   author?: string | undefined
   featured?: boolean | undefined
+  imageCreditName?: string | undefined
+  imageCreditUrl?: string | undefined
   /** MDX file body */
   body: MDX
   url: string

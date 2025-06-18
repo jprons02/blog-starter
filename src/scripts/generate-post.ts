@@ -22,13 +22,22 @@ async function writePost(
     image?: string;
   },
   content: string,
-  images: { url: string; alt: string }[]
+  images: {
+    url: string;
+    alt: string;
+    photographer: string;
+    photographer_url: string;
+  }[]
 ) {
-  if (images[0]) meta.image = images[0].url;
+  const image = images[0];
 
-  const { title, summary, tags, date, image } = meta;
-
-  const mdx = formatPostToMDX({ title, summary, tags, date, image, content });
+  const mdx = formatPostToMDX({
+    ...meta,
+    image: image?.url,
+    imageCreditName: image?.photographer,
+    imageCreditUrl: image?.photographer_url,
+    content,
+  });
 
   const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
   await fs.writeFile(filePath, mdx);

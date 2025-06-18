@@ -15,20 +15,35 @@ export function formatPostToMDX(meta: {
   tags: string[];
   date: string;
   image?: string;
+  imageCreditName?: string;
+  imageCreditUrl?: string;
   content: string;
 }) {
-  const { title, summary, tags, date, image, content } = meta;
+  const {
+    title,
+    summary,
+    tags,
+    date,
+    image,
+    imageCreditName,
+    imageCreditUrl,
+    content,
+  } = meta;
 
-  // Construct frontmatter lines as YAML key-value strings
   const frontmatterLines = [
     `title: ${JSON.stringify(title)}`,
     `summary: ${JSON.stringify(summary)}`,
     `tags: ${JSON.stringify(tags)}`,
     `date: ${JSON.stringify(date)}`,
-    ...(image ? [`image: ${JSON.stringify(image)}`] : []), // Include image only if provided
+    ...(image ? [`image: ${JSON.stringify(image)}`] : []),
+    ...(imageCreditName
+      ? [`imageCreditName: ${JSON.stringify(imageCreditName)}`]
+      : []),
+    ...(imageCreditUrl
+      ? [`imageCreditUrl: ${JSON.stringify(imageCreditUrl)}`]
+      : []),
   ];
 
-  // Combine frontmatter and content into a complete MDX string
   const mdx = `---\n${frontmatterLines.join(
     "\n"
   )}\n---\n\n# ${title}\n\n${content.trim()}\n`;
