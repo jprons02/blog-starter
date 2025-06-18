@@ -111,14 +111,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
       {/* 🧱 Blog Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        Blog cards here...
-      </div>
-    </main>
-  );
-}
-
-/*
-{postsWithoutFeatured.map((post) => (
+        {postsWithoutFeatured.map((post) => (
           <FadeIn key={post.url} delay={250}>
             <BlogCard
               post={post}
@@ -127,4 +120,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
             />
           </FadeIn>
         ))}
-*/
+      </div>
+    </main>
+  );
+}
