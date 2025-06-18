@@ -1,7 +1,7 @@
+import { siteTitle } from "@/lib/constants";
+
 export default function PrivacyPolicyPage() {
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "YourSiteName";
-  const contactEmail =
-    process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@example.com";
+  const contactEmail = "contact@example.com";
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 privacy-policy">
       <h1
@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
 
       <section className="space-y-6 text-base leading-relaxed text-[var(--color-muted-text)]">
         <p>
-          {siteName} operates this blog to share helpful content. This page
+          {siteTitle} operates this blog to share helpful content. This page
           outlines how we handle data and what your rights are.
         </p>
 

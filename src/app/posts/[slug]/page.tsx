@@ -30,7 +30,7 @@ export default async function PostPage(props: {
               fontSize: "0.65rem",
             }}
           >
-            {new Date(post.date).toLocaleDateString(undefined, {
+            {new Date(post.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
               day: "numeric",

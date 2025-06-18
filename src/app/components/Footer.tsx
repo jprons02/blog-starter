@@ -1,10 +1,10 @@
-export default function Footer() {
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "This Site";
+import { siteTitle } from "@/lib/constants";
 
+export default function Footer() {
   return (
     <footer className="mt-16 border-t border-[var(--color-border)] py-6 text-center text-[var(--color-muted-text)]">
       <p className="mb-2">
-        © {new Date().getFullYear()} {siteName} All rights reserved.
+        © {new Date().getFullYear()} {siteTitle} All rights reserved.
       </p>
       <p>
         Photos via{" "}
