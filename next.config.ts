@@ -1,11 +1,14 @@
 import type { NextConfig } from "next";
 import { withContentlayer } from "next-contentlayer2";
+const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  experimental: {
-    allowDevelopmentBuild: true,
-  },
+  ...(isDev && {
+    experimental: {
+      allowDevelopmentBuild: true,
+    },
+  }),
   images: {
     remotePatterns: [
       {
