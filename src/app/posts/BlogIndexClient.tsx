@@ -133,7 +133,7 @@ import BlogCard from "@/app/components/BlogCard";
 import FadeIn from "@/app/components/FadeIn";
 import TagFilterDisplay from "@/app/components/TagFilterDisplay";
 import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
-import { formatDate } from "@/lib/formatDate";
+//import { formatDate } from "@/lib/formatDate";
 import type { Post } from "contentlayer/generated";
 
 type Props = {
@@ -165,7 +165,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
   const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
 
   // ✅ Precompute date string safely
-  const formattedFeaturedDate = featured ? formatDate(featured.date) : "";
+  //const formattedFeaturedDate = featured ? formatDate(featured.date) : "";
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
@@ -209,7 +209,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
                   className="uppercase tracking-wide mt-4 featured-meta"
                   style={{ color: "#bac2cd", fontSize: "0.65rem" }}
                 >
-                  {formattedFeaturedDate}
+                  {/*formattedFeaturedDate*/}
                   &nbsp;&nbsp;•&nbsp;&nbsp;
                   {featured.author?.toUpperCase() || "STAFF"}
                 </p>
