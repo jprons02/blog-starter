@@ -129,7 +129,7 @@ import Fuse from "fuse.js";
 //import Link from "next/link";
 //import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
-//import BlogCard from "@/app/components/BlogCard";
+import BlogCard from "@/app/components/BlogCard";
 import FadeIn from "@/app/components/FadeIn";
 import TagFilterDisplay from "@/app/components/TagFilterDisplay";
 import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
@@ -186,7 +186,11 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
         {postsWithoutFeatured.map((post) => (
           <FadeIn key={post.url} delay={250}>
-            Test
+            <BlogCard
+              post={post}
+              selectedTag={selectedTag}
+              onTagClick={setSelectedTag}
+            />
           </FadeIn>
         ))}
       </div>
