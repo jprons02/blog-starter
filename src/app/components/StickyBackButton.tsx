@@ -8,8 +8,6 @@ export default function StickyBackButton() {
   const searchParams = useSearchParams();
   const fromTag = searchParams.get("fromTag");
 
-  console.log("fromTag:", fromTag);
-
   const handleClick = () => {
     if (fromTag) {
       router.push(`/tags`);

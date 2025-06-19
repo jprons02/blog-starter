@@ -15,7 +15,7 @@ export type Post = {
   type: 'Post'
   title: string
   summary: string
-  date: IsoDateTimeString
+  date: string
   tags?: string[] | undefined
   image?: string | undefined
   author?: string | undefined
