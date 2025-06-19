@@ -5,7 +5,7 @@ import Fuse from "fuse.js";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
-//import BlogCard from "@/app/components/BlogCard";
+import BlogCard from "@/app/components/BlogCard";
 import FadeIn from "@/app/components/FadeIn";
 import TagFilterDisplay from "@/app/components/TagFilterDisplay";
 import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
@@ -42,8 +42,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
   }
 
   // Split featured post from the rest
-  //const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
-  const { featured } = splitFeatured(filtered);
+  const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
@@ -62,14 +61,16 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
             href={featured.url}
             className="group block rounded-3xl overflow-hidden shadow-md hover:shadow-lg transition-all"
           >
-            <div className="relative h-auto min-h-[22rem] sm:h-96 w-full group-hover:brightness-110 transition">
-              <Image
-                src={featured.image!}
-                alt={featured.title}
-                fill
-                className="object-cover group-hover:brightness-110 transition"
-                priority
-              />
+            <div className="relative h-[22rem] sm:h-96 w-full group-hover:brightness-110 transition">
+              {featured.image && (
+                <Image
+                  src={featured.image}
+                  alt={featured.title}
+                  fill
+                  className="object-cover group-hover:brightness-110 transition"
+                  priority
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
                 <h2
                   className="text-3xl sm:text-5xl font-bold mb-3 group-hover:underline"
@@ -109,14 +110,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
       {/* 🧱 Blog Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        test.
-      </div>
-    </main>
-  );
-}
-
-/*
-{postsWithoutFeatured.map((post) => (
+        {postsWithoutFeatured.map((post) => (
           <FadeIn key={post.url} delay={250}>
             <BlogCard
               post={post}
@@ -125,4 +119,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
             />
           </FadeIn>
         ))}
-*/
+      </div>
+    </main>
+  );
+}
