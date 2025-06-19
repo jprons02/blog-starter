@@ -7,12 +7,14 @@ import type { Post } from "contentlayer/generated";
 import { formatDate } from "@/lib/formatDate";
 
 type Props = {
-  post: Post; // ✅ Single post, not an array
+  post: Post;
   selectedTag?: string | null;
   onTagClick?: (tag: string) => void;
 };
 
 export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
+  const formattedDate = formatDate(post.date); // ✅ memoized date formatting
+
   return (
     <Link
       href={
@@ -45,7 +47,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           className="font-medium uppercase tracking-wide mb-4"
           style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
         >
-          {formatDate(post.date)}• {post.author?.toUpperCase() || "STAFF"}
+          {formattedDate} • {post.author?.toUpperCase() || "STAFF"}
         </p>
 
         {/* Title */}
@@ -67,16 +69,14 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
         {/* Tags */}
         {Array.isArray(post.tags) && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
-            {post.tags.map((tag) => {
-              return (
-                <Tag
-                  key={tag}
-                  name={tag}
-                  selected={selectedTag?.toLowerCase() === tag.toLowerCase()}
-                  onClick={onTagClick}
-                />
-              );
-            })}
+            {post.tags.map((tag) => (
+              <Tag
+                key={tag}
+                name={tag}
+                selected={selectedTag?.toLowerCase() === tag.toLowerCase()}
+                onClick={onTagClick}
+              />
+            ))}
           </div>
         )}
       </div>

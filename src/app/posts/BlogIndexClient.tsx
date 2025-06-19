@@ -126,15 +126,15 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
 import { useState } from "react";
 import Fuse from "fuse.js";
-//import Link from "next/link";
-//import Image from "next/image";
+import Link from "next/link";
+import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
 import BlogCard from "@/app/components/BlogCard";
 import FadeIn from "@/app/components/FadeIn";
 import TagFilterDisplay from "@/app/components/TagFilterDisplay";
 import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
+import { formatDate } from "@/lib/formatDate";
 import type { Post } from "contentlayer/generated";
-//import { formatDate } from "@/lib/formatDate";
 
 type Props = {
   posts: Post[];
@@ -147,16 +147,13 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
     initialTag || null
   );
 
-  // Sort posts by date (newest first)
   const sortedPosts = sortPosts(posts);
 
-  // Set up Fuse.js for fuzzy search across title, summary, and tags
   const fuse = new Fuse(sortedPosts, {
     keys: ["title", "summary", "tags"],
     threshold: 0.3,
   });
 
-  // Filter posts based on search query and selected tag
   let filtered = searchQuery
     ? fuse.search(searchQuery).map((r) => r.item)
     : sortedPosts;
@@ -165,8 +162,10 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
     filtered = filterPostsByTag(filtered, selectedTag);
   }
 
-  // Split featured post from the rest
-  const { rest: postsWithoutFeatured } = splitFeatured(filtered);
+  const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
+
+  // ✅ Precompute date string safely
+  const formattedFeaturedDate = featured ? formatDate(featured.date) : "";
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
@@ -177,28 +176,6 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
         />
       )}
 
-      <FadeIn delay={250}>
-        <div className="mt-12 mb-1">
-          <SearchBar onSearch={setSearchQuery} />
-        </div>
-      </FadeIn>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        {postsWithoutFeatured.map((post) => (
-          <FadeIn key={post.url} delay={250}>
-            <BlogCard
-              post={post}
-              selectedTag={selectedTag}
-              onTagClick={setSelectedTag}
-            />
-          </FadeIn>
-        ))}
-      </div>
-    </main>
-  );
-}
-
-/*
       {featured && (
         <FadeIn>
           <Link
@@ -230,12 +207,9 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
                 </p>
                 <p
                   className="uppercase tracking-wide mt-4 featured-meta"
-                  style={{
-                    color: "#bac2cd",
-                    fontSize: "0.65rem",
-                  }}
+                  style={{ color: "#bac2cd", fontSize: "0.65rem" }}
                 >
-                  {formatDate(featured.date)}
+                  {formattedFeaturedDate}
                   &nbsp;&nbsp;•&nbsp;&nbsp;
                   {featured.author?.toUpperCase() || "STAFF"}
                 </p>
@@ -245,12 +219,23 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
         </FadeIn>
       )}
 
+      <FadeIn delay={250}>
+        <div className="mt-12 mb-1">
+          <SearchBar onSearch={setSearchQuery} />
+        </div>
+      </FadeIn>
 
-      <BlogCard
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
+        {postsWithoutFeatured.map((post) => (
+          <FadeIn key={post.url} delay={250}>
+            <BlogCard
               post={post}
               selectedTag={selectedTag}
               onTagClick={setSelectedTag}
             />
-
-
-*/
+          </FadeIn>
+        ))}
+      </div>
+    </main>
+  );
+}
