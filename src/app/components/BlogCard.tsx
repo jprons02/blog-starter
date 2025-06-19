@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Tag from "@/app/components/Tag";
 import type { Post } from "contentlayer/generated";
-//import { formatDate } from "@/lib/formatDate";
+import { formatDate } from "@/lib/formatDate";
 
 type Props = {
   post: Post;
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
-  //const formattedDate = formatDate(post.date); // ✅ memoized date formatting
+  const formattedDate = formatDate(post.date); // ✅ memoized date formatting
 
   return (
     <Link
@@ -47,7 +47,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           className="font-medium uppercase tracking-wide mb-4"
           style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
         >
-          {/*formattedDate*/} • {post.author?.toUpperCase() || "STAFF"}
+          {formattedDate} • {post.author?.toUpperCase() || "STAFF"}
         </p>
 
         {/* Title */}
