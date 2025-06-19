@@ -1,8 +1,16 @@
-export function formatDate(dateInput: string | Date): string {
-  const date = new Date(dateInput);
-  const year = date.getFullYear();
-  const month = date.toLocaleString("en-US", { month: "short" }); // e.g., Jan
-  const day = date.getDate().toString().padStart(2, "0");
+export function formatDate(date: string): string {
+  try {
+    const parsed = new Date(date);
 
-  return `${month} ${day}, ${year}`; // e.g., Jan 21, 2025
+    // If the date is invalid, return the raw string for visibility
+    if (isNaN(parsed.getTime())) return date;
+
+    return parsed.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  } catch {
+    return date;
+  }
 }

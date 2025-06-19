@@ -18,21 +18,20 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
+export async function generateMetadata(props: {
   params: Promise<{ tag: string }>;
 }) {
-  const { tag } = await params;
+  const { tag } = await props.params;
 
   const displayTag = tag.replace(/-/g, " ");
+
   return {
     title: `Posts tagged with "${displayTag}"`,
     description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
     openGraph: {
       title: `Posts tagged with "${displayTag}"`,
       description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
-      url: `${siteUrl}/tags/${displayTag}`,
+      url: `${siteUrl}/tags/${tag}`, // ✅ Use kebab-case tag for URL
       type: "website",
       images: [getOgImageForTag(displayTag)],
     },
@@ -45,25 +44,24 @@ export async function generateMetadata({
   };
 }
 
-export default async function TagPage({
-  params,
-}: {
+export default async function TagPage(props: {
   params: Promise<{ tag: string }>;
 }) {
-  const { tag } = await params;
+  const { tag } = await props.params; // URL param (already kebab-case)
 
-  // Convert kebab-case back to the original tag format
-  const normalizedTag = decodeURIComponent(tag)
-    .toLowerCase()
-    .replace(/-/g, " ");
+  // Helper to normalize tags to kebab-case
+  const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
 
-  const taggedPosts = allPosts.filter(
-    (post) => post.tags?.some((t) => t.toLowerCase() === normalizedTag) // ✅ this is where it goes
+  // Match posts where a normalized tag equals the kebab-case route param
+  const taggedPosts = allPosts.filter((post) =>
+    post.tags?.some((t) => normalize(t) === tag)
   );
 
   if (!taggedPosts.length) return notFound();
 
-  const sortedPosts = sortPosts(taggedPosts);
+  // Pass human-readable tag (e.g., "Affordable Connectivity") to the UI
+  const readableTag = tag.replace(/-/g, " ");
 
-  return <TagPageClient posts={sortedPosts} tag={normalizedTag} />;
+  const sortedPosts = sortPosts(taggedPosts);
+  return <TagPageClient posts={sortedPosts} tag={readableTag} />;
 }

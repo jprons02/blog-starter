@@ -124,7 +124,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Fuse from "fuse.js";
 import Link from "next/link";
 import Image from "next/image";
@@ -146,6 +146,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
   const [selectedTag, setSelectedTag] = useState<string | null>(
     initialTag || null
   );
+  const [formattedFeaturedDate, setFormattedFeaturedDate] = useState("");
 
   const sortedPosts = sortPosts(posts);
 
@@ -164,8 +165,11 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
   const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
 
-  // ✅ Precompute date string safely
-  const formattedFeaturedDate = featured ? formatDate(featured.date) : "";
+  useEffect(() => {
+    if (featured?.date) {
+      setFormattedFeaturedDate(formatDate(featured.date));
+    }
+  }, [featured]);
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">

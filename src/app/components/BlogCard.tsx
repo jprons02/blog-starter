@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Tag from "@/app/components/Tag";
@@ -13,7 +14,11 @@ type Props = {
 };
 
 export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
-  const formattedDate = formatDate(post.date); // ✅ memoized date formatting
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    setDate(formatDate(post.date));
+  }, [post.date]);
 
   return (
     <Link
@@ -47,7 +52,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           className="font-medium uppercase tracking-wide mb-4"
           style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
         >
-          {formattedDate} • {post.author?.toUpperCase() || "STAFF"}
+          {date} • {post.author?.toUpperCase() || "STAFF"}
         </p>
 
         {/* Title */}
