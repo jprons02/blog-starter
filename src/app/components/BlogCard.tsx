@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Tag from "@/app/components/Tag";
 import type { Post } from "contentlayer/generated";
+import { formatDate } from "@/lib/formatDate";
 
 type Props = {
   post: Post; // ✅ Single post, not an array
@@ -44,12 +45,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           className="font-medium uppercase tracking-wide mb-4"
           style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
         >
-          {new Date(post.date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}{" "}
-          • {post.author?.toUpperCase() || "STAFF"}
+          {formatDate(post.date)}• {post.author?.toUpperCase() || "STAFF"}
         </p>
 
         {/* Title */}

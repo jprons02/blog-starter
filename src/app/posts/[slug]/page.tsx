@@ -5,6 +5,7 @@ import Image from "next/image";
 import Tag from "@/app/components/Tag";
 import StickyBackButton from "@/app/components/StickyBackButton";
 import FadeIn from "@/app/components/FadeIn";
+import { formatDate } from "@/lib/formatDate";
 
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
@@ -30,11 +31,7 @@ export default async function PostPage(props: {
               fontSize: "0.65rem",
             }}
           >
-            {new Date(post.date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
+            {formatDate(post.date)}
             &nbsp;&nbsp;•&nbsp;&nbsp;
             {post.author?.toUpperCase() || "STAFF"}
           </p>

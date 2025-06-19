@@ -3,6 +3,9 @@ import { withContentlayer } from "next-contentlayer2";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  experimental: {
+    allowDevelopmentBuild: true,
+  },
   images: {
     remotePatterns: [
       {

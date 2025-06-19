@@ -5,11 +5,12 @@ import Fuse from "fuse.js";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBar from "@/app/components/SearchBar";
-import BlogCard from "@/app/components/BlogCard";
+//import BlogCard from "@/app/components/BlogCard";
 import FadeIn from "@/app/components/FadeIn";
 import TagFilterDisplay from "@/app/components/TagFilterDisplay";
 import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
 import type { Post } from "contentlayer/generated";
+import { formatDate } from "@/lib/formatDate";
 
 type Props = {
   posts: Post[];
@@ -41,7 +42,8 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
   }
 
   // Split featured post from the rest
-  const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
+  //const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
+  const { featured } = splitFeatured(filtered);
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
@@ -88,11 +90,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
                     fontSize: "0.65rem",
                   }}
                 >
-                  {new Date(featured.date).toLocaleDateString(undefined, {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
+                  {formatDate(featured.date)}
                   &nbsp;&nbsp;•&nbsp;&nbsp;
                   {featured.author?.toUpperCase() || "STAFF"}
                 </p>
@@ -111,7 +109,14 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
       {/* 🧱 Blog Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        {postsWithoutFeatured.map((post) => (
+        test.
+      </div>
+    </main>
+  );
+}
+
+/*
+{postsWithoutFeatured.map((post) => (
           <FadeIn key={post.url} delay={250}>
             <BlogCard
               post={post}
@@ -120,7 +125,4 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
             />
           </FadeIn>
         ))}
-      </div>
-    </main>
-  );
-}
+*/
