@@ -146,6 +146,48 @@ figcaption a:hover {
 }
 
 /* =====================
+   Form Styles
+   ===================== */
+form input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+.tw-input-base {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-muted-bg);
+  color: var(--color-foreground);
+  width: 100%;
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  font-size: 0.875rem; /* text-sm */
+}
+
+.tw-input-base:focus,
+.tw-input-base:active {
+  background-color: var(--color-background);
+}
+
+.tw-input-base::placeholder {
+  color: var(--color-muted-text);
+}
+
+.tw-form-submit-base {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-muted-bg);
+  color: var(--color-foreground);
+  width: 100%;
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  font-size: 0.875rem; /* text-sm */
+}
+.tw-form-submit-base:hover {
+  background-color: var(--color-background);
+  cursor: pointer;
+}
+
+/* =====================
    Markdown Styles
    ===================== */
 

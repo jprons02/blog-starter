@@ -94,7 +94,7 @@ export default function ContactModal() {
             {/* Close button */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-[var(--color-muted-text)] hover:text-[var(--color-foreground)] text-lg"
+              className="cursor-pointer absolute top-4 right-4 text-[var(--color-muted-text)] hover:text-[var(--color-foreground)] text-lg"
               aria-label="Close contact form"
             >
               ✕
@@ -109,7 +109,7 @@ export default function ContactModal() {
                 value={form.name}
                 onChange={handleChange}
                 required
-                className="w-full rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 text-sm placeholder-[var(--color-muted-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                className="tw-input-base"
               />
               <input
                 name="email"
@@ -118,7 +118,7 @@ export default function ContactModal() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 text-sm placeholder-[var(--color-muted-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                className="tw-input-base"
               />
               <textarea
                 name="message"
@@ -126,14 +126,18 @@ export default function ContactModal() {
                 value={form.message}
                 onChange={handleChange}
                 required
-                className="w-full h-28 resize-none rounded-lg border border-[var(--color-border)] bg-transparent px-4 py-2 text-sm placeholder-[var(--color-muted-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
+                className="tw-input-base"
               />
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="w-full py-2 rounded-lg bg-[var(--color-primary)] text-black font-semibold hover:brightness-110 transition disabled:opacity-50"
+                className="tw-form-submit-base flex items-center justify-center gap-2"
               >
-                {status === "sending" ? "Sending..." : "Send Message"}
+                {status === "sending" ? (
+                  <div className="w-5 h-5 border-2 border-t-transparent border-[var(--color-primary)] rounded-full animate-spin" />
+                ) : (
+                  "Send Message"
+                )}
               </button>
             </form>
           </motion.div>
@@ -142,43 +146,3 @@ export default function ContactModal() {
     </AnimatePresence>
   );
 }
-
-/*
-  // Handle form submit event
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus("sending");
-
-    try {
-      // Step 1: Get a reCAPTCHA token from Google
-      const token = await window.grecaptcha.execute(recaptchaKey, {
-        action: "submit",
-      });
-
-      // Step 2: Validate token via backend Lambda
-      const verified = await verifyCaptcha(token);
-
-      if (!verified) {
-        setStatus("error");
-        toast.error("Failed reCAPTCHA verification.");
-        return;
-      }
-
-      // Step 3: Send the email through SES Lambda
-      const res = await sendEmail(form);
-
-      if (res.ok) {
-        setStatus("sent");
-        setForm({ name: "", email: "", message: "" }); // Reset form
-        toast.success("Message sent successfully!");
-        setIsOpen(false); // Close modal
-      } else {
-        throw new Error("Failed to send");
-      }
-    } catch (err) {
-      setStatus("error");
-      toast.error("Something went wrong. Please try again.");
-    }
-  };
-
-*/
