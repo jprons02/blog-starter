@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Hides recpatcha badge. */
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
 /* ====================================
    Base Theme Tokens (Dark Mode Default)
    ==================================== */

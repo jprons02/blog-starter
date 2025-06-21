@@ -1,7 +1,10 @@
+"use client";
+
+import { useContactModal } from "@/app/hooks/useContactModal";
 import { siteTitle } from "@/lib/constants";
 
 export default function PrivacyPolicyPage() {
-  const contactEmail = "contact@example.com";
+  const { setIsOpen } = useContactModal();
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 privacy-policy">
       <h1
@@ -28,7 +31,7 @@ export default function PrivacyPolicyPage() {
             explicitly provided by you (e.g., via forms or email).
           </p>
           <p>We may use third-party services such as:</p>
-          <ul className="list-disc list-inside mt-2">
+          <ul className="list-disc pl-5 sm:pl-10 mt-2">
             <li>
               Plausible or Vercel Analytics (privacy-focused traffic insights)
             </li>
@@ -53,13 +56,12 @@ export default function PrivacyPolicyPage() {
             We may link to or use tools from third-party providers. See their
             privacy policies for more info:
           </p>
-          <ul className="list-disc list-inside mt-2">
+          <ul className="list-disc pl-5 sm:pl-10 mt-2">
             <li>
               <a
                 href="https://www.pexels.com/about/privacy/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-[var(--color-primary-dark)]"
               >
                 Pexels Privacy Policy
               </a>
@@ -69,7 +71,6 @@ export default function PrivacyPolicyPage() {
                 href="https://openai.com/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-[var(--color-primary-dark)]"
               >
                 OpenAI Privacy Policy
               </a>
@@ -102,11 +103,10 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <p className="pt-6">
-          Questions? Email us at{" "}
-          <a href={`mailto:${contactEmail}`} className="underline">
-            {contactEmail}
+          Questions?{" "}
+          <a onClick={() => setIsOpen(true)} className="cursor-pointer">
+            Contact us.
           </a>
-          .
         </p>
       </section>
     </main>

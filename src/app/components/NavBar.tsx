@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import ThemeToggle from "@/app/components/ToggleButtonLightDark";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useContactModal } from "@/app/hooks/useContactModal";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -16,10 +17,16 @@ const NAV_ITEMS = [
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLight, setIsLight] = useState(false);
+  const { setIsOpen: openContactModal } = useContactModal();
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", isLight);
   }, [isLight]);
+
+  const handleContactClick = () => {
+    setIsOpen(false); // close mobile nav if open
+    openContactModal(true); // open modal
+  };
 
   return (
     <nav
@@ -58,6 +65,16 @@ export default function NavBar() {
                 </Link>
               </li>
             ))}
+            {/* Contact as inline nav item */}
+            <li>
+              <span
+                onClick={handleContactClick}
+                className="cursor-pointer transition-colors duration-200"
+                style={{ color: "var(--color-foreground)" }}
+              >
+                Contact
+              </span>
+            </li>
           </ul>
           <ThemeToggle isLight={isLight} setIsLight={setIsLight} />
         </div>
@@ -105,6 +122,14 @@ export default function NavBar() {
                   {label}
                 </Link>
               ))}
+              {/* Contact in mobile nav */}
+              <span
+                onClick={handleContactClick}
+                className="block text-sm font-medium transition cursor-pointer"
+                style={{ color: "var(--color-muted-text)" }}
+              >
+                Contact
+              </span>
             </div>
           </motion.div>
         )}
