@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import BlogCard from "@/app/components/BlogCard";
 import Tag from "@/app/components/Tag";
@@ -11,11 +11,30 @@ import { siteUrl } from "@/lib/constants";
 import type { Post } from "contentlayer/generated";
 import { useRouter } from "next/navigation";
 
+const CATEGORIES = [
+  "Housing & Utilities",
+  "Phones & Internet",
+  "Health & Nutrition",
+  "Money & Benefits",
+];
+
 export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
+  const [postsByCategory, setPostsByCategory] = useState<Post[]>([]);
+
+  useEffect(() => {
+    setPostsByCategory(
+      allPosts.filter((post) =>
+        post.category?.some(
+          (cat) => cat.toLowerCase() === selectedCategory.toLowerCase()
+        )
+      ) || []
+    );
+  }, [selectedCategory]);
 
   const handleCopy = async () => {
     if (!selectedTag) return;
@@ -33,13 +52,16 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
   };
 
   const handleTagClick = (tag: string) => {
-    setSelectedTag(tag);
     const slug = tag.toLowerCase().replace(/\s+/g, "-");
     router.push(`/tags/${slug}`); // ⬅️ Change the URL on click
   };
 
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
   const tagMap = new Map<string, string>();
-  for (const post of allPosts) {
+  for (const post of postsByCategory) {
     for (const rawTag of post.tags || []) {
       const key = rawTag.toLowerCase();
       if (!tagMap.has(key)) tagMap.set(key, rawTag);
@@ -47,7 +69,7 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
   }
 
   const tags = Array.from(tagMap.values()).sort();
-  const sortedPosts = sortPosts(allPosts);
+  const sortedPosts = sortPosts(postsByCategory);
   const filteredPosts = selectedTag
     ? filterPostsByTag(sortedPosts, selectedTag.toLowerCase())
     : [];
@@ -60,6 +82,29 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
       >
         Browse by Tag
       </h1>
+
+      {/* ✅ Category Tabs */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {CATEGORIES.map((category) => (
+          <button
+            key={category}
+            onClick={() => handleCategoryChange(category)}
+            className="cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition hover:shadow-sm hover:brightness-110"
+            style={{
+              backgroundColor:
+                selectedCategory === category
+                  ? "var(--color-primary)"
+                  : "var(--color-tag-bg)",
+              color:
+                selectedCategory === category
+                  ? "var(--color-background)"
+                  : "var(--color-tag-text)",
+            }}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
 
       <div className="flex flex-wrap gap-2 mb-8">
         {tags.map((tag) => (

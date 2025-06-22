@@ -17,6 +17,7 @@ export type Post = {
   summary: string
   date: string
   tags?: string[] | undefined
+  category?: string[] | undefined
   image?: string | undefined
   author?: string | undefined
   featured?: boolean | undefined
