@@ -6,7 +6,10 @@ export default function AboutPage() {
   const { setIsOpen } = useContactModal();
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
-      <h1 className="text-4xl font-bold mb-4 text-[var(--color-primary)]">
+      <h1
+        className="text-3xl font-bold mb-6"
+        style={{ color: "var(--color-primary)" }}
+      >
         About Us
       </h1>
       <p className="text-sm text-[var(--color-muted-text)] mb-8">

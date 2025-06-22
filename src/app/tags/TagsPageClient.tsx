@@ -9,8 +9,10 @@ import TagFilterDisplay from "@/app/components/TagFilterDisplay";
 import { sortPosts, filterPostsByTag } from "@/lib/posts";
 import { siteUrl } from "@/lib/constants";
 import type { Post } from "contentlayer/generated";
+import { useRouter } from "next/navigation";
 
 export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
+  const router = useRouter();
   const pathname = usePathname();
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -28,6 +30,12 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
     } catch (err) {
       console.error("Failed to copy tag URL:", err);
     }
+  };
+
+  const handleTagClick = (tag: string) => {
+    setSelectedTag(tag);
+    const slug = tag.toLowerCase().replace(/\s+/g, "-");
+    router.push(`/tags/${slug}`); // ⬅️ Change the URL on click
   };
 
   const tagMap = new Map<string, string>();
@@ -59,7 +67,7 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
             key={tag}
             name={tag}
             selected={tag.toLowerCase() === selectedTag?.toLowerCase()}
-            onClick={setSelectedTag}
+            onClick={() => handleTagClick(tag)}
           />
         ))}
       </div>
