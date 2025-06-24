@@ -26,10 +26,7 @@ export default function ContactForm() {
     "idle"
   );
 
-  console.log("process.env: ", process.env);
-
   const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!;
-  console.log("reCAPTCHA key:", recaptchaKey);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,8 +36,6 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Submitting contact form:", form);
 
     const nameError = validateName(form.name);
     const emailError = validateEmail(form.email);
@@ -56,20 +51,15 @@ export default function ContactForm() {
       return;
     }
 
-    console.log("No validation errors, proceeding with submission");
-
     setErrors({});
     setStatus("sending");
 
     try {
-      console.log("Executing reCAPTCHA...");
       const token = await window.grecaptcha.execute(recaptchaKey, {
         action: "submit",
       });
-      console.log("reCAPTCHA token received:", token);
 
       const verified = await verifyCaptcha(token);
-      console.log("reCAPTCHA verification result:", verified);
       if (!verified) {
         setStatus("error");
         toast.error("Failed reCAPTCHA verification.");
