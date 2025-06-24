@@ -7,7 +7,7 @@ vi.mock("node-fetch", () => ({
   default: vi.fn(),
 }));
 
-import { searchPexelsImages } from "@/lib/pexels";
+import { searchPexelsImages } from "@/lib/api/pexels";
 
 describe("searchPexelsImages", () => {
   it("returns formatted image results with fallback alt text", async () => {

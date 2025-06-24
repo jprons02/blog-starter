@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Tag from "@/app/components/Tag";
+import Tag from "@/app/components/ui/Tag";
 import type { Post } from "contentlayer/generated";
-import { formatDate } from "@/lib/formatDate";
+import { formatDate } from "@/lib/utils/formatDate";
 
 type Props = {
   post: Post;

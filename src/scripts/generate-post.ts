@@ -4,9 +4,9 @@
 import fs from "fs/promises";
 import path from "path";
 import dotenv from "dotenv";
-import { fetchImages, promptUser } from "../lib/pexels.ts";
-import { formatPostToMDX } from "../lib/post-generator.ts";
-import { generatePost } from "../lib/openai-post.ts";
+import { fetchImages, promptUser } from "../lib/api/pexels.ts";
+import { formatPostToMDX } from "../lib/services/post-generator.ts";
+import { generatePost } from "../lib/api/openai-post.ts";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 

@@ -1,6 +1,6 @@
 import { allPosts } from "contentlayer/generated";
 import type { MetadataRoute } from "next";
-import { siteUrl } from "@/lib/constants";
+import { siteUrl } from "@/lib/utils/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import sendEmail from "@/lib/sendEmail";
-import verifyCaptcha from "@/lib/verifyRecaptcha";
+import sendEmail from "@/lib/api/sendEmail";
+import verifyCaptcha from "@/lib/api/verifyRecaptcha";
 import { useModal } from "@/app/hooks/useModal";
-import { validateName, validateEmail } from "@/lib/validationSchemas";
+import { validateName, validateEmail } from "@/lib/utils/validationSchemas";
 
 declare global {
   interface Window {

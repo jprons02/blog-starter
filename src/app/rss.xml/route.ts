@@ -1,5 +1,5 @@
 import { allPosts } from "contentlayer/generated";
-import { siteUrl } from "@/lib/constants";
+import { siteUrl } from "@/lib/utils/constants";
 
 export async function GET() {
   const feedItems = allPosts

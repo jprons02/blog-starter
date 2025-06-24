@@ -1,8 +1,8 @@
 "use client";
 
-import BaseModal from "@/app/components/BaseModal";
-import ContactForm from "@/app/components/ContactForm";
-import BenefitForm from "@/app/components/BenefitForm";
+import BaseModal from "@/app/components/modals/BaseModal";
+import ContactForm from "@/app/components/forms/ContactForm";
+import BenefitForm from "@/app/components/forms/BenefitForm";
 import { useModal } from "@/app/hooks/useModal";
 
 export default function GlobalModal() {

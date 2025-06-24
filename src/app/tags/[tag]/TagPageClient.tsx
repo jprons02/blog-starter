@@ -1,8 +1,8 @@
 "use client";
 
-import BlogCard from "@/app/components/BlogCard";
-import FadeIn from "@/app/components/FadeIn";
-import TagFilterDisplay from "@/app/components/TagFilterDisplay";
+import BlogCard from "@/app/components/ui/BlogCard";
+import FadeIn from "@/app/components/ui/FadeIn";
+import TagFilterDisplay from "@/app/components/ui/TagFilterDisplay";
 import type { Post } from "contentlayer/generated";
 import { useRouter } from "next/navigation";
 

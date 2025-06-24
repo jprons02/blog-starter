@@ -2,8 +2,8 @@ import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
-import { siteUrl } from "@/lib/constants";
-import { getOgImageForTag } from "@/lib/og";
+import { siteUrl } from "@/lib/utils/constants";
+import { getOgImageForTag } from "@/lib/utils/og";
 
 export async function generateStaticParams() {
   const tags = [

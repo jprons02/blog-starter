@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { siteTitle } from "@/lib/constants";
+import { siteTitle } from "@/lib/utils/constants";
 
 export default function Footer() {
   const [year, setYear] = useState<number | null>(null);

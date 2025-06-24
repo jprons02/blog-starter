@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import Fuse from "fuse.js";
 import Link from "next/link";
 import Image from "next/image";
-import SearchBar from "@/app/components/SearchBar";
-import BlogCard from "@/app/components/BlogCard";
-import FadeIn from "@/app/components/FadeIn";
-import TagFilterDisplay from "@/app/components/TagFilterDisplay";
+import SearchBar from "@/app/components/ui/SearchBar";
+import BlogCard from "@/app/components/ui/BlogCard";
+import FadeIn from "@/app/components/ui/FadeIn";
+import TagFilterDisplay from "@/app/components/ui/TagFilterDisplay";
 import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
-import { formatDate } from "@/lib/formatDate";
+import { formatDate } from "@/lib/utils/formatDate";
 import type { Post } from "contentlayer/generated";
 
 type Props = {

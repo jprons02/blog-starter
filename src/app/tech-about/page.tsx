@@ -2,7 +2,7 @@
 
 "use client";
 
-import FadeIn from "@/app/components/FadeIn";
+import FadeIn from "@/app/components/ui/FadeIn";
 
 export default function AboutPage() {
   return (

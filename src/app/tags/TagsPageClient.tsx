@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import BlogCard from "@/app/components/BlogCard";
-import Tag from "@/app/components/Tag";
-import FadeIn from "@/app/components/FadeIn";
-import TagFilterDisplay from "@/app/components/TagFilterDisplay";
+import BlogCard from "@/app/components/ui/BlogCard";
+import Tag from "@/app/components/ui/Tag";
+import FadeIn from "@/app/components/ui/FadeIn";
+import TagFilterDisplay from "@/app/components/ui/TagFilterDisplay";
 import { sortPosts, filterPostsByTag } from "@/lib/posts";
-import { siteUrl } from "@/lib/constants";
+import { siteUrl } from "@/lib/utils/constants";
 import type { Post } from "contentlayer/generated";
 import { useRouter } from "next/navigation";
 

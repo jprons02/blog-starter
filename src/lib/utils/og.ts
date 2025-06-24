@@ -1,7 +1,7 @@
 /** Metadata dynamic images */
 
 import { allPosts } from "contentlayer/generated";
-import { siteUrl } from "@/lib/constants";
+import { siteUrl } from "@/lib/utils/constants";
 
 export function getOgImageForTag(tag: string): string {
   const normalizedTag = tag.toLowerCase();

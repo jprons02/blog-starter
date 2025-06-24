@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import ThemeToggle from "@/app/components/ToggleButtonLightDark";
+import ThemeToggle from "@/app/components/layout/ToggleButtonLightDark";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useModal } from "@/app/hooks/useModal";

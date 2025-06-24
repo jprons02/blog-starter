@@ -2,10 +2,10 @@ import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import { getMDXComponent } from "next-contentlayer2/hooks";
 import Image from "next/image";
-import Tag from "@/app/components/Tag";
-import StickyBackButton from "@/app/components/StickyBackButton";
-import FadeIn from "@/app/components/FadeIn";
-import { formatDate } from "@/lib/formatDate";
+import Tag from "@/app/components/ui/Tag";
+import StickyBackButton from "@/app/components/layout/StickyBackButton";
+import FadeIn from "@/app/components/ui/FadeIn";
+import { formatDate } from "@/lib/utils/formatDate";
 import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
 
 export default async function PostPage(props: {
@@ -96,7 +96,7 @@ export default async function PostPage(props: {
 // Dynamically generates SEO metadata for individual blog posts
 // using Contentlayer data and a reusable metadata helper.
 // Includes Open Graph and Twitter card support.
-import { getPageMeta } from "@/lib/seo";
+import { getPageMeta } from "@/lib/utils/seo";
 export async function generateMetadata({
   params,
 }: {

@@ -1,12 +1,12 @@
 import "./globals.css";
-import NavBar from "@/app/components/NavBar";
-import Footer from "@/app/components/Footer";
+import NavBar from "@/app/components/layout/NavBar";
+import Footer from "@/app/components/layout/Footer";
 import { Poppins, Inter, JetBrains_Mono } from "next/font/google";
-import GlobalModal from "@/app/components/GlobalModal";
+import GlobalModal from "@/app/components/modals/GlobalModal";
 import { ModalProvider } from "@/app/hooks/useModal";
 import { Toaster } from "sonner";
 import Script from "next/script";
-import { GA_TRACKING_ID } from "@/lib/gtag";
+import { GA_TRACKING_ID } from "@/lib/utils/gtag";
 import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 import { Suspense } from "react";
 

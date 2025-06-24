@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { getPostMeta } from "@/lib/seo";
+import { getPostMeta } from "@/lib/utils/seo";
 
 describe("getPostMeta", () => {
   /**

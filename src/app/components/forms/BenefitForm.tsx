@@ -7,8 +7,8 @@ import {
   validateName,
   validateEmail,
   validatePhone,
-} from "@/lib/validationSchemas";
-import { getEligibilityResults } from "@/lib/benefitEligibility";
+} from "@/lib/utils/validationSchemas";
+import { getEligibilityResults } from "@/lib/services/benefitEligibility";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
 const steps = [

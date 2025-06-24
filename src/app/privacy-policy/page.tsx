@@ -1,7 +1,7 @@
 "use client";
 
 import { useModal } from "@/app/hooks/useModal";
-import { siteTitle } from "@/lib/constants";
+import { siteTitle } from "@/lib/utils/constants";
 
 export default function PrivacyPolicyPage() {
   const { openModal } = useModal();

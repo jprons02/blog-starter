@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect, vi } from "vitest";
-import { generatePost } from "@/lib/openai-post";
+import { generatePost } from "@/lib/api/openai-post";
 
 // 🔧 Mock OpenAI class constructor + completions.create method
 vi.mock("openai", () => {

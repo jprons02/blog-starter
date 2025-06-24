@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { formatPostToMDX } from "@/lib/post-generator";
+import { formatPostToMDX } from "@/lib/services/post-generator";
 
 describe("formatPostToMDX", () => {
   /**

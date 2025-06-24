@@ -1,5 +1,5 @@
 "use client";
-import { siteTitle } from "@/lib/constants";
+import { siteTitle } from "@/lib/utils/constants";
 import { useModal } from "@/app/hooks/useModal";
 
 export default function AboutPage() {
