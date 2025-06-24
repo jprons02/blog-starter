@@ -27,6 +27,7 @@ export default function ContactForm() {
   );
 
   const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!;
+  console.log("reCAPTCHA key:", recaptchaKey);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
