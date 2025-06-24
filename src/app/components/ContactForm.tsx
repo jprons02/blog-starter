@@ -26,6 +26,8 @@ export default function ContactForm() {
     "idle"
   );
 
+  console.log("process.env: ", process.env);
+
   const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!;
   console.log("reCAPTCHA key:", recaptchaKey);
 
