@@ -37,6 +37,7 @@ export default function StickyBackButton() {
         backgroundColor: "var(--color-muted-bg)",
         color: "var(--color-foreground)",
         border: "1px solid var(--color-border)",
+        zIndex: 10,
       }}
     >
       <ArrowLeft className="w-4 h-4" />

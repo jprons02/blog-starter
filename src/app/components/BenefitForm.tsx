@@ -124,7 +124,11 @@ export default function BenefitEligibilityForm() {
                   setForm({ ...form, householdSize: Number(e.target.value) })
                 }
                 className="tw-input-base pr-8" // add right padding for the buttons
-                style={{ height: "70px", fontSize: "24px" }}
+                style={{
+                  height: "70px",
+                  fontSize: "24px",
+                  color: "var(--color-foreground)",
+                }}
               />
               <div className="absolute right-1 top-1 bottom-1 flex flex-col justify-between">
                 <button
@@ -167,7 +171,7 @@ export default function BenefitEligibilityForm() {
               className="block font-medium"
               style={{ color: "var(--color-muted-text)" }}
             >
-              What is your total monthly household income?
+              What is your total <strong>monthly</strong> household income?
             </label>
             <div className="space-y-2">
               {[
@@ -191,17 +195,17 @@ export default function BenefitEligibilityForm() {
                     className="hidden"
                   />
                   <div
-                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition ${
+                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition ${
                       form.income === value
                         ? "border-[var(--color-primary)]"
                         : "border-[var(--color-border)]"
                     }`}
                   >
                     {form.income === value && (
-                      <div className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
+                      <div className="w-3 h-3 rounded-full bg-[var(--color-primary)]" />
                     )}
                   </div>
-                  <span className="text-sm text-[var(--color-muted-text)]">
+                  <span className="text-lg text-[var(--color-foreground)]">
                     {label}
                   </span>
                 </label>
@@ -250,7 +254,7 @@ export default function BenefitEligibilityForm() {
                       className="hidden"
                     />
                     <div
-                      className={`w-4 h-4 border-2 rounded-sm flex items-center justify-center transition ${
+                      className={`w-6 h-6 border-2 rounded-sm flex items-center justify-center transition ${
                         isChecked
                           ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
                           : "border-[var(--color-border)]"
@@ -258,7 +262,7 @@ export default function BenefitEligibilityForm() {
                     >
                       {isChecked && (
                         <svg
-                          className="w-3 h-3"
+                          className="w-5 h-5"
                           style={{ color: "var(--color-background)" }}
                           viewBox="0 0 20 20"
                           fill="currentColor"
@@ -271,7 +275,7 @@ export default function BenefitEligibilityForm() {
                         </svg>
                       )}
                     </div>
-                    <span className="text-sm text-[var(--color-muted-text)]">
+                    <span className="text-lg text-[var(--color-foreground)]">
                       {label}
                     </span>
                   </label>
@@ -307,17 +311,21 @@ export default function BenefitEligibilityForm() {
                 }}
                 type="button"
               >
-                Yes
+                <span className="text-lg color-[var(--color-foreground)]">
+                  Yes
+                </span>
               </button>
               <button
-                className="tw-form-submit-base"
+                className="tw-form-submit-base color-[var(--color-foreground)]"
                 onClick={() => {
                   setForm({ ...form, housing: "no" });
                   handleNext();
                 }}
                 type="button"
               >
-                No
+                <span className="text-lg color-[var(--color-foreground)]">
+                  No
+                </span>
               </button>
             </div>
           </div>
@@ -388,7 +396,9 @@ export default function BenefitEligibilityForm() {
                 }}
                 className="tw-form-submit-base bg-[var(--color-primary)] text-white w-full mt-2"
               >
-                See My Results
+                <span className="text-lg color-[var(--color-foreground)]">
+                  See My Results
+                </span>
               </button>
             </div>
           </div>
@@ -455,7 +465,14 @@ export default function BenefitEligibilityForm() {
   return (
     <div className="space-y-6">
       <div className="text-xs" style={{ color: "var(--color-muted-text)" }}>
-        Step {step + 1} of {steps.length}: <strong>{steps[step]}</strong>
+        {step < steps.length - 1 ? (
+          <>
+            Step {step + 1} of {steps.length - 1}:{" "}
+            <strong>{steps[step]}</strong>
+          </>
+        ) : (
+          <strong>Results</strong>
+        )}
       </div>
       <AnimatePresence mode="wait">
         <motion.div
