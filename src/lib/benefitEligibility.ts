@@ -10,7 +10,7 @@ export type FormData = {
   householdSize: number;
   income: string;
   situations: string[];
-  housing: string;
+  payUtility: string;
 };
 
 const FPL: Record<number, number> = {
@@ -47,7 +47,7 @@ export function getEligibilityResults(form: FormData): Benefit[] {
       form.situations.includes("I have children under 5")) &&
     incomeAmount <= householdFPL * 1.85;
   const qualifiesForLIHEAP =
-    form.housing === "yes" && incomeAmount <= householdFPL * 1.5;
+    form.payUtility === "yes" && incomeAmount <= householdFPL * 1.5;
 
   if (qualifiesForSNAP) {
     results.push({

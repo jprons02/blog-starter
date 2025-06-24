@@ -9,7 +9,7 @@ const sendEmail = async ({
 }) => {
   const API_ENDPOINT =
     "https://xjsx1og5tf.execute-api.us-east-1.amazonaws.com/prod/contact";
-  const API_KEY = process.env.NEXT_PUBLIC_LAMBDA_EMAIL_API_KEY!;
+  const API_KEY = process.env.NEXT_PUBLIC_LAMBDA_BLOG_API_KEY!;
 
   const response = await fetch(API_ENDPOINT, {
     method: "POST",

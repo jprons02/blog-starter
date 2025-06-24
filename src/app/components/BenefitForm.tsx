@@ -15,7 +15,7 @@ const steps = [
   "Household",
   "Income",
   "Situations",
-  "Housing",
+  "Pay Utility",
   "Contact",
   "Results",
 ];
@@ -29,7 +29,7 @@ export default function BenefitEligibilityForm() {
     householdSize: 1,
     income: "",
     situations: [] as string[],
-    housing: "yes",
+    payUtility: "yes",
     firstName: "",
     lastName: "",
     email: "",
@@ -306,7 +306,7 @@ export default function BenefitEligibilityForm() {
               <button
                 className="tw-form-submit-base"
                 onClick={() => {
-                  setForm({ ...form, housing: "yes" });
+                  setForm({ ...form, payUtility: "yes" });
                   handleNext();
                 }}
                 type="button"
@@ -318,7 +318,7 @@ export default function BenefitEligibilityForm() {
               <button
                 className="tw-form-submit-base color-[var(--color-foreground)]"
                 onClick={() => {
-                  setForm({ ...form, housing: "no" });
+                  setForm({ ...form, payUtility: "no" });
                   handleNext();
                 }}
                 type="button"
