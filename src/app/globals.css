@@ -148,10 +148,23 @@ figcaption a:hover {
 /* =====================
    Form Styles
    ===================== */
-form input:focus,
+input:focus,
 textarea:focus,
 select:focus {
   outline: none;
+}
+
+.tw-input-error-label {
+  font-size: var(--text-xs);
+  font-style: italic;
+  color: var(--color-danger);
+  margin-left: calc(var(--spacing) * 1);
+  margin-bottom: calc(var(--spacing) * 4);
+  margin-top: -10px;
+}
+
+.tw-input-error {
+  border-color: var(--color-danger) !important;
 }
 
 .tw-input-base {
@@ -185,6 +198,17 @@ select:focus {
 .tw-form-submit-base:hover {
   background-color: var(--color-background);
   cursor: pointer;
+}
+
+/* Hide number input spinners in all browsers */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
 }
 
 /* =====================

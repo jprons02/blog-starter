@@ -34,7 +34,7 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
         )
       ) || []
     );
-  }, [selectedCategory]);
+  }, [selectedCategory, allPosts]);
 
   const handleCopy = async () => {
     if (!selectedTag) return;

@@ -1,9 +1,9 @@
 "use client";
 import { siteTitle } from "@/lib/constants";
-import { useContactModal } from "@/app/hooks/useContactModal";
+import { useModal } from "@/app/hooks/useModal";
 
 export default function AboutPage() {
-  const { setIsOpen } = useContactModal();
+  const { openModal } = useModal();
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
       <h1
@@ -68,7 +68,7 @@ export default function AboutPage() {
           <p className="text-sm text-[var(--color-muted-text)]">
             If you have questions or suggestions,{" "}
             <span
-              onClick={() => setIsOpen(true)}
+              onClick={() => openModal("contact")}
               className="cursor-pointer underline"
               style={{ color: "var(--color-primary)" }}
             >

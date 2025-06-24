@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 import ThemeToggle from "@/app/components/ToggleButtonLightDark";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { useContactModal } from "@/app/hooks/useContactModal";
+import { useModal } from "@/app/hooks/useModal";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -17,16 +17,11 @@ const NAV_ITEMS = [
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLight, setIsLight] = useState(false);
-  const { setIsOpen: openContactModal } = useContactModal();
+  const { openModal } = useModal();
 
   useEffect(() => {
     document.documentElement.classList.toggle("light", isLight);
   }, [isLight]);
-
-  const handleContactClick = () => {
-    setIsOpen(false); // close mobile nav if open
-    openContactModal(true); // open modal
-  };
 
   return (
     <nav
@@ -68,7 +63,16 @@ export default function NavBar() {
             {/* Contact as inline nav item */}
             <li>
               <span
-                onClick={handleContactClick}
+                onClick={() => openModal("benefit")}
+                className="cursor-pointer transition-colors duration-200"
+                style={{ color: "var(--color-foreground)" }}
+              >
+                Check Benefits
+              </span>
+            </li>
+            <li>
+              <span
+                onClick={() => openModal("contact")}
                 className="cursor-pointer transition-colors duration-200"
                 style={{ color: "var(--color-foreground)" }}
               >
@@ -122,9 +126,16 @@ export default function NavBar() {
                   {label}
                 </Link>
               ))}
+              <span
+                onClick={() => openModal("benefit")}
+                className="block text-sm font-medium transition cursor-pointer"
+                style={{ color: "var(--color-muted-text)" }}
+              >
+                Check Benefits
+              </span>
               {/* Contact in mobile nav */}
               <span
-                onClick={handleContactClick}
+                onClick={() => openModal("contact")}
                 className="block text-sm font-medium transition cursor-pointer"
                 style={{ color: "var(--color-muted-text)" }}
               >

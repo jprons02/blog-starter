@@ -2,8 +2,8 @@ import "./globals.css";
 import NavBar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
 import { Poppins, Inter, JetBrains_Mono } from "next/font/google";
-import ContactModal from "@/app/components/ContactModal";
-import { ContactModalProvider } from "@/app/hooks/useContactModal";
+import GlobalModal from "@/app/components/GlobalModal";
+import { ModalProvider } from "@/app/hooks/useModal";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/gtag";
@@ -65,13 +65,13 @@ export default function RootLayout({
         defer
       ></script>
       <body>
-        <ContactModalProvider>
+        <ModalProvider>
           <NavBar />
-          <ContactModal />
+          <GlobalModal />
           {children}
           <Toaster position="bottom-right" richColors />
           <Footer />
-        </ContactModalProvider>
+        </ModalProvider>
         <Suspense fallback={null}>
           <GoogleAnalytics />
         </Suspense>

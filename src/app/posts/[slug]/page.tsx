@@ -6,6 +6,7 @@ import Tag from "@/app/components/Tag";
 import StickyBackButton from "@/app/components/StickyBackButton";
 import FadeIn from "@/app/components/FadeIn";
 import { formatDate } from "@/lib/formatDate";
+import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
 
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
@@ -83,6 +84,7 @@ export default async function PostPage(props: {
         <FadeIn>
           <div className="markdown-body text-base leading-relaxed">
             <Content />
+            <BenefitsCtaBanner />
           </div>
         </FadeIn>
       </article>

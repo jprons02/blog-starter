@@ -1,10 +1,10 @@
 "use client";
 
-import { useContactModal } from "@/app/hooks/useContactModal";
+import { useModal } from "@/app/hooks/useModal";
 import { siteTitle } from "@/lib/constants";
 
 export default function PrivacyPolicyPage() {
-  const { setIsOpen } = useContactModal();
+  const { openModal } = useModal();
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 privacy-policy">
       <h1
@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
         Privacy Policy
       </h1>
 
-      <p className="text-sm text-muted mb-8">Last updated: June 17, 2025</p>
+      <p className="text-sm text-muted mb-8">Last updated: June 24, 2025</p>
 
       <section className="space-y-6 text-base leading-relaxed text-[var(--color-muted-text)]">
         <p>
@@ -27,10 +27,17 @@ export default function PrivacyPolicyPage() {
             1. Information We Collect
           </h2>
           <p>
-            We do <strong>not</strong> collect personal information unless
-            explicitly provided by you (e.g., via forms or email).
+            We collect personal information only when you voluntarily provide
+            it, such as by submitting a contact form or completing our benefit
+            eligibility checklist. This may include your name, email address,
+            phone number, and general eligibility details (like household size
+            or income range).
           </p>
-          <p>We may use third-party services such as:</p>
+          <p>
+            We do <strong>not</strong> collect sensitive documents or government
+            ID numbers.
+          </p>
+          <p>We may also use third-party services such as:</p>
           <ul className="list-disc pl-5 sm:pl-10 mt-2">
             <li>
               Plausible or Vercel Analytics (privacy-focused traffic insights)
@@ -43,8 +50,15 @@ export default function PrivacyPolicyPage() {
         <div>
           <h2 className="text-xl font-semibold mb-2">2. Use of Information</h2>
           <p>
-            We use any information to improve the website experience and respond
-            to user submissions. No personal data is sold or shared.
+            Any information you submit is used to help match you with public
+            assistance programs and to follow up if requested. We may use your
+            email or phone to send helpful reminders, results, or updates if you
+            opt-in.
+          </p>
+          <p>
+            Leads may be stored securely through a third-party CRM or email
+            marketing platform (e.g., Mailchimp or Airtable). We do{" "}
+            <strong>not</strong> sell or rent your personal information.
           </p>
         </div>
 
@@ -53,17 +67,26 @@ export default function PrivacyPolicyPage() {
             3. Third-Party Services
           </h2>
           <p>
-            We may link to or use tools from third-party providers. See their
-            privacy policies for more info:
+            We may link to or use tools from third-party providers to improve
+            functionality and track performance. These include:
           </p>
           <ul className="list-disc pl-5 sm:pl-10 mt-2">
             <li>
               <a
-                href="https://www.pexels.com/about/privacy/"
+                href="https://marketingplatform.google.com/about/analytics/terms/us/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Pexels Privacy Policy
+                Google Analytics – used to track traffic and usage patterns
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.pexels.com/privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Pexels – image provider, no personal data collected
               </a>
             </li>
             <li>
@@ -72,7 +95,7 @@ export default function PrivacyPolicyPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                OpenAI Privacy Policy
+                OpenAI – assists with content generation
               </a>
             </li>
           </ul>
@@ -81,16 +104,22 @@ export default function PrivacyPolicyPage() {
         <div>
           <h2 className="text-xl font-semibold mb-2">4. Cookies</h2>
           <p>
-            We do not set cookies directly. However, analytics providers may use
-            anonymous cookies to understand usage patterns.
+            We do not set cookies directly. However, services like Google
+            Analytics may use cookies to collect anonymized traffic data. This
+            helps us understand how visitors use the site and improve the
+            experience.
+          </p>
+          <p>
+            You can disable cookies in your browser settings or use browser
+            add-ons to opt out of tracking by Google Analytics.
           </p>
         </div>
 
         <div>
           <h2 className="text-xl font-semibold mb-2">5. Your Rights</h2>
           <p>
-            You may contact us to request deletion of any submitted data or for
-            privacy-related questions.
+            You may request to access, correct, or delete any data you&apos;ve
+            submitted by contacting us directly.
           </p>
         </div>
 
@@ -104,7 +133,7 @@ export default function PrivacyPolicyPage() {
 
         <p className="pt-6">
           Questions?{" "}
-          <a onClick={() => setIsOpen(true)} className="cursor-pointer">
+          <a onClick={() => openModal("contact")} className="cursor-pointer">
             Contact us.
           </a>
         </p>
