@@ -10,6 +10,8 @@ import {
 } from "@/lib/utils/validationSchemas";
 import { getEligibilityResults } from "@/lib/services/benefitEligibility";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import type { BenefitForm } from "@/lib/types/benefit";
+import sendMailchimpLead from "@/lib/api/sendMailchimpLead";
 
 const steps = [
   "Household",
@@ -24,31 +26,39 @@ export default function BenefitEligibilityForm() {
   const { closeModal } = useModal();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  /*
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
+  */
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
 
-  const [form, setForm] = useState({
-    householdSize: 1,
-    income: "",
-    situations: [] as string[],
-    payUtility: "yes",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
+  const [form, setForm] = useState<BenefitForm>({
+    FNAME: "",
+    LNAME: "",
+    EMAIL: "",
+    PHONE: "",
+    HSHLDSIZE: 1,
+    INCOME: "",
+    FACTORS: [] as string[],
+    PAYSUTILS: "yes",
   });
 
   const handleNext = () => {
     const errors: Record<string, string> = {};
 
-    if (step === 0 && form.householdSize < 1) {
-      errors.householdSize = "Household size must be at least 1.";
+    if (step === 0 && form.HSHLDSIZE < 1) {
+      errors.HSHLDSIZE = "Household size must be at least 1.";
     }
 
-    if (step === 1 && !form.income) {
-      errors.income = "Please select your income range.";
+    if (step === 1 && !form.INCOME) {
+      errors.INCOME = "Please select your income range.";
     }
 
-    if (step === 2 && form.situations.length === 0) {
-      errors.situations = "Please select at least one option.";
+    if (step === 2 && form.FACTORS.length === 0) {
+      errors.FACTORS = "Please select at least one option.";
     }
 
     if (Object.keys(errors).length > 0) {
@@ -63,40 +73,62 @@ export default function BenefitEligibilityForm() {
 
   const toggleSituation = (value: string) => {
     setForm((prev) => {
-      const { situations } = prev;
+      const { FACTORS } = prev;
 
       // Handle "None of these apply to me" exclusively
       if (value === "None of these apply to me") {
         return {
           ...prev,
-          situations: situations.includes(value) ? [] : [value],
+          FACTORS: FACTORS.includes(value) ? [] : [value],
         };
       }
 
-      const withoutNone = situations.filter(
+      const withoutNone = FACTORS.filter(
         (s) => s !== "None of these apply to me"
       );
       const exists = withoutNone.includes(value);
       return {
         ...prev,
-        situations: exists
+        FACTORS: exists
           ? withoutNone.filter((s) => s !== value)
           : [...withoutNone, value],
       };
     });
   };
 
+  const handleSubmit = async () => {
+    if (validateContact()) {
+      setStatus("sending");
+      try {
+        const res = await sendMailchimpLead(form);
+        const data = await res.json(); // 👈 parse response body
+        console.log("Mailchimp response:", data);
+
+        if (res.ok) {
+          setStatus("sent");
+          handleNext();
+        } else {
+          console.error("Mailchimp error:", data.error);
+          setStatus("error");
+        }
+      } catch (err) {
+        console.error("Submission failed:", err);
+        setStatus("error");
+      }
+    }
+  };
+
   const validateContact = () => {
     const newErrors: Record<string, string> = {};
-    const firstNameError = validateName(form.firstName);
-    const lastNameError = validateName(form.lastName);
-    const emailError = validateEmail(form.email);
-    const phoneError = validatePhone(form.phone);
+    const FNAMEError = validateName(form.FNAME);
+    const LNAMEError = validateName(form.LNAME);
+    const EMAILError = validateEmail(form.EMAIL);
+    const PHONEError = validatePhone(form.PHONE);
 
-    if (firstNameError) newErrors.firstName = firstNameError;
-    if (lastNameError) newErrors.lastName = lastNameError;
-    if (emailError) newErrors.email = emailError;
-    if (phoneError) newErrors.phone = phoneError;
+    if (FNAMEError) newErrors.FNAME = FNAMEError;
+    if (LNAMEError) newErrors.LNAME = LNAMEError;
+    if (EMAILError) newErrors.EMAIL = EMAILError;
+    if (PHONEError) newErrors.PHONE = PHONEError;
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -119,9 +151,9 @@ export default function BenefitEligibilityForm() {
                 type="number"
                 readOnly
                 min={1}
-                value={form.householdSize}
+                value={form.HSHLDSIZE}
                 onChange={(e) =>
-                  setForm({ ...form, householdSize: Number(e.target.value) })
+                  setForm({ ...form, HSHLDSIZE: Number(e.target.value) })
                 }
                 className="tw-input-base pr-8" // add right padding for the buttons
                 style={{
@@ -136,7 +168,7 @@ export default function BenefitEligibilityForm() {
                   onClick={() =>
                     setForm((prev) => ({
                       ...prev,
-                      householdSize: Math.max(1, prev.householdSize + 1),
+                      HSHLDSIZE: Math.max(1, prev.HSHLDSIZE + 1),
                     }))
                   }
                   className="hover:text-[var(--color-primary)]"
@@ -149,7 +181,7 @@ export default function BenefitEligibilityForm() {
                   onClick={() =>
                     setForm((prev) => ({
                       ...prev,
-                      householdSize: Math.max(1, prev.householdSize - 1),
+                      HSHLDSIZE: Math.max(1, prev.HSHLDSIZE - 1),
                     }))
                   }
                   className="hover:text-[var(--color-primary)]"
@@ -159,8 +191,8 @@ export default function BenefitEligibilityForm() {
                 </button>
               </div>
             </div>
-            {errors.householdSize && (
-              <p className="tw-input-error-label">{errors.householdSize}</p>
+            {errors.HSHLDSIZE && (
+              <p className="tw-input-error-label">{errors.HSHLDSIZE}</p>
             )}
           </div>
         );
@@ -190,18 +222,18 @@ export default function BenefitEligibilityForm() {
                     type="radio"
                     name="income"
                     value={value}
-                    checked={form.income === value}
-                    onChange={() => setForm({ ...form, income: value })}
+                    checked={form.INCOME === value}
+                    onChange={() => setForm({ ...form, INCOME: value })}
                     className="hidden"
                   />
                   <div
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition ${
-                      form.income === value
+                      form.INCOME === value
                         ? "border-[var(--color-primary)]"
                         : "border-[var(--color-border)]"
                     }`}
                   >
-                    {form.income === value && (
+                    {form.INCOME === value && (
                       <div className="w-3 h-3 rounded-full bg-[var(--color-primary)]" />
                     )}
                   </div>
@@ -210,12 +242,12 @@ export default function BenefitEligibilityForm() {
                   </span>
                 </label>
               ))}
-              {errors.income && (
+              {errors.INCOME && (
                 <p
                   className="tw-input-error-label"
                   style={{ marginTop: "10px" }}
                 >
-                  {errors.income}
+                  {errors.INCOME}
                 </p>
               )}
             </div>
@@ -241,7 +273,7 @@ export default function BenefitEligibilityForm() {
                 "I receive SNAP, Medicaid, or SSI",
                 "None of these apply to me",
               ].map((label) => {
-                const isChecked = form.situations.includes(label);
+                const isChecked = form.FACTORS.includes(label);
                 return (
                   <label
                     key={label}
@@ -281,12 +313,12 @@ export default function BenefitEligibilityForm() {
                   </label>
                 );
               })}
-              {errors.situations && (
+              {errors.FACTORS && (
                 <p
                   className="tw-input-error-label"
                   style={{ marginTop: "10px" }}
                 >
-                  {errors.situations}
+                  {errors.FACTORS}
                 </p>
               )}
             </div>
@@ -306,7 +338,7 @@ export default function BenefitEligibilityForm() {
               <button
                 className="tw-form-submit-base"
                 onClick={() => {
-                  setForm({ ...form, payUtility: "yes" });
+                  setForm({ ...form, PAYSUTILS: "yes" });
                   handleNext();
                 }}
                 type="button"
@@ -318,7 +350,7 @@ export default function BenefitEligibilityForm() {
               <button
                 className="tw-form-submit-base color-[var(--color-foreground)]"
                 onClick={() => {
-                  setForm({ ...form, payUtility: "no" });
+                  setForm({ ...form, PAYSUTILS: "no" });
                   handleNext();
                 }}
                 type="button"
@@ -343,62 +375,66 @@ export default function BenefitEligibilityForm() {
               <input
                 type="text"
                 placeholder="First Name"
-                value={form.firstName}
-                onChange={(e) =>
-                  setForm({ ...form, firstName: e.target.value })
-                }
+                value={form.FNAME}
+                onChange={(e) => setForm({ ...form, FNAME: e.target.value })}
                 className={`tw-input-base ${
-                  errors.firstName ? "tw-input-error" : ""
+                  errors.FNAME ? "tw-input-error" : ""
                 }`}
               />
-              {errors.firstName && (
-                <p className="tw-input-error-label">{errors.firstName}</p>
+              {errors.FNAME && (
+                <p className="tw-input-error-label">{errors.FNAME}</p>
               )}
               <input
                 type="text"
                 placeholder="Last Name"
-                value={form.lastName}
-                onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                value={form.LNAME}
+                onChange={(e) => setForm({ ...form, LNAME: e.target.value })}
                 className={`tw-input-base ${
-                  errors.lastName ? "tw-input-error" : ""
+                  errors.LNAME ? "tw-input-error" : ""
                 }`}
               />
-              {errors.lastName && (
-                <p className="tw-input-error-label">{errors.lastName}</p>
+              {errors.LNAME && (
+                <p className="tw-input-error-label">{errors.LNAME}</p>
               )}
               <input
                 type="email"
                 placeholder="Email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                value={form.EMAIL}
+                onChange={(e) => setForm({ ...form, EMAIL: e.target.value })}
                 className={`tw-input-base ${
-                  errors.email ? "tw-input-error" : ""
+                  errors.EMAIL ? "tw-input-error" : ""
                 }`}
               />
-              {errors.email && (
-                <p className="tw-input-error-label">{errors.email}</p>
+              {errors.EMAIL && (
+                <p className="tw-input-error-label">{errors.EMAIL}</p>
               )}
               <input
                 type="tel"
                 placeholder="Phone Number (no dashes or spaces)"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                value={form.PHONE}
+                onChange={(e) => setForm({ ...form, PHONE: e.target.value })}
                 className={`tw-input-base ${
-                  errors.phone ? "tw-input-error" : ""
+                  errors.PHONE ? "tw-input-error" : ""
                 }`}
               />
-              {errors.phone && (
-                <p className="tw-input-error-label">{errors.phone}</p>
+              {errors.PHONE && (
+                <p className="tw-input-error-label">{errors.PHONE}</p>
               )}
               <button
-                onClick={() => {
-                  if (validateContact()) handleNext();
-                }}
+                onClick={handleSubmit}
+                disabled={status === "sending"}
                 className="tw-form-submit-base bg-[var(--color-primary)] text-white w-full mt-2"
               >
-                <span className="text-lg color-[var(--color-foreground)]">
-                  See My Results
-                </span>
+                {status === "sending" ? (
+                  <div
+                    className="w-5 h-5 border-2 border-t-transparent border-[var(--color-primary)] rounded-full animate-spin"
+                    style={{ margin: "auto" }}
+                  />
+                ) : (
+                  <span className="text-lg color-[var(--color-foreground)]">
+                    See My Results
+                  </span>
+                )}
               </button>
             </div>
           </div>

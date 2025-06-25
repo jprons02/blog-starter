@@ -1,16 +1,9 @@
-// This is the data driving the benefit eligibility logic for SNAP, WIC, and LIHEAP.
+import type { BenefitForm } from "@/lib/types/benefit";
 
 export type Benefit = {
   name: string;
   description: string;
   link: string;
-};
-
-export type FormData = {
-  householdSize: number;
-  income: string;
-  situations: string[];
-  payUtility: string;
 };
 
 const FPL: Record<number, number> = {
@@ -33,21 +26,21 @@ const incomeMap: Record<string, number> = {
   "5000+": 5000,
 };
 
-export function getEligibilityResults(form: FormData): Benefit[] {
+export function getEligibilityResults(form: BenefitForm): Benefit[] {
   const results: Benefit[] = [];
 
-  const householdFPL = FPL[form.householdSize] || FPL[8];
-  const incomeAmount = incomeMap[form.income];
+  const householdFPL = FPL[form.HSHLDSIZE] || FPL[8];
+  const incomeAmount = incomeMap[form.INCOME];
 
-  if (!incomeAmount || !form.householdSize) return results;
+  if (!incomeAmount || !form.HSHLDSIZE) return results;
 
   const qualifiesForSNAP = incomeAmount <= householdFPL * 1.3;
   const qualifiesForWIC =
-    (form.situations.includes("I am pregnant") ||
-      form.situations.includes("I have children under 5")) &&
+    (form.FACTORS.includes("I am pregnant") ||
+      form.FACTORS.includes("I have children under 5")) &&
     incomeAmount <= householdFPL * 1.85;
   const qualifiesForLIHEAP =
-    form.payUtility === "yes" && incomeAmount <= householdFPL * 1.5;
+    form.PAYSUTILS === "yes" && incomeAmount <= householdFPL * 1.5;
 
   if (qualifiesForSNAP) {
     results.push({
