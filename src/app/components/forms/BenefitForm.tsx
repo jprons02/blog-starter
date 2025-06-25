@@ -12,6 +12,7 @@ import { getEligibilityResults } from "@/lib/services/benefitEligibility";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import type { BenefitForm } from "@/lib/types/benefit";
 import sendMailchimpLead from "@/lib/api/sendMailchimpLead";
+import { toast } from "sonner";
 
 const steps = [
   "Household",
@@ -102,18 +103,21 @@ export default function BenefitEligibilityForm() {
       try {
         const res = await sendMailchimpLead(form);
         const data = await res.json(); // 👈 parse response body
-        console.log("Mailchimp response:", data);
 
         if (res.ok) {
           setStatus("sent");
           handleNext();
         } else {
-          console.error("Mailchimp error:", data.error);
+          console.log("Mailchimp error:", data.error);
           setStatus("error");
+          toast.error(
+            data.error.detail || "Something went wrong. Please try again."
+          );
         }
       } catch (err) {
-        console.error("Submission failed:", err);
+        console.log("Submission failed:", err);
         setStatus("error");
+        toast.error("Submission failed. Please try again.");
       }
     }
   };

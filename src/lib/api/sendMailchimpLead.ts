@@ -20,8 +20,6 @@ const sendMailchimpLead = async (data: BenefitForm): Promise<Response> => {
     },
   };
 
-  console.log("Sending Mailchimp lead:", payload);
-
   const res = await fetch(API_ENDPOINT, {
     method: "POST",
     headers: {
