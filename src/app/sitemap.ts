@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.7,
     },
+    // 👇 DO NOT include /privacy-policy or /resources
     ...allPosts.map((post) => ({
       url: `${siteUrl}/${post._raw.flattenedPath}`,
       lastModified: new Date(post.date),

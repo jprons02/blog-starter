@@ -13,3 +13,24 @@ export const pageview = (url: string) => {
     page_path: url,
   });
 };
+
+// Custom event tracking function
+export const event = ({
+  action,
+  category,
+  label,
+  value,
+}: {
+  action: string;
+  category: string;
+  label?: string;
+  value?: number;
+}) => {
+  if (!window.gtag || !GA_TRACKING_ID) return;
+
+  window.gtag("event", action, {
+    event_category: category,
+    event_label: label,
+    value,
+  });
+};

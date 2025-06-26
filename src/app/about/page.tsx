@@ -5,7 +5,7 @@ import { useModal } from "@/app/hooks/useModal";
 export default function AboutPage() {
   const { openModal } = useModal();
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
+    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 about-page">
       <h1
         className="text-3xl font-bold mb-6"
         style={{ color: "var(--color-primary)" }}

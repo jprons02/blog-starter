@@ -1,12 +1,17 @@
-"use client";
+import { siteTitle, siteUrl } from "@/lib/utils/constants";
+import { ModalTrigger } from "@/app/components/modals/ModalTrigger";
 
-import { useModal } from "@/app/hooks/useModal";
-import { siteTitle } from "@/lib/utils/constants";
+export const metadata = {
+  title: "Privacy Policy",
+  robots: "noindex, nofollow",
+  alternates: {
+    canonical: `${siteUrl}/privacy-policy`,
+  },
+};
 
 export default function PrivacyPolicyPage() {
-  const { openModal } = useModal();
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 privacy-policy">
+    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 privacy-policy-page">
       <h1
         className="text-3xl font-bold mb-6"
         style={{ color: "var(--color-primary)" }}
@@ -133,9 +138,12 @@ export default function PrivacyPolicyPage() {
 
         <p className="pt-6">
           Questions?{" "}
-          <a onClick={() => openModal("contact")} className="cursor-pointer">
+          <ModalTrigger
+            modalId="contact"
+            className="cursor-pointer underline text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
+          >
             Contact us.
-          </a>
+          </ModalTrigger>
         </p>
       </section>
     </main>

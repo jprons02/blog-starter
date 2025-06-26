@@ -1,9 +1,19 @@
 "use client";
 
 import { useModal } from "@/app/hooks/useModal";
+import { event as gaEvent } from "@/lib/utils/gtag";
 
 export default function BenefitsCtaBanner() {
   const { openModal } = useModal();
+
+  const handleClick = () => {
+    gaEvent({
+      action: "check_benefits_click",
+      category: "engagement",
+      label: "Benefits CTA Banner",
+    });
+    openModal("benefit");
+  };
 
   return (
     <div className="mt-12">
@@ -14,7 +24,7 @@ export default function BenefitsCtaBanner() {
         Need help applying? Use our{" "}
         <span
           className="cursor-pointer text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
-          onClick={() => openModal("benefit")}
+          onClick={handleClick}
         >
           free checklist
         </span>{" "}

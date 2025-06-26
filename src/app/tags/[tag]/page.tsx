@@ -18,12 +18,14 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata(props: {
+export async function generateMetadata({
+  params,
+}: {
   params: Promise<{ tag: string }>;
 }) {
-  const { tag } = await props.params;
-
+  const { tag } = await params;
   const displayTag = tag.replace(/-/g, " ");
+  const ogImage = getOgImageForTag(displayTag) || `${siteUrl}/default-og.jpg`;
 
   return {
     title: `Posts tagged with "${displayTag}"`,
@@ -31,15 +33,18 @@ export async function generateMetadata(props: {
     openGraph: {
       title: `Posts tagged with "${displayTag}"`,
       description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
-      url: `${siteUrl}/tags/${tag}`, // ✅ Use kebab-case tag for URL
+      url: `${siteUrl}/tags/${tag}`,
       type: "website",
-      images: [getOgImageForTag(displayTag)],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `Posts tagged with "${displayTag}"`,
       description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
-      images: [getOgImageForTag(displayTag)],
+      images: [ogImage],
+    },
+    alternates: {
+      canonical: `${siteUrl}/tags/${tag}`,
     },
   };
 }

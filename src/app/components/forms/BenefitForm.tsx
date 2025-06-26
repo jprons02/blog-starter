@@ -13,6 +13,7 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 import type { BenefitForm } from "@/lib/types/benefit";
 import sendMailchimpLead from "@/lib/api/sendMailchimpLead";
 import { toast } from "sonner";
+import { event as gaEvent } from "@/lib/utils/gtag";
 
 const steps = [
   "Household",
@@ -106,6 +107,12 @@ export default function BenefitEligibilityForm() {
 
         if (res.ok) {
           setStatus("sent");
+          // Google Analytics event tracking
+          gaEvent({
+            action: "benefits_form_submit",
+            category: "conversion",
+            label: "Eligibility Form",
+          });
           handleNext();
         } else {
           console.log("Mailchimp error:", data.error);

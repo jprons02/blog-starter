@@ -39,6 +39,7 @@
   /* Accent & State */
   --color-accent: #fb923c;
   --color-danger: #f87171;
+  --color-warning: #facc15;
   --color-success: #34d399;
 
   /* Muted & Border */
@@ -74,6 +75,7 @@
 
   --color-accent: #f97316;
   --color-danger: #ef4444;
+  --color-warning: #eab308;
   --color-success: #10b981;
 
   --color-muted-bg: #f9fafb;
@@ -133,14 +135,18 @@ footer {
 }
 
 footer a,
-.privacy-policy a,
+.privacy-policy-page a,
+.about-page a,
+.resources-page a,
 figcaption a {
   color: var(--color-link);
   text-decoration: underline;
 }
 
 footer a:hover,
-.privacy-policy a:hover,
+.privacy-policy-page a:hover,
+.about-page a:hover,
+.resources-page a:hover,
 figcaption a:hover {
   color: var(--color-link-hover);
 }

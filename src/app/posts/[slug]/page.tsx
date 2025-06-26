@@ -18,6 +18,7 @@ export default async function PostPage(props: {
   if (!post) return notFound();
 
   const Content = getMDXComponent(post.body.code);
+  const components = { BenefitsCtaBanner };
   return (
     <>
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
@@ -83,8 +84,7 @@ export default async function PostPage(props: {
 
         <FadeIn>
           <div className="markdown-body text-base leading-relaxed">
-            <Content />
-            <BenefitsCtaBanner />
+            <Content components={components} />
           </div>
         </FadeIn>
       </article>
@@ -113,8 +113,9 @@ export async function generateMetadata({
   // Generate SEO metadata using a reusable helper
   return getPageMeta({
     title: post.title, // Post title for <title> tag, Open Graph, and Twitter
-    description: post.summary || "", // Post summary for meta description
+    description: post.summary || "Helpful guides on US benefit programs.", // Post summary for meta description
     slug: post._raw.flattenedPath.replace(/^posts\//, ""), // Slug used to build canonical and OG URLs
     image: post.image, // Optional cover image for OG/Twitter cards
+    type: "article",
   });
 }

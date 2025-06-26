@@ -12,9 +12,10 @@ export function getPageMeta({
   title = siteTitle,
   description = siteDescription,
   slug = "",
-  image = `${siteUrl}/default-og.jpg`,
+  image,
   type = "article",
 }: SEOProps) {
+  const fallbackImage = `${siteUrl}/default-og.jpg`;
   const url = `${siteUrl}/blog/${slug}`;
 
   return {
@@ -25,13 +26,13 @@ export function getPageMeta({
       description,
       url,
       type,
-      images: [{ url: image }],
+      images: [{ url: image || fallbackImage }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      images: [image || fallbackImage],
     },
   };
 }
