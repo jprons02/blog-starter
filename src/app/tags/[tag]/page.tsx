@@ -2,7 +2,7 @@ import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
-import { siteUrl } from "@/lib/utils/constants";
+import { siteUrl, siteImage } from "@/lib/utils/constants";
 import { getOgImageForTag } from "@/lib/utils/og";
 
 export async function generateStaticParams() {
@@ -25,7 +25,7 @@ export async function generateMetadata({
 }) {
   const { tag } = await params;
   const displayTag = tag.replace(/-/g, " ");
-  const ogImage = getOgImageForTag(displayTag) || `${siteUrl}/default-og.jpg`;
+  const ogImage = getOgImageForTag(displayTag) || siteImage;
 
   return {
     title: `Posts tagged with "${displayTag}"`,

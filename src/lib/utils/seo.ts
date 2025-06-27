@@ -1,4 +1,4 @@
-import { siteUrl, siteTitle, siteDescription } from "./constants";
+import { siteUrl, siteTitle, siteDescription, siteImage } from "./constants";
 
 export type SEOProps = {
   title: string;
@@ -15,7 +15,7 @@ export function getPageMeta({
   image,
   type = "article",
 }: SEOProps) {
-  const fallbackImage = `${siteUrl}/default-og.jpg`;
+  const fallbackImage = siteImage;
   const url = `${siteUrl}/blog/${slug}`;
 
   return {
