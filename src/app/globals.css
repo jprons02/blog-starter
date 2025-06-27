@@ -354,11 +354,13 @@ input[type="number"] {
 
 .markdown-body a {
   color: var(--color-link);
-  font-size: 0.9rem;
   text-decoration: underline;
 }
 .markdown-body a:hover {
   color: var(--color-link-hover);
+}
+.markdown-body .references a {
+  font-size: 0.9rem;
 }
 
 .markdown-body blockquote {

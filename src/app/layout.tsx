@@ -9,6 +9,7 @@ import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/utils/gtag";
 import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 import { Suspense } from "react";
+import { siteUrl } from "@/lib/utils/constants";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -28,6 +29,10 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
 });
+
+export const metadata = {
+  metadataBase: new URL(siteUrl),
+};
 
 export default function RootLayout({
   children,
