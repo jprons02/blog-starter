@@ -31,6 +31,17 @@ export function getEligibilityResults(form: BenefitForm): Benefit[] {
 
   const householdFPL = FPL[form.HSHLDSIZE] || FPL[8];
   const incomeAmount = incomeMap[form.INCOME];
+  const isVeteran = form.FACTORS.includes("I am a veteran");
+  const hasHonorableDischarge = form.FACTORS.includes(
+    "My discharge was honorable or general"
+  );
+  const recentlySeparated = form.FACTORS.includes(
+    "I separated from service within the last 5 years"
+  );
+  const servedInCombat = form.FACTORS.includes("I served in a combat zone");
+  const hasDisability = form.FACTORS.includes("I have a disability");
+  const isLowIncome = incomeAmount <= householdFPL * 1.5;
+  const isHousingInsecure = form.PAYSUTILS === "yes";
 
   if (!incomeAmount || !form.HSHLDSIZE) return results;
 
@@ -41,6 +52,19 @@ export function getEligibilityResults(form: BenefitForm): Benefit[] {
     incomeAmount <= householdFPL * 1.85;
   const qualifiesForLIHEAP =
     form.PAYSUTILS === "yes" && incomeAmount <= householdFPL * 1.5;
+
+  const qualifiesForVAHealthCare =
+    isVeteran &&
+    hasHonorableDischarge &&
+    (hasDisability ||
+      recentlySeparated ||
+      servedInCombat ||
+      incomeAmount <= householdFPL * 2);
+
+  const qualifiesForVAHousing = isVeteran && hasHonorableDischarge;
+
+  const qualifiesForVetCrisisAid =
+    isVeteran && hasHonorableDischarge && isLowIncome && isHousingInsecure;
 
   if (qualifiesForSNAP) {
     results.push({
@@ -66,6 +90,33 @@ export function getEligibilityResults(form: BenefitForm): Benefit[] {
       description:
         "Because you pay rent or utilities and reported a lower income, you may qualify for energy or housing assistance.",
       link: "https://www.acf.hhs.gov/ocs/low-income-home-energy-assistance-program-liheap",
+    });
+  }
+
+  if (qualifiesForVAHealthCare) {
+    results.push({
+      name: "VA Healthcare Eligibility",
+      description:
+        "You may qualify for free or low-cost VA healthcare based on your income, service-connected disability, or recent separation.",
+      link: "https://www.va.gov/health-care/eligibility/",
+    });
+  }
+
+  if (qualifiesForVAHousing) {
+    results.push({
+      name: "VA Housing Assistance",
+      description:
+        "Veterans may be eligible for VA-backed home loans, refinancing, or foreclosure prevention. A Certificate of Eligibility is required.",
+      link: "https://www.va.gov/housing-assistance/",
+    });
+  }
+
+  if (qualifiesForVetCrisisAid) {
+    results.push({
+      name: "Veteran Emergency Financial Aid",
+      description:
+        "As a low-income veteran paying rent or utilities, you may qualify for emergency help through SSVF or VFW grants.",
+      link: "https://www.va.gov/homeless/ssvf/",
     });
   }
 

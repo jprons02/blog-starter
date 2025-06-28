@@ -28,11 +28,6 @@ export default function BenefitEligibilityForm() {
   const { closeModal } = useModal();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  /*
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
-  );
-  */
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
@@ -282,6 +277,7 @@ export default function BenefitEligibilityForm() {
                 "I have a disability",
                 "I’m currently unemployed",
                 "I receive SNAP, Medicaid, or SSI",
+                "I am a veteran",
                 "None of these apply to me",
               ].map((label) => {
                 const isChecked = form.FACTORS.includes(label);
@@ -331,6 +327,59 @@ export default function BenefitEligibilityForm() {
                 >
                   {errors.FACTORS}
                 </p>
+              )}
+              {form.FACTORS.includes("I am a veteran") && (
+                <div className="space-y-3 pt-4 pl-3 border-l-2 border-[var(--color-primary)]">
+                  <label className="block font-medium text-[var(--color-muted-text)]">
+                    Help us better understand your veteran status:
+                  </label>
+
+                  {[
+                    "My discharge was honorable or general",
+                    "I separated from service within the last 5 years",
+                    "I served in a combat zone",
+                  ].map((label) => {
+                    const isChecked = form.FACTORS.includes(label);
+                    return (
+                      <label
+                        key={label}
+                        className="flex items-center gap-3 cursor-pointer px-3 py-2 rounded-md hover:bg-[var(--color-hover-bg)] transition"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleSituation(label)}
+                          className="hidden"
+                        />
+                        <div
+                          className={`w-5 h-5 border-2 rounded-sm flex items-center justify-center transition ${
+                            isChecked
+                              ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
+                              : "border-[var(--color-border)]"
+                          }`}
+                        >
+                          {isChecked && (
+                            <svg
+                              className="w-4 h-4"
+                              style={{ color: "var(--color-background)" }}
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.704 5.292a1 1 0 010 1.416l-7.416 7.416a1 1 0 01-1.416 0L3.296 9.416a1 1 0 011.416-1.416l3.96 3.96 6.708-6.708a1 1 0 011.416 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className="text-[var(--color-foreground)]">
+                          {label}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </div>

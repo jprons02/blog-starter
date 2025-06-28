@@ -18,20 +18,22 @@
   --color-static-dark-muted-text: #94a3b8;
   --color-static-dark-border: #334155;
   --color-static-dark-background: #0f172a;
-  --color-static-dark-primary: #00ff0a;
+  --color-static-dark-primary: #39a6ff;
   --color-static-light-foreground: #111827;
   --color-static-light-muted-text: #6b7280;
   --color-static-light-border: #e5e7eb;
   --color-static-light-background: #f9fafb;
-  --color-static-light-primary: #b70086;
+  --color-static-light-primary: #ff3974;
 
   /* Base Colors */
   --color-background: #0f172a;
   --color-foreground: #f1f5f9;
 
   /* Primary */
-  --color-primary: #00ff0a;
-  --color-primary-dark: #00b907;
+  /*--color-primary: #00ff0a;*/
+  /*--color-primary-dark: #00b907;*/
+  --color-primary: #39a6ff;
+  --color-primary-dark: #308fdd;
   --color-primary-bg: #1e293b;
   /*--color-primary: #60a5fa;*/
   /*--color-primary-dark: #3b82f6;*/
@@ -67,8 +69,8 @@
 :root.light {
   --color-background: #ffffff;
   --color-foreground: #111827;
-  --color-primary: #b70086; /* Muted green, works well on white */
-  --color-primary-dark: #81005e;
+  --color-primary: #ff3974;
+  --color-primary-dark: #e63469;
   --color-primary-bg: #eff6ff;
   /*--color-primary: #3b82f6;*/
   /*--color-primary-dark: #1e3a8a;*/
