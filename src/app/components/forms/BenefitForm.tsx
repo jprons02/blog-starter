@@ -299,7 +299,7 @@ export default function BenefitEligibilityForm() {
                 return (
                   <label
                     key={label}
-                    className="flex items-center gap-4 px-3 py-2 rounded-md hover:bg-[var(--color-hover-bg)] transition cursor-pointer"
+                    className="flex items-start gap-4 px-3 py-2 rounded-md hover:bg-[var(--color-hover-bg)] transition cursor-pointer"
                   >
                     <input
                       type="checkbox"
@@ -313,6 +313,7 @@ export default function BenefitEligibilityForm() {
                           ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
                           : "border-[var(--color-border)]"
                       }`}
+                      style={{ marginTop: "4px" }}
                     >
                       {isChecked && (
                         <svg
@@ -368,6 +369,7 @@ export default function BenefitEligibilityForm() {
                               ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
                               : "border-[var(--color-border)]"
                           }`}
+                          style={{ marginTop: "4px" }}
                         >
                           {isChecked && (
                             <svg
