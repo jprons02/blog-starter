@@ -283,6 +283,7 @@ export default function BenefitEligibilityForm() {
             >
               Select any that apply:
             </label>
+
             <div className="space-y-2">
               {[
                 "I am pregnant",
@@ -298,7 +299,7 @@ export default function BenefitEligibilityForm() {
                 return (
                   <label
                     key={label}
-                    className="flex items-center gap-3 cursor-pointer px-3 py-2 rounded-md hover:bg-[var(--color-hover-bg)] transition"
+                    className="flex items-center gap-4 px-3 py-2 rounded-md hover:bg-[var(--color-hover-bg)] transition cursor-pointer"
                   >
                     <input
                       type="checkbox"
@@ -307,7 +308,7 @@ export default function BenefitEligibilityForm() {
                       className="hidden"
                     />
                     <div
-                      className={`w-6 h-6 border-2 rounded-sm flex items-center justify-center transition ${
+                      className={`w-6 h-6 flex-shrink-0 border-2 rounded-sm flex items-center justify-center transition ${
                         isChecked
                           ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
                           : "border-[var(--color-border)]"
@@ -315,8 +316,7 @@ export default function BenefitEligibilityForm() {
                     >
                       {isChecked && (
                         <svg
-                          className="w-5 h-5"
-                          style={{ color: "var(--color-background)" }}
+                          className="w-4 h-4 text-[var(--color-background)]"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
@@ -328,75 +328,69 @@ export default function BenefitEligibilityForm() {
                         </svg>
                       )}
                     </div>
-                    <span className="text-lg text-[var(--color-foreground)]">
+                    <span className="text-lg text-[var(--color-foreground)] leading-snug min-w-0">
                       {label}
                     </span>
                   </label>
                 );
               })}
-              {errors.FACTORS && (
-                <p
-                  className="tw-input-error-label"
-                  style={{ marginTop: "10px" }}
-                >
-                  {errors.FACTORS}
-                </p>
-              )}
-              <div className="transition-all duration-300 ease-in-out">
-                {form.FACTORS.includes("I am a veteran") && (
-                  <div className="space-y-3 pt-4 pl-3 border-l-2 border-[var(--color-primary)]">
-                    <label className="block font-medium text-[var(--color-muted-text)]">
-                      Help us better understand your veteran status:
-                    </label>
 
-                    {[
-                      "My discharge was honorable or general",
-                      "I separated from service within the last 5 years",
-                      "I served in a combat zone",
-                    ].map((label) => {
-                      const isChecked = form.FACTORS.includes(label);
-                      return (
-                        <label
-                          key={label}
-                          className="flex items-center gap-3 cursor-pointer px-3 py-2 rounded-md hover:bg-[var(--color-hover-bg)] transition"
+              {errors.FACTORS && (
+                <p className="tw-input-error-label mt-2">{errors.FACTORS}</p>
+              )}
+
+              {form.FACTORS.includes("I am a veteran") && (
+                <div className="transition-all duration-300 ease-in-out space-y-3 pt-4 pl-3 border-l-2 border-[var(--color-primary)]">
+                  <label className="block font-medium text-[var(--color-muted-text)]">
+                    Help us better understand your veteran status:
+                  </label>
+
+                  {[
+                    "My discharge was honorable or general",
+                    "I separated from service within the last 5 years",
+                    "I served in a combat zone",
+                  ].map((label) => {
+                    const isChecked = form.FACTORS.includes(label);
+                    return (
+                      <label
+                        key={label}
+                        className="flex items-start gap-4 px-3 py-3 rounded-md hover:bg-[var(--color-hover-bg)] transition cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleSituation(label)}
+                          className="hidden"
+                        />
+                        <div
+                          className={`w-6 h-6 flex-shrink-0 border-2 rounded-sm flex items-center justify-center transition ${
+                            isChecked
+                              ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
+                              : "border-[var(--color-border)]"
+                          }`}
                         >
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleSituation(label)}
-                            className="hidden"
-                          />
-                          <div
-                            className={`w-5 h-5 border-2 rounded-sm flex items-center justify-center transition ${
-                              isChecked
-                                ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
-                                : "border-[var(--color-border)]"
-                            }`}
-                          >
-                            {isChecked && (
-                              <svg
-                                className="w-4 h-4"
-                                style={{ color: "var(--color-background)" }}
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.704 5.292a1 1 0 010 1.416l-7.416 7.416a1 1 0 01-1.416 0L3.296 9.416a1 1 0 011.416-1.416l3.96 3.96 6.708-6.708a1 1 0 011.416 0z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                            )}
-                          </div>
-                          <span className="text-[var(--color-foreground)]">
-                            {label}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+                          {isChecked && (
+                            <svg
+                              className="w-4 h-4 text-[var(--color-background)]"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.704 5.292a1 1 0 010 1.416l-7.416 7.416a1 1 0 01-1.416 0L3.296 9.416a1 1 0 011.416-1.416l3.96 3.96 6.708-6.708a1 1 0 011.416 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          )}
+                        </div>
+                        <span className="text-lg text-[var(--color-foreground)] leading-snug min-w-0">
+                          {label}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         );
@@ -594,7 +588,7 @@ export default function BenefitEligibilityForm() {
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="overflow-y-auto max-h-[80vh] px-4" ref={formRef}>
+          <div className="overflow-y-auto max-h-[60vh] px-4" ref={formRef}>
             {renderStepContent()}
           </div>
 

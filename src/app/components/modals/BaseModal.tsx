@@ -27,6 +27,18 @@ export default function BaseModal({
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [isOpen]);
+
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === backdropRef.current) {
       onClose();
