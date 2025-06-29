@@ -14,6 +14,7 @@ import type { BenefitForm } from "@/lib/types/benefit";
 import sendMailchimpLead from "@/lib/api/sendMailchimpLead";
 import { toast } from "sonner";
 import { event as gaEvent } from "@/lib/utils/gtag";
+import { getCityStateFromZip } from "@/lib/api/getCityState";
 
 const steps = [
   "Household",
@@ -37,6 +38,9 @@ export default function BenefitEligibilityForm() {
     LNAME: "",
     EMAIL: "",
     PHONE: "",
+    STATE: "",
+    CITY: "",
+    ZIP: "",
     HSHLDSIZE: 1,
     INCOME: "",
     FACTORS: [] as string[],
@@ -110,8 +114,19 @@ export default function BenefitEligibilityForm() {
   const handleSubmit = async () => {
     if (validateContact()) {
       setStatus("sending");
+
+      // 1. Lookup city/state from ZIP
+      const { city, state } = await getCityStateFromZip(form.ZIP);
+
+      // 2. Update form state with new city/state
+      const updatedForm = {
+        ...form,
+        CITY: city || "",
+        STATE: state || "",
+      };
+      setForm(updatedForm);
       try {
-        const res = await sendMailchimpLead(form);
+        const res = await sendMailchimpLead(updatedForm);
         const data = await res.json(); // 👈 parse response body
 
         if (res.ok) {
@@ -124,7 +139,6 @@ export default function BenefitEligibilityForm() {
           });
           handleNext();
         } else {
-          console.log("Mailchimp error:", data.error);
           setStatus("error");
           toast.error(
             data.error.detail || "Something went wrong. Please try again."
@@ -491,6 +505,20 @@ export default function BenefitEligibilityForm() {
               />
               {errors.PHONE && (
                 <p className="tw-input-error-label">{errors.PHONE}</p>
+              )}
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                placeholder="ZIP Code"
+                value={form.ZIP}
+                onChange={(e) => setForm({ ...form, ZIP: e.target.value })}
+                className={`tw-input-base ${
+                  errors.ZIP ? "tw-input-error" : ""
+                }`}
+              />
+              {errors.ZIP && (
+                <p className="tw-input-error-label">{errors.ZIP}</p>
               )}
               <button
                 onClick={handleSubmit}
