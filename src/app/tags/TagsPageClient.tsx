@@ -1,15 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import BlogCard from "@/app/components/ui/BlogCard";
 import Tag from "@/app/components/ui/Tag";
 import FadeIn from "@/app/components/ui/FadeIn";
-import TagFilterDisplay from "@/app/components/ui/TagFilterDisplay";
-import { sortPosts, filterPostsByTag } from "@/lib/posts";
-import { siteUrl } from "@/lib/utils/constants";
+import { sortPosts } from "@/lib/posts";
 import type { Post } from "contentlayer/generated";
-import { useRouter } from "next/navigation";
+import { useTagNavigation } from "@/app/hooks/useTagNavigation";
 
 const CATEGORIES = [
   "Housing & Utilities",
@@ -19,10 +16,7 @@ const CATEGORIES = [
 ];
 
 export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  const goToTagPage = useTagNavigation();
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0]);
   const [postsByCategory, setPostsByCategory] = useState<Post[]>([]);
 
@@ -36,25 +30,7 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
     );
   }, [selectedCategory, allPosts]);
 
-  const handleCopy = async () => {
-    if (!selectedTag) return;
-    try {
-      const url = `${siteUrl}${pathname}/${selectedTag
-        .toLowerCase()
-        .replace(/\s+/g, "-")}`;
-
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy tag URL:", err);
-    }
-  };
-
-  const handleTagClick = (tag: string) => {
-    const slug = tag.toLowerCase().replace(/\s+/g, "-");
-    router.push(`/tags/${slug}`); // ⬅️ Change the URL on click
-  };
+  const handleTagClick = goToTagPage;
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -70,9 +46,6 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
 
   const tags = Array.from(tagMap.values()).sort();
   const sortedPosts = sortPosts(postsByCategory);
-  const filteredPosts = selectedTag
-    ? filterPostsByTag(sortedPosts, selectedTag.toLowerCase())
-    : [];
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-12">
@@ -83,7 +56,6 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
         Browse by Tag
       </h1>
 
-      {/* ✅ Category Tabs */}
       <div className="flex flex-wrap gap-2 mb-8">
         {CATEGORIES.map((category) => (
           <button
@@ -108,56 +80,17 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
 
       <div className="flex flex-wrap gap-2 mb-8">
         {tags.map((tag) => (
-          <Tag
-            key={tag}
-            name={tag}
-            selected={tag.toLowerCase() === selectedTag?.toLowerCase()}
-            onClick={() => handleTagClick(tag)}
-          />
+          <Tag key={tag} name={tag} onClick={() => handleTagClick(tag)} />
         ))}
       </div>
 
-      {selectedTag && (
-        <>
-          <TagFilterDisplay
-            tag={selectedTag}
-            onClear={() => setSelectedTag(null)}
-          />
-          <div className="mb-6 flex items-center gap-3">
-            <button
-              onClick={handleCopy}
-              className="cursor-pointer transition px-4 py-2 rounded-full text-sm font-medium border border-[var(--color-border)] bg-[var(--color-muted-bg)] hover:brightness-110"
-              style={{ color: "var(--color-foreground)" }}
-            >
-              {copied ? "Copied!" : "Copy Tag URL"}
-            </button>
-            <span className="text-xs text-[var(--color-muted-text)]">
-              Share or bookmark this tag page
-            </span>
-          </div>
-        </>
-      )}
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPosts.map((post) => (
+        {sortedPosts.map((post) => (
           <FadeIn key={post._id}>
-            <BlogCard
-              post={post}
-              selectedTag={selectedTag}
-              onTagClick={setSelectedTag}
-            />
+            <BlogCard post={post} onTagClick={goToTagPage} />
           </FadeIn>
         ))}
       </div>
-
-      {selectedTag && filteredPosts.length === 0 && (
-        <p
-          className="text-sm mt-8"
-          style={{ color: "var(--color-muted-text)" }}
-        >
-          No posts found for #{selectedTag}
-        </p>
-      )}
     </main>
   );
 }

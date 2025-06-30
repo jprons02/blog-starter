@@ -7,37 +7,31 @@ import Image from "next/image";
 import SearchBar from "@/app/components/ui/SearchBar";
 import BlogCard from "@/app/components/ui/BlogCard";
 import FadeIn from "@/app/components/ui/FadeIn";
-import TagFilterDisplay from "@/app/components/ui/TagFilterDisplay";
-import { sortPosts, filterPostsByTag, splitFeatured } from "@/lib/posts";
+import { sortPosts, splitFeatured } from "@/lib/posts";
 import { formatDate } from "@/lib/utils/formatDate";
 import type { Post } from "contentlayer/generated";
+import { useTagNavigation } from "@/app/hooks/useTagNavigation";
 
 type Props = {
   posts: Post[];
-  initialTag?: string;
 };
 
-export default function BlogIndexClient({ posts, initialTag }: Props) {
+export default function BlogIndexClient({ posts }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string | null>(
-    initialTag || null
-  );
   const [formattedFeaturedDate, setFormattedFeaturedDate] = useState("");
 
   const sortedPosts = sortPosts(posts);
+
+  const goToTagPage = useTagNavigation();
 
   const fuse = new Fuse(sortedPosts, {
     keys: ["title", "summary", "tags"],
     threshold: 0.3,
   });
 
-  let filtered = searchQuery
+  const filtered = searchQuery
     ? fuse.search(searchQuery).map((r) => r.item)
     : sortedPosts;
-
-  if (selectedTag) {
-    filtered = filterPostsByTag(filtered, selectedTag);
-  }
 
   const { featured, rest: postsWithoutFeatured } = splitFeatured(filtered);
 
@@ -49,13 +43,6 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
-      {selectedTag && (
-        <TagFilterDisplay
-          tag={selectedTag}
-          onClear={() => setSelectedTag(null)}
-        />
-      )}
-
       {featured && (
         <FadeIn>
           <Link
@@ -108,11 +95,7 @@ export default function BlogIndexClient({ posts, initialTag }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
         {postsWithoutFeatured.map((post) => (
           <FadeIn key={post.url} delay={250}>
-            <BlogCard
-              post={post}
-              selectedTag={selectedTag}
-              onTagClick={setSelectedTag}
-            />
+            <BlogCard post={post} onTagClick={goToTagPage} />
           </FadeIn>
         ))}
       </div>

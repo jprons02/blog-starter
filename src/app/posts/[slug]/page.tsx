@@ -2,11 +2,10 @@ import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import { getMDXComponent } from "next-contentlayer2/hooks";
 import Image from "next/image";
-import Tag from "@/app/components/ui/Tag";
-import StickyBackButton from "@/app/components/layout/StickyBackButton";
 import FadeIn from "@/app/components/ui/FadeIn";
 import { formatDate } from "@/lib/utils/formatDate";
 import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
+import PostTags from "./PostTags";
 
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
@@ -74,11 +73,7 @@ export default async function PostPage(props: {
 
         {Array.isArray(post.tags) && (
           <FadeIn>
-            <div className="flex flex-wrap gap-2 mt-2 mb-6">
-              {post.tags.map((tag: string) => (
-                <Tag key={tag} name={tag} />
-              ))}
-            </div>
+            <PostTags tags={post.tags} />
           </FadeIn>
         )}
 
@@ -88,7 +83,6 @@ export default async function PostPage(props: {
           </div>
         </FadeIn>
       </article>
-      <StickyBackButton />
     </>
   );
 }
