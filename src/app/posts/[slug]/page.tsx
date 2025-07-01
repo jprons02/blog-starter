@@ -106,7 +106,7 @@ export async function generateMetadata({
 
   // Generate SEO metadata using a reusable helper
   return getPageMeta({
-    title: post.title, // Post title for <title> tag, Open Graph, and Twitter
+    title: post.seoTitle ?? post.title, // Post title for <title> tag, Open Graph, and Twitter
     description: post.summary || "Helpful guides on US benefit programs.", // Post summary for meta description
     slug: post._raw.flattenedPath.replace(/^posts\//, ""), // Slug used to build canonical and OG URLs
     image: post.image, // Optional cover image for OG/Twitter cards

@@ -14,6 +14,7 @@ export type Post = {
   _raw: Local.RawDocumentData
   type: 'Post'
   title: string
+  seoTitle?: string | undefined
   summary: string
   date: string
   tags?: string[] | undefined

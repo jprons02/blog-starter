@@ -15,7 +15,7 @@ type NavItem =
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/", type: "link" },
-  { label: "Tags", href: "/tags", type: "link" },
+  { label: "Browse by Tags", href: "/tags", type: "link" },
   { label: "Check Benefits", modal: "benefit", type: "modal" },
   { label: "About", href: "/about", type: "link" },
 ];
