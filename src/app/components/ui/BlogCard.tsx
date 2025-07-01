@@ -22,11 +22,7 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
 
   return (
     <Link
-      href={
-        selectedTag
-          ? `${post.url}?fromTag=${encodeURIComponent(selectedTag)}`
-          : post.url
-      }
+      href={post.url}
       className="group block rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
       style={{
         backgroundColor: "var(--color-card-bg)",
