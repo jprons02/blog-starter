@@ -10,6 +10,7 @@ import { GA_TRACKING_ID } from "@/lib/utils/gtag";
 import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 import { Suspense } from "react";
 import { siteUrl } from "@/lib/utils/constants";
+import CanonicalTag from "@/app/components/seo/CanonicalTag";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -46,22 +47,28 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Google Analytics Script (loads gtag.js) */}
+        <meta name="robots" content="index, follow" />
+        <CanonicalTag /> {/* ✅ Keep this */}
+        {/* ✅ GA Scripts */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"
         />
-        {/* Google Analytics config */}
         <Script id="gtag-init" strategy="afterInteractive">
           {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}', {
-              page_path: window.location.pathname,
-            });
-          `}
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${GA_TRACKING_ID}', {
+        page_path: window.location.pathname,
+      });
+    `}
         </Script>
+        {/* ✅ reCAPTCHA */}
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+          strategy="afterInteractive"
+        />
       </head>
       {/* ✅ Load reCAPTCHA v3 script */}
       <script
