@@ -12,7 +12,7 @@ export default function TagFilterDisplay({ tag }: { tag: string }) {
           onClick={() => router.push("/")}
           className="mr-3 cursor-pointer underline text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
         >
-          Home
+          Blogs
         </a>
 
         <a

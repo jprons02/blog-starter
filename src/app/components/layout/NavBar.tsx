@@ -8,10 +8,16 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useModal } from "@/app/hooks/useModal";
 
-const NAV_ITEMS = [
-  { label: "Home", href: "/" },
-  { label: "Tags", href: "/tags" },
-  { label: "About", href: "/about" },
+// Unified array with link and modal items
+type NavItem =
+  | { label: string; href: string; type: "link" }
+  | { label: string; modal: "benefit"; type: "modal" };
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Home", href: "/", type: "link" },
+  { label: "Tags", href: "/tags", type: "link" },
+  { label: "Check Benefits", modal: "benefit", type: "modal" },
+  { label: "About", href: "/about", type: "link" },
 ];
 
 export default function NavBar() {
@@ -49,36 +55,27 @@ export default function NavBar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6 ml-auto">
           <ul className="flex items-center gap-6 text-sm font-medium">
-            {NAV_ITEMS.map(({ label, href }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className="transition-colors duration-200"
-                  style={{ color: "var(--color-foreground)" }}
-                >
-                  {label}
-                </Link>
+            {NAV_ITEMS.map((item) => (
+              <li key={item.label}>
+                {item.type === "link" ? (
+                  <Link
+                    href={item.href!}
+                    className="relative pb-1 border-b-2 border-transparent transition-colors duration-200 hover:border-[var(--color-foreground)]"
+                    style={{ color: "var(--color-foreground)" }}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <span
+                    onClick={() => openModal(item.modal!)}
+                    className="cursor-pointer relative pb-1 border-b-2 border-transparent transition-colors duration-200 hover:border-[var(--color-foreground)]"
+                    style={{ color: "var(--color-foreground)" }}
+                  >
+                    {item.label}
+                  </span>
+                )}
               </li>
             ))}
-            {/* Contact as inline nav item */}
-            <li>
-              <span
-                onClick={() => openModal("benefit")}
-                className="cursor-pointer transition-colors duration-200"
-                style={{ color: "var(--color-foreground)" }}
-              >
-                Check Benefits
-              </span>
-            </li>
-            <li>
-              <span
-                onClick={() => openModal("contact")}
-                className="cursor-pointer transition-colors duration-200"
-                style={{ color: "var(--color-foreground)" }}
-              >
-                Contact
-              </span>
-            </li>
           </ul>
           <ThemeToggle isLight={isLight} setIsLight={setIsLight} />
         </div>
@@ -109,38 +106,43 @@ export default function NavBar() {
             className="md:hidden overflow-hidden"
           >
             <div
-              className="px-4 py-4 space-y-3"
+              className="px-4 py-4 space-y-3 text-center"
               style={{
                 backgroundColor: "var(--color-muted-bg)",
                 borderTop: "1px solid var(--color-border)",
               }}
             >
-              {NAV_ITEMS.map(({ label, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="block text-sm font-medium transition"
-                  style={{ color: "var(--color-muted-text)" }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {label}
-                </Link>
-              ))}
-              <span
-                onClick={() => openModal("benefit")}
-                className="block text-sm font-medium transition cursor-pointer"
-                style={{ color: "var(--color-muted-text)" }}
-              >
-                Check Benefits
-              </span>
-              {/* Contact in mobile nav */}
-              <span
-                onClick={() => openModal("contact")}
-                className="block text-sm font-medium transition cursor-pointer"
-                style={{ color: "var(--color-muted-text)" }}
-              >
-                Contact
-              </span>
+              {NAV_ITEMS.map((item) =>
+                item.type === "link" ? (
+                  <Link
+                    key={item.label}
+                    href={item.href!}
+                    className="block font-medium transition"
+                    style={{
+                      color: "var(--color-muted-text)",
+                      fontSize: "1.2rem",
+                    }}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <span
+                    key={item.label}
+                    onClick={() => {
+                      openModal(item.modal!);
+                      setIsOpen(false);
+                    }}
+                    className="block font-medium transition cursor-pointer"
+                    style={{
+                      color: "var(--color-muted-text)",
+                      fontSize: "1.2rem",
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                )
+              )}
             </div>
           </motion.div>
         )}
