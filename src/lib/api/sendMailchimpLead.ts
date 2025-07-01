@@ -20,6 +20,7 @@ const sendMailchimpLead = async (data: BenefitForm): Promise<Response> => {
       INCOME: data.INCOME,
       FACTORS: data.FACTORS.join(", "),
       PAYSUTILS: data.PAYSUTILS,
+      WEBSITE: data.WEBSITE,
     },
   };
 

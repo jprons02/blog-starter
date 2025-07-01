@@ -10,4 +10,5 @@ export type BenefitForm = {
   INCOME: string;
   FACTORS: string[];
   PAYSUTILS: string;
+  WEBSITE: string;
 };

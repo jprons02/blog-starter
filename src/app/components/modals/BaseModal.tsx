@@ -66,7 +66,8 @@ export default function BaseModal({
         >
           <button
             onClick={onClose}
-            className="cursor-pointer absolute top-4 right-4 text-[var(--color-muted-text)] hover:text-[var(--color-foreground)] text-lg"
+            className="cursor-pointer absolute top-4 right-4 text-[var(--color-muted-text)] hover:text-[var(--color-foreground)]"
+            style={{ fontSize: "1.2rem" }}
             aria-label="Close modal"
           >
             ✕

@@ -45,6 +45,7 @@ export default function BenefitEligibilityForm() {
     INCOME: "",
     FACTORS: [] as string[],
     PAYSUTILS: "yes",
+    WEBSITE: "mygovblog.com",
   });
 
   const formRef = useRef<HTMLDivElement>(null);
