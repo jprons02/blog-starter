@@ -48,8 +48,7 @@ export default function RootLayout({
     >
       <head>
         <meta name="robots" content="index, follow" />
-        <CanonicalTag /> {/* ✅ Keep this */}
-        {/* ✅ GA Scripts */}
+        <CanonicalTag />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"
@@ -64,13 +63,11 @@ export default function RootLayout({
       });
     `}
         </Script>
-        {/* ✅ reCAPTCHA */}
         <Script
           src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
           strategy="afterInteractive"
         />
       </head>
-      {/* ✅ Load reCAPTCHA v3 script */}
       <script
         src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
         async
