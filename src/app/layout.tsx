@@ -32,9 +32,6 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
-  alternates: {
-    canonical: "/",
-  },
 };
 
 export default function RootLayout({

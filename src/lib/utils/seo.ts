@@ -17,15 +17,7 @@ export function getPageMeta({
   type = "article",
 }: SEOProps): Metadata {
   const fallbackImage = siteImage;
-  const url = `${siteUrl}/posts/${slug}`;
-
-  console.log("Generating SEO metadata for:", {
-    title,
-    description,
-    url,
-    image,
-    type,
-  });
+  const url = slug ? `${siteUrl}/posts/${slug}` : siteUrl;
 
   return {
     title,
