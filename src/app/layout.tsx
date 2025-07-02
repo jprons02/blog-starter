@@ -10,7 +10,6 @@ import { GA_TRACKING_ID } from "@/lib/utils/gtag";
 import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 import { Suspense } from "react";
 import { siteUrl } from "@/lib/utils/constants";
-import CanonicalTag from "@/app/components/seo/CanonicalTag";
 
 const poppins = Poppins({
   variable: "--font-heading",
@@ -33,6 +32,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({
@@ -48,7 +50,6 @@ export default function RootLayout({
     >
       <head>
         <meta name="robots" content="index, follow" />
-        <CanonicalTag />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"

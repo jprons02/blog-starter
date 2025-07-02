@@ -1,4 +1,5 @@
 import { siteUrl, siteTitle, siteDescription, siteImage } from "./constants";
+import type { Metadata } from "next";
 
 export type SEOProps = {
   title: string;
@@ -6,6 +7,9 @@ export type SEOProps = {
   slug?: string;
   image?: string;
   type?: "website" | "article";
+  alternates?: {
+    canonical?: string;
+  };
 };
 
 export function getPageMeta({
@@ -14,13 +18,16 @@ export function getPageMeta({
   slug = "",
   image,
   type = "article",
-}: SEOProps) {
+}: SEOProps): Metadata {
   const fallbackImage = siteImage;
   const url = `${siteUrl}/blog/${slug}`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title,
       description,
