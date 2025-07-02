@@ -3,7 +3,7 @@ import { allPosts } from "contentlayer/generated";
 
 // ✅ SEO metadata
 export const metadata = {
-  title: "Browse by Tag - My Gov Blog",
+  title: "Browse by Tags - My Gov Blog",
   description:
     "Explore blog posts by topic to find help with housing, utilities, food, financial aid, and more. Filter resources to match your needs.",
 };

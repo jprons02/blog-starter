@@ -55,7 +55,7 @@ export default function Footer() {
         .
       </p>
       <p>
-        MyGovBlog{" "}
+        {siteTitle}{" "}
         <a href="/privacy-policy" className="underline">
           Privacy Policy
         </a>

@@ -43,6 +43,9 @@ export default function BlogIndexClient({ posts }: Props) {
 
   return (
     <main className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="sr-only">
+        My Gov Blog – News, Insights, and Survival Tips
+      </h1>
       {featured && (
         <FadeIn>
           <Link
