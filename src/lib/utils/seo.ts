@@ -7,9 +7,6 @@ export type SEOProps = {
   slug?: string;
   image?: string;
   type?: "website" | "article";
-  alternates?: {
-    canonical?: string;
-  };
 };
 
 export function getPageMeta({
@@ -20,7 +17,15 @@ export function getPageMeta({
   type = "article",
 }: SEOProps): Metadata {
   const fallbackImage = siteImage;
-  const url = `${siteUrl}/blog/${slug}`;
+  const url = `${siteUrl}/posts/${slug}`;
+
+  console.log("Generating SEO metadata for:", {
+    title,
+    description,
+    url,
+    image,
+    type,
+  });
 
   return {
     title,
