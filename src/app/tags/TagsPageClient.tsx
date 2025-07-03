@@ -53,7 +53,7 @@ export default function TagsPageClient({ allPosts }: { allPosts: Post[] }) {
         className="text-3xl font-bold mb-6"
         style={{ color: "var(--color-primary)" }}
       >
-        Browse by Tags
+        Browse by Tag
       </h1>
 
       <div className="flex flex-wrap gap-2 mb-8">

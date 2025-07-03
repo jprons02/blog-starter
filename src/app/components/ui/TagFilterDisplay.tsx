@@ -19,7 +19,7 @@ export default function TagFilterDisplay({ tag }: { tag: string }) {
           onClick={() => router.push("/tags")}
           className="cursor-pointer underline text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
         >
-          Browse by Tags
+          Browse by Tag
         </a>
       </div>
       <div

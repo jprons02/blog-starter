@@ -47,6 +47,7 @@ export default function RootLayout({
     >
       <head>
         <meta name="robots" content="index, follow" />
+        <meta name="fo-verify" content="159ed184-dd4f-414f-adca-e688d3ddc0cc" />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"
