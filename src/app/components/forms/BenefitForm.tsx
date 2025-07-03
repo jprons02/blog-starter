@@ -15,6 +15,7 @@ import sendMailchimpLead from "@/lib/api/sendMailchimpLead";
 import { toast } from "sonner";
 import { event as gaEvent } from "@/lib/utils/gtag";
 import { getCityStateFromZip } from "@/lib/api/getCityState";
+import type { Benefit } from "@/lib/services/benefitEligibility";
 
 const steps = [
   "Household",
@@ -32,7 +33,7 @@ export default function BenefitEligibilityForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
-
+  const [results, setResults] = useState<Benefit[]>([]);
   const [form, setForm] = useState<BenefitForm>({
     FNAME: "",
     LNAME: "",
@@ -65,8 +66,9 @@ export default function BenefitEligibilityForm() {
   const handleNext = () => {
     const errors: Record<string, string> = {};
 
-    if (step === 0 && form.HSHLDSIZE < 1) {
-      errors.HSHLDSIZE = "Household size must be at least 1.";
+    if (step === 0 && (form.HSHLDSIZE < 1 || form.HSHLDSIZE > 20)) {
+      errors.HSHLDSIZE =
+        "Household size must be at least 1 and no larger than 20.";
     }
 
     if (step === 1 && !form.INCOME) {
@@ -114,25 +116,30 @@ export default function BenefitEligibilityForm() {
 
   const handleSubmit = async () => {
     if (validateContact()) {
-      setStatus("sending");
-
       // 1. Lookup city/state from ZIP
+      if (!form.ZIP || !/^\d{5}$/.test(form.ZIP)) {
+        setErrors({ ZIP: "Please enter a valid 5-digit ZIP code." });
+        return;
+      }
+      setStatus("sending");
       const { city, state } = await getCityStateFromZip(form.ZIP);
 
       // 2. Update form state with new city/state
       const updatedForm = {
         ...form,
         CITY: city || "",
-        STATE: state || "",
+        STATE: state?.toLowerCase() || "us", // fallback to 'us'
       };
       setForm(updatedForm);
       try {
         const res = await sendMailchimpLead(updatedForm);
-        const data = await res.json(); // 👈 parse response body
+        const data = await res.json();
 
         if (res.ok) {
+          const benefits = await getEligibilityResults(updatedForm);
+          setResults(benefits); // ✅ set results here
           setStatus("sent");
-          // Google Analytics event tracking
+
           gaEvent({
             action: "benefits_form_submit",
             category: "conversion",
@@ -180,6 +187,12 @@ export default function BenefitEligibilityForm() {
             >
               How many people are in your household?
             </label>
+            <p className="text-sm text-[var(--color-muted-text)] leading-snug">
+              <em>
+                Include yourself, your spouse/partner, children, and anyone else
+                you financially support.
+              </em>
+            </p>
 
             <div className="relative w-[100px]">
               <input
@@ -203,7 +216,7 @@ export default function BenefitEligibilityForm() {
                   onClick={() =>
                     setForm((prev) => ({
                       ...prev,
-                      HSHLDSIZE: Math.max(1, prev.HSHLDSIZE + 1),
+                      HSHLDSIZE: Math.min(20, prev.HSHLDSIZE + 1),
                     }))
                   }
                   className="hover:text-[var(--color-primary)]"
@@ -541,7 +554,6 @@ export default function BenefitEligibilityForm() {
           </div>
         );
       case 5:
-        const results = getEligibilityResults(form);
         return (
           <div className="space-y-4 text-[var(--color-muted-text)]">
             <p className="text-base font-medium">
@@ -584,8 +596,10 @@ export default function BenefitEligibilityForm() {
             )}
 
             <p className="text-sm pt-4">
-              * This is a basic estimate. Final eligibility depends on your
-              state and submitted documents.
+              Results are based on the official 2025 Federal Poverty Guidelines
+              published by the U.S. Department of Health & Human Services, along
+              with current federal benefit rules. Final eligibility may vary
+              depending on your state and the documents you submit.
             </p>
 
             <button

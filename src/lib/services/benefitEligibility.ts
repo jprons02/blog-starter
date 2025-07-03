@@ -1,20 +1,10 @@
 import type { BenefitForm } from "@/lib/types/benefit";
+import { getMonthlyFPL } from "@/lib/api/getPovertyLevel";
 
 export type Benefit = {
   name: string;
   description: string;
   link: string;
-};
-
-const FPL: Record<number, number> = {
-  1: 1450,
-  2: 1956,
-  3: 2460,
-  4: 2966,
-  5: 3472,
-  6: 3978,
-  7: 4484,
-  8: 4990,
 };
 
 const incomeMap: Record<string, number> = {
@@ -26,10 +16,13 @@ const incomeMap: Record<string, number> = {
   "5000+": 5000,
 };
 
-export function getEligibilityResults(form: BenefitForm): Benefit[] {
+export async function getEligibilityResults(
+  form: BenefitForm
+): Promise<Benefit[]> {
   const results: Benefit[] = [];
 
-  const householdFPL = FPL[form.HSHLDSIZE] || FPL[8];
+  const householdFPL = await getMonthlyFPL(form.HSHLDSIZE, form.STATE, 2025);
+  console.log("householdFPL: ", householdFPL);
   const incomeAmount = incomeMap[form.INCOME];
   const isVeteran = form.FACTORS.includes("I am a veteran");
   const hasHonorableDischarge = form.FACTORS.includes(
