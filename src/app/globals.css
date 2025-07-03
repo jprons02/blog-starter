@@ -153,6 +153,10 @@ figcaption a:hover {
   color: var(--color-link-hover);
 }
 
+.my-tag:hover {
+  background-color: var(--color-primary) !important;
+}
+
 /* =====================
    Form Styles
    ===================== */

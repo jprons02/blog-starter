@@ -12,8 +12,8 @@ export default function Tag({ name, selected, onClick }: TagProps) {
   const TagEl = onClick ? "button" : "span";
 
   const baseClass = `
-    text-xs font-medium px-2 py-1 rounded-full uppercase tracking-wide
-    transition-all duration-300 ease-in-out hover:shadow-sm hover:brightness-110
+    my-tag text-xs font-medium px-2 py-1 rounded-full uppercase tracking-wide
+    transition-all duration-300 ease-in-out
   `;
 
   const cursorClass = onClick ? "cursor-pointer" : "cursor-default";
