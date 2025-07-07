@@ -23,7 +23,8 @@ export default function BenefitsCtaBanner() {
       >
         Need help applying? Use our{" "}
         <span
-          className="cursor-pointer text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
+          className="underline cursor-pointer text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
+          style={{ fontSize: "1.3rem" }}
           onClick={handleClick}
         >
           free checklist
