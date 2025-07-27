@@ -1,63 +1,78 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { useModal } from "@/app/hooks/useModal";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from 'react';
+import { useModal } from '@/app/hooks/useModal';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   validateName,
   validateEmail,
   validatePhone,
-} from "@/lib/utils/validationSchemas";
-import { getEligibilityResults } from "@/lib/services/benefitEligibility";
-import { ChevronUp, ChevronDown } from "lucide-react";
-import type { BenefitForm } from "@/lib/types/benefit";
-import sendMailchimpLead from "@/lib/api/sendMailchimpLead";
-import { toast } from "sonner";
-import { event as gaEvent } from "@/lib/utils/gtag";
-import { getCityStateFromZip } from "@/lib/api/getCityState";
-import type { Benefit } from "@/lib/services/benefitEligibility";
+} from '@/lib/utils/validationSchemas';
+import { getEligibilityResults } from '@/lib/services/benefitEligibility';
+import { ChevronUp, ChevronDown } from 'lucide-react';
+import type { BenefitForm } from '@/lib/types/benefit';
+import sendMailchimpLead from '@/lib/api/sendMailchimpLead';
+import { toast } from 'sonner';
+import { event as gaEvent } from '@/lib/utils/gtag';
+import { getCityStateFromZip } from '@/lib/api/getCityState';
+import type { Benefit } from '@/lib/services/benefitEligibility';
+import { benefitsFocusMap, FocusSlug } from '@/lib/utils/benefitsFocusMap';
+import { getIncomeThresholdFor } from '@/lib/services/benefitEligibility';
 
 const steps = [
-  "Household",
-  "Income",
-  "Situations",
-  "Pay Utility",
-  "Contact",
-  "Results",
+  'Household',
+  'Income',
+  'Situations',
+  'Pay Utility',
+  'Contact',
+  'Results',
 ];
 
-export default function BenefitEligibilityForm() {
+type Props = {
+  focus?: string;
+};
+
+export default function BenefitEligibilityForm({ focus }: Props) {
   const { closeModal } = useModal();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
+    'idle'
   );
   const [results, setResults] = useState<Benefit[]>([]);
   const [form, setForm] = useState<BenefitForm>({
-    FNAME: "",
-    LNAME: "",
-    EMAIL: "",
-    PHONE: "",
-    STATE: "",
-    CITY: "",
-    ZIP: "",
+    FNAME: '',
+    LNAME: '',
+    EMAIL: '',
+    PHONE: '',
+    STATE: '',
+    CITY: '',
+    ZIP: '',
     HSHLDSIZE: 1,
-    INCOME: "",
+    INCOME: '',
     FACTORS: [] as string[],
-    PAYSUTILS: "yes",
-    WEBSITE: "mygovblog.com",
+    PAYSUTILS: 'yes',
+    WEBSITE: 'mygovblog.com',
   });
 
   const formRef = useRef<HTMLDivElement>(null);
+  const isValidFocusKey = (key: string): key is FocusSlug =>
+    key in benefitsFocusMap;
+
+  const focusKey = focus && isValidFocusKey(focus) ? focus : null;
+  const focusData = focusKey ? benefitsFocusMap[focusKey] : null;
+
+  const incomeLimit = focusKey
+    ? getIncomeThresholdFor(focusKey, form.HSHLDSIZE)
+    : null;
 
   useEffect(() => {
-    if (form.FACTORS.includes("I am a veteran")) {
+    if (form.FACTORS.includes('I am a veteran')) {
       // Wait for DOM to update
       setTimeout(() => {
         formRef.current?.scrollTo({
           top: formRef.current.scrollHeight,
-          behavior: "smooth",
+          behavior: 'smooth',
         });
       }, 200); // delay helps ensure content is rendered
     }
@@ -68,15 +83,15 @@ export default function BenefitEligibilityForm() {
 
     if (step === 0 && (form.HSHLDSIZE < 1 || form.HSHLDSIZE > 20)) {
       errors.HSHLDSIZE =
-        "Household size must be at least 1 and no larger than 20.";
+        'Household size must be at least 1 and no larger than 20.';
     }
 
     if (step === 1 && !form.INCOME) {
-      errors.INCOME = "Please select your income range.";
+      errors.INCOME = 'Please select your income range.';
     }
 
     if (step === 2 && form.FACTORS.length === 0) {
-      errors.FACTORS = "Please select at least one option.";
+      errors.FACTORS = 'Please select at least one option.';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -94,7 +109,7 @@ export default function BenefitEligibilityForm() {
       const { FACTORS } = prev;
 
       // Handle "None of these apply to me" exclusively
-      if (value === "None of these apply to me") {
+      if (value === 'None of these apply to me') {
         return {
           ...prev,
           FACTORS: FACTORS.includes(value) ? [] : [value],
@@ -102,7 +117,7 @@ export default function BenefitEligibilityForm() {
       }
 
       const withoutNone = FACTORS.filter(
-        (s) => s !== "None of these apply to me"
+        (s) => s !== 'None of these apply to me'
       );
       const exists = withoutNone.includes(value);
       return {
@@ -114,21 +129,19 @@ export default function BenefitEligibilityForm() {
     });
   };
 
+  /*
   const handleSubmit = async () => {
     if (validateContact()) {
-      // 1. Lookup city/state from ZIP
       if (!form.ZIP || !/^\d{5}$/.test(form.ZIP)) {
-        setErrors({ ZIP: "Please enter a valid 5-digit ZIP code." });
+        setErrors({ ZIP: 'Please enter a valid 5-digit ZIP code.' });
         return;
       }
-      setStatus("sending");
+      setStatus('sending');
       const { city, state } = await getCityStateFromZip(form.ZIP);
-
-      // 2. Update form state with new city/state
       const updatedForm = {
         ...form,
-        CITY: city || "",
-        STATE: state?.toLowerCase() || "us", // fallback to 'us'
+        CITY: city || '',
+        STATE: state?.toLowerCase() || 'us',
       };
       setForm(updatedForm);
       try {
@@ -136,26 +149,95 @@ export default function BenefitEligibilityForm() {
         const data = await res.json();
 
         if (res.ok) {
-          const benefits = await getEligibilityResults(updatedForm);
-          setResults(benefits); // ✅ set results here
-          setStatus("sent");
+          let benefits = await getEligibilityResults(updatedForm);
+          if (focusKey && focusData) {
+            const priority = benefits.find((b) =>
+              b.name.toLowerCase().includes(searchKey)
+            );
+            const rest = benefits.filter(
+              (b) => !b.name.toLowerCase().includes(searchKey)
+            );
+            benefits = priority ? [priority, ...rest] : benefits;
+          }
+
+          setResults(benefits);
+          setStatus('sent');
 
           gaEvent({
-            action: "benefits_form_submit",
-            category: "conversion",
-            label: "Eligibility Form",
+            action: 'benefits_form_submit',
+            category: 'conversion',
+            label: 'Eligibility Form',
           });
-          handleNext();
+
+          setStep((prev) => Math.min(prev + 1, steps.length - 1));
         } else {
-          setStatus("error");
+          setStatus('error');
           toast.error(
-            data.error.detail || "Something went wrong. Please try again."
+            data.error.detail || 'Something went wrong. Please try again.'
           );
         }
       } catch (err) {
-        console.log("Submission failed:", err);
-        setStatus("error");
-        toast.error("Submission failed. Please try again.");
+        console.log('Submission failed:', err);
+        setStatus('error');
+        toast.error('Submission failed. Please try again.');
+      }
+    }
+  };
+  */
+
+  const handleSubmit = async () => {
+    if (validateContact()) {
+      if (!form.ZIP || !/^\d{5}$/.test(form.ZIP)) {
+        setErrors({ ZIP: 'Please enter a valid 5-digit ZIP code.' });
+        return;
+      }
+
+      setStatus('sending');
+
+      const { city, state } = await getCityStateFromZip(form.ZIP);
+      const updatedForm = {
+        ...form,
+        CITY: city || '',
+        STATE: state?.toLowerCase() || 'us',
+      };
+      setForm(updatedForm);
+
+      try {
+        const res = await sendMailchimpLead(updatedForm);
+        const data = await res.json();
+
+        if (res.ok) {
+          let benefits = await getEligibilityResults(updatedForm);
+
+          // ✅ Safe reordering of focus benefit if present
+          if (focusKey && focusData) {
+            const reordered = [...benefits].sort((a, b) => {
+              if (a.name === focusData.label) return -1;
+              if (b.name === focusData.label) return 1;
+              return 0;
+            });
+            benefits = reordered;
+          }
+          setResults(benefits);
+          setStatus('sent');
+
+          gaEvent({
+            action: 'benefits_form_submit',
+            category: 'conversion',
+            label: 'Eligibility Form',
+          });
+
+          setStep((prev) => Math.min(prev + 1, steps.length - 1));
+        } else {
+          setStatus('error');
+          toast.error(
+            data.error?.detail || 'Something went wrong. Please try again.'
+          );
+        }
+      } catch (err) {
+        console.log('Submission failed:', err);
+        setStatus('error');
+        toast.error('Submission failed. Please try again.');
       }
     }
   };
@@ -183,7 +265,7 @@ export default function BenefitEligibilityForm() {
           <div className="space-y-4">
             <label
               className="block font-medium"
-              style={{ color: "var(--color-muted-text)" }}
+              style={{ color: 'var(--color-muted-text)' }}
             >
               How many people are in your household?
             </label>
@@ -205,9 +287,9 @@ export default function BenefitEligibilityForm() {
                 }
                 className="tw-input-base pr-8" // add right padding for the buttons
                 style={{
-                  height: "70px",
-                  fontSize: "24px",
-                  color: "var(--color-foreground)",
+                  height: '70px',
+                  fontSize: '24px',
+                  color: 'var(--color-foreground)',
                 }}
               />
               <div className="absolute right-1 top-1 bottom-1 flex flex-col justify-between">
@@ -249,18 +331,18 @@ export default function BenefitEligibilityForm() {
           <div className="space-y-4">
             <label
               className="block font-medium"
-              style={{ color: "var(--color-muted-text)" }}
+              style={{ color: 'var(--color-muted-text)' }}
             >
               What is your total <strong>monthly</strong> household income?
             </label>
             <div className="space-y-2">
               {[
-                { label: "Less than $1,000", value: "<1000" },
-                { label: "$1,000 – $1,999", value: "1000-1999" },
-                { label: "$2,000 – $2,999", value: "2000-2999" },
-                { label: "$3,000 – $3,999", value: "3000-3999" },
-                { label: "$4,000 – $4,999", value: "4000-4999" },
-                { label: "$5,000 or more", value: "5000+" },
+                { label: 'Less than $1,000', value: '<1000' },
+                { label: '$1,000 – $1,999', value: '1000-1999' },
+                { label: '$2,000 – $2,999', value: '2000-2999' },
+                { label: '$3,000 – $3,999', value: '3000-3999' },
+                { label: '$4,000 – $4,999', value: '4000-4999' },
+                { label: '$5,000 or more', value: '5000+' },
               ].map(({ label, value }) => (
                 <label
                   key={value}
@@ -277,8 +359,8 @@ export default function BenefitEligibilityForm() {
                   <div
                     className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition ${
                       form.INCOME === value
-                        ? "border-[var(--color-primary)]"
-                        : "border-[var(--color-border)]"
+                        ? 'border-[var(--color-primary)]'
+                        : 'border-[var(--color-border)]'
                     }`}
                   >
                     {form.INCOME === value && (
@@ -293,7 +375,7 @@ export default function BenefitEligibilityForm() {
               {errors.INCOME && (
                 <p
                   className="tw-input-error-label"
-                  style={{ marginTop: "10px" }}
+                  style={{ marginTop: '10px' }}
                 >
                   {errors.INCOME}
                 </p>
@@ -307,21 +389,21 @@ export default function BenefitEligibilityForm() {
           <div className="space-y-4">
             <label
               className="block font-medium"
-              style={{ color: "var(--color-muted-text)" }}
+              style={{ color: 'var(--color-muted-text)' }}
             >
               Select any that apply:
             </label>
 
             <div className="space-y-2">
               {[
-                "I am pregnant",
-                "I have children under 5",
-                "I am over age 65",
-                "I have a disability",
-                "I’m currently unemployed",
-                "I receive SNAP, Medicaid, or SSI",
-                "I am a veteran",
-                "None of these apply to me",
+                'I am pregnant',
+                'I have children under 5',
+                'I am over age 65',
+                'I have a disability',
+                'I’m currently unemployed',
+                'I receive SNAP, Medicaid, or SSI',
+                'I am a veteran',
+                'None of these apply to me',
               ].map((label) => {
                 const isChecked = form.FACTORS.includes(label);
                 return (
@@ -338,10 +420,10 @@ export default function BenefitEligibilityForm() {
                     <div
                       className={`w-6 h-6 flex-shrink-0 border-2 rounded-sm flex items-center justify-center transition ${
                         isChecked
-                          ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
-                          : "border-[var(--color-border)]"
+                          ? 'border-[var(--color-primary)] bg-[var(--color-primary)]'
+                          : 'border-[var(--color-border)]'
                       }`}
-                      style={{ marginTop: "4px" }}
+                      style={{ marginTop: '4px' }}
                     >
                       {isChecked && (
                         <svg
@@ -368,16 +450,16 @@ export default function BenefitEligibilityForm() {
                 <p className="tw-input-error-label mt-2">{errors.FACTORS}</p>
               )}
 
-              {form.FACTORS.includes("I am a veteran") && (
+              {form.FACTORS.includes('I am a veteran') && (
                 <div className="transition-all duration-300 ease-in-out space-y-3 pt-4 pl-3 border-l-2 border-[var(--color-primary)]">
                   <label className="block font-medium text-[var(--color-muted-text)]">
                     Help us better understand your veteran status:
                   </label>
 
                   {[
-                    "My discharge was honorable or general",
-                    "I separated from service within the last 5 years",
-                    "I served in a combat zone",
+                    'My discharge was honorable or general',
+                    'I separated from service within the last 5 years',
+                    'I served in a combat zone',
                   ].map((label) => {
                     const isChecked = form.FACTORS.includes(label);
                     return (
@@ -394,10 +476,10 @@ export default function BenefitEligibilityForm() {
                         <div
                           className={`w-6 h-6 flex-shrink-0 border-2 rounded-sm flex items-center justify-center transition ${
                             isChecked
-                              ? "border-[var(--color-primary)] bg-[var(--color-primary)]"
-                              : "border-[var(--color-border)]"
+                              ? 'border-[var(--color-primary)] bg-[var(--color-primary)]'
+                              : 'border-[var(--color-border)]'
                           }`}
-                          style={{ marginTop: "4px" }}
+                          style={{ marginTop: '4px' }}
                         >
                           {isChecked && (
                             <svg
@@ -430,7 +512,7 @@ export default function BenefitEligibilityForm() {
           <div className="space-y-4">
             <label
               className="block font-medium"
-              style={{ color: "var(--color-muted-text)" }}
+              style={{ color: 'var(--color-muted-text)' }}
             >
               Do you currently pay rent or utility bills?
             </label>
@@ -438,7 +520,7 @@ export default function BenefitEligibilityForm() {
               <button
                 className="tw-form-submit-base"
                 onClick={() => {
-                  setForm({ ...form, PAYSUTILS: "yes" });
+                  setForm({ ...form, PAYSUTILS: 'yes' });
                   handleNext();
                 }}
                 type="button"
@@ -450,7 +532,7 @@ export default function BenefitEligibilityForm() {
               <button
                 className="tw-form-submit-base color-[var(--color-foreground)]"
                 onClick={() => {
-                  setForm({ ...form, PAYSUTILS: "no" });
+                  setForm({ ...form, PAYSUTILS: 'no' });
                   handleNext();
                 }}
                 type="button"
@@ -467,7 +549,7 @@ export default function BenefitEligibilityForm() {
           <div className="space-y-4">
             <label
               className="block font-medium"
-              style={{ color: "var(--color-muted-text)" }}
+              style={{ color: 'var(--color-muted-text)' }}
             >
               Your Contact Information
             </label>
@@ -478,7 +560,7 @@ export default function BenefitEligibilityForm() {
                 value={form.FNAME}
                 onChange={(e) => setForm({ ...form, FNAME: e.target.value })}
                 className={`tw-input-base ${
-                  errors.FNAME ? "tw-input-error" : ""
+                  errors.FNAME ? 'tw-input-error' : ''
                 }`}
               />
               {errors.FNAME && (
@@ -490,7 +572,7 @@ export default function BenefitEligibilityForm() {
                 value={form.LNAME}
                 onChange={(e) => setForm({ ...form, LNAME: e.target.value })}
                 className={`tw-input-base ${
-                  errors.LNAME ? "tw-input-error" : ""
+                  errors.LNAME ? 'tw-input-error' : ''
                 }`}
               />
               {errors.LNAME && (
@@ -502,7 +584,7 @@ export default function BenefitEligibilityForm() {
                 value={form.EMAIL}
                 onChange={(e) => setForm({ ...form, EMAIL: e.target.value })}
                 className={`tw-input-base ${
-                  errors.EMAIL ? "tw-input-error" : ""
+                  errors.EMAIL ? 'tw-input-error' : ''
                 }`}
               />
               {errors.EMAIL && (
@@ -514,7 +596,7 @@ export default function BenefitEligibilityForm() {
                 value={form.PHONE}
                 onChange={(e) => setForm({ ...form, PHONE: e.target.value })}
                 className={`tw-input-base ${
-                  errors.PHONE ? "tw-input-error" : ""
+                  errors.PHONE ? 'tw-input-error' : ''
                 }`}
               />
               {errors.PHONE && (
@@ -528,7 +610,7 @@ export default function BenefitEligibilityForm() {
                 value={form.ZIP}
                 onChange={(e) => setForm({ ...form, ZIP: e.target.value })}
                 className={`tw-input-base ${
-                  errors.ZIP ? "tw-input-error" : ""
+                  errors.ZIP ? 'tw-input-error' : ''
                 }`}
               />
               {errors.ZIP && (
@@ -536,13 +618,13 @@ export default function BenefitEligibilityForm() {
               )}
               <button
                 onClick={handleSubmit}
-                disabled={status === "sending"}
+                disabled={status === 'sending'}
                 className="tw-form-submit-base bg-[var(--color-primary)] text-white w-full mt-2"
               >
-                {status === "sending" ? (
+                {status === 'sending' ? (
                   <div
                     className="w-5 h-5 border-2 border-t-transparent border-[var(--color-primary)] rounded-full animate-spin"
-                    style={{ margin: "auto" }}
+                    style={{ margin: 'auto' }}
                   />
                 ) : (
                   <span className="text-lg color-[var(--color-foreground)]">
@@ -556,51 +638,126 @@ export default function BenefitEligibilityForm() {
       case 5:
         return (
           <div className="space-y-4 text-[var(--color-muted-text)]">
-            <p className="text-base font-medium">
-              Based on your answers, you may qualify for:
-            </p>
+            {/* Focus fallback guidance (only if not matched) */}
 
-            {results.length > 0 ? (
-              <ul className="list-disc pl-5 space-y-3">
-                {results.map((benefit) => (
-                  <li key={benefit.name}>
-                    <strong>{benefit.name}</strong> – {benefit.description}{" "}
+            {status === 'sent' &&
+              focusData &&
+              !results.some((b) => b.name === focusData.label) && (
+                <div className="text-sm space-y-2 leading-snug">
+                  <p className="font-medium">
+                    It looks like you may not qualify for{' '}
+                    <strong>{focusData.label}</strong>. Here&apos;s a general
+                    outline on how to qualify:
+                  </p>
+                  <ul className="list-disc ml-5">
+                    {focusData.qualifyTips.map((tip: string, i: number) => (
+                      <li key={i}>
+                        {i === 0 && incomeLimit
+                          ? `For a household of ${
+                              form.HSHLDSIZE
+                            }, your income must be under $${incomeLimit.toLocaleString()} per year.`
+                          : tip}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="pt-2">
                     <a
-                      href={benefit.link}
+                      href={focusData.learnMore}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="underline text-[var(--color-primary)]"
                     >
                       Learn more ↗
                     </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm italic">
-                Unfortunately, we couldn&apos;t match you with any major federal
-                programs based on your answers. But don&apos;t worry — you may
-                still be eligible for local or state-level assistance. We
-                recommend contacting your county human services office or
-                visiting{" "}
-                <a
-                  href="https://www.benefits.gov/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-[var(--color-primary)]"
-                >
-                  Benefits.gov ↗
-                </a>{" "}
-                to explore additional programs.
-              </p>
+                  </p>
+
+                  {results.length > 0 && (
+                    <hr className="border-t border-[var(--color-border)] my-4" />
+                  )}
+                </div>
+              )}
+
+            {/* General results list */}
+            {status === 'sent' && results.length > 0 && (
+              <>
+                <p className="text-base font-medium">
+                  Based on your answers, you may qualify for:
+                </p>
+                <ul className="list-disc pl-5 space-y-3">
+                  {results.map((benefit) => (
+                    <li key={benefit.name}>
+                      <strong>{benefit.name}</strong> – {benefit.description}{' '}
+                      <a
+                        href={benefit.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-[var(--color-primary)]"
+                      >
+                        Apply now on official site ↗
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
 
-            <p className="text-sm pt-4">
-              Results are based on the official 2025 Federal Poverty Guidelines
-              published by the U.S. Department of Health & Human Services, along
-              with current federal benefit rules. Final eligibility may vary
-              depending on your state and the documents you submit.
-            </p>
+            {/* Final notes and close button */}
+            {status === 'sent' && results.length === 0 && (
+              <div className="space-y-3 text-sm leading-snug">
+                <p className="font-medium text-[var(--color-strong-text)]">
+                  No direct matches found based on your answers — but don’t
+                  worry.
+                </p>
+
+                {focusData && (
+                  <>
+                    <p>
+                      You may still be able to qualify for{' '}
+                      <strong>{focusData.label}</strong> if your situation
+                      changes or you can provide the right documentation.
+                    </p>
+                    <ul className="list-disc ml-5">
+                      {focusData.qualifyTips.map((tip: string, i: number) => (
+                        <li key={i}>
+                          {i === 0 && incomeLimit
+                            ? `For a household of ${
+                                form.HSHLDSIZE
+                              }, your income must be under $${incomeLimit.toLocaleString()} per year.`
+                            : tip}
+                        </li>
+                      ))}
+                    </ul>
+                    <p>
+                      <a
+                        href={focusData.learnMore}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-[var(--color-primary)]"
+                      >
+                        Learn more about how to qualify ↗
+                      </a>
+                    </p>
+                  </>
+                )}
+
+                {!focusData && (
+                  <p>
+                    You may still qualify for benefits not listed here. We
+                    recommend checking with your local social services office or
+                    visiting{' '}
+                    <a
+                      href="https://benefits.gov/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline text-[var(--color-primary)]"
+                    >
+                      Benefits.gov ↗
+                    </a>{' '}
+                    for more options.
+                  </p>
+                )}
+              </div>
+            )}
 
             <button
               onClick={closeModal}
@@ -615,15 +772,13 @@ export default function BenefitEligibilityForm() {
 
   return (
     <div className="space-y-6">
-      <div className="text-xs" style={{ color: "var(--color-muted-text)" }}>
+      <div className="text-xs" style={{ color: 'var(--color-muted-text)' }}>
         {step < steps.length - 1 ? (
           <>
-            Step {step + 1} of {steps.length - 1}:{" "}
+            Step {step + 1} of {steps.length - 1}:{' '}
             <strong>{steps[step]}</strong>
           </>
-        ) : (
-          <strong>Results</strong>
-        )}
+        ) : null}
       </div>
       <AnimatePresence mode="wait">
         <motion.div
@@ -643,7 +798,7 @@ export default function BenefitEligibilityForm() {
                 <button
                   onClick={handleBack}
                   className="tw-form-submit-base"
-                  style={{ marginRight: "5px" }}
+                  style={{ marginRight: '5px' }}
                 >
                   Back
                 </button>
@@ -653,7 +808,7 @@ export default function BenefitEligibilityForm() {
               <button
                 onClick={handleNext}
                 className="tw-form-submit-base"
-                style={{ marginLeft: "5px" }}
+                style={{ marginLeft: '5px' }}
               >
                 Next
               </button>
