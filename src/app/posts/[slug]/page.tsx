@@ -5,6 +5,7 @@ import Image from "next/image";
 import FadeIn from "@/app/components/ui/FadeIn";
 import { formatDate } from "@/lib/utils/formatDate";
 import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
+import AffiliateCtaBanner from "@/app/components/AffiliateCtaBanner";
 import PostTags from "./PostTags";
 
 export default async function PostPage(props: {
@@ -17,7 +18,7 @@ export default async function PostPage(props: {
   if (!post) return notFound();
 
   const Content = getMDXComponent(post.body.code);
-  const components = { BenefitsCtaBanner };
+  const components = { BenefitsCtaBanner, AffiliateCtaBanner };
   return (
     <>
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
