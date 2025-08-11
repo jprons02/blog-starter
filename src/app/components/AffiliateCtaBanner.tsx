@@ -13,7 +13,7 @@ const AFFILIATES: Record<string, AffiliateInfo> = {
     copy: "Build your credit just by paying rent. See if Boompay is right for you.",
   },
   safelink: {
-    url: "https://www.safelinkwireless.com/en/#!/newHome?promocode=LCP0001915",
+    url: "https://freesmartphone.net/promo?code=free",
     copy: "Get free cell phone service with Safelink Wireless. Check if you qualify.",
   },
 };
