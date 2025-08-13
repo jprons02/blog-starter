@@ -7,32 +7,53 @@ import { ModalProvider } from "@/app/hooks/useModal";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/utils/gtag";
-import GoogleAnalytics from "@/app/components/GoogleAnalytics";
-import { Suspense } from "react";
 import { siteUrl } from "@/lib/utils/constants";
 
+// fonts
 const poppins = Poppins({
   variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
   weight: ["600"],
 });
-
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
 });
-
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
 });
 
+// Global site defaults
 export const metadata = {
-  metadataBase: new URL(siteUrl),
-};
+  metadataBase: new URL(siteUrl), // e.g., "https://mygovblog.com"
+  title: {
+    default: "MyGovBlog — Government help, explained simply",
+    template: "%s • MyGovBlog",
+  },
+  description:
+    "Step‑by‑step guides for SNAP, WIC, LIHEAP, Medicaid, and more — no jargon.",
+  // Optional global social defaults; per‑post overrides will come from generateMetadata
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "MyGovBlog",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: { index: true, follow: true }, // robots.txt still the source of truth; this is a helpful hint
+} satisfies import("next").Metadata;
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#ffffff",
+} satisfies import("next").Viewport;
 
 export default function RootLayout({
   children,
@@ -46,32 +67,40 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <meta name="robots" content="index, follow" />
+        {/* Resource hints for GA (optional but nice) */}
+        <link
+          rel="preconnect"
+          href="https://www.googletagmanager.com"
+          crossOrigin=""
+        />
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+
+        {/* Site verification you already had */}
         <meta name="fo-verify" content="159ed184-dd4f-414f-adca-e688d3ddc0cc" />
+
+        {/* GA4 - keep ONLY ONE approach. If you keep this, remove your <GoogleAnalytics /> component */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"
         />
         <Script id="gtag-init" strategy="afterInteractive">
           {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${GA_TRACKING_ID}', {
-        page_path: window.location.pathname,
-      });
-    `}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', { anonymize_ip: true, page_path: window.location.pathname });
+          `}
         </Script>
+
+        {/* reCAPTCHA — keep only this include */}
         <Script
           src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
           strategy="afterInteractive"
         />
       </head>
-      <script
-        src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
-        async
-        defer
-      ></script>
+
+      {/* REMOVE the duplicate raw <script> for reCAPTCHA */}
+
       <body>
         <ModalProvider>
           <NavBar />
@@ -80,9 +109,13 @@ export default function RootLayout({
           <Toaster position="bottom-right" richColors />
           <Footer />
         </ModalProvider>
-        <Suspense fallback={null}>
+
+        {/* If you prefer to keep a <GoogleAnalytics /> component instead of the inline gtag above,
+            then REMOVE the GA <Script> tags in <head> and just render the component here.
+            Don't do both. */}
+        {/* <Suspense fallback={null}>
           <GoogleAnalytics />
-        </Suspense>
+        </Suspense> */}
       </body>
     </html>
   );
