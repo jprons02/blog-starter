@@ -1,7 +1,7 @@
 export const siteUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : "https://www.mygovblog.com";
+    : "https://mygovblog.com";
 
 export const siteTitle = "My Gov Blog";
 export const siteDescription =
@@ -9,4 +9,4 @@ export const siteDescription =
 export const siteTwitter = "";
 export const siteHandle = "";
 export const siteAuthor = "My Gov Blog Team";
-export const siteImage = "https://www.mygovblog.com/default-og.jpg";
+export const siteImage = "/default-og.jpg";
