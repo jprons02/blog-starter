@@ -8,6 +8,8 @@ import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
 import AffiliateCtaBanner from "@/app/components/AffiliateCtaBanner";
 import AffiliateDisclosure from "@/app/components/AffiliateDisclaimer";
 import PostTags from "./PostTags";
+import JsonLd from "@/app/components/JsonLd";
+import { siteUrl } from "@/lib/utils/constants";
 
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
@@ -26,6 +28,68 @@ export default async function PostPage(props: {
   };
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.summary ?? "",
+          datePublished: post.date,
+          dateModified: post.date,
+          isAccessibleForFree: true,
+          inLanguage: "en",
+          image: post.image
+            ? [
+                `${siteUrl}${
+                  post.image.startsWith("/") ? post.image : `/${post.image}`
+                }`,
+              ]
+            : undefined,
+          author: post.author
+            ? { "@type": "Person", name: post.author }
+            : { "@type": "Organization", name: "MyGovBlog" },
+          mainEntityOfPage: `${siteUrl}/posts/${post._raw.flattenedPath.replace(
+            /^posts\//,
+            ""
+          )}`,
+          publisher: {
+            "@type": "Organization",
+            name: "MyGovBlog",
+            url: siteUrl,
+          },
+        }}
+      />
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: `${siteUrl}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Posts",
+              item: `${siteUrl}/posts`,
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: post.title,
+              item: `${siteUrl}/posts/${post._raw.flattenedPath.replace(
+                /^posts\//,
+                ""
+              )}`,
+            },
+          ],
+        }}
+      />
+
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <FadeIn>
           <h1 className="text-3xl font-bold tracking-tight mb-2">
@@ -52,6 +116,7 @@ export default async function PostPage(props: {
                 alt={post.title}
                 width={800}
                 height={400}
+                sizes="(max-width: 1024px) 100vw, 800px"
                 className="rounded-xl w-full h-auto object-cover"
                 priority
               />

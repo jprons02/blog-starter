@@ -9,4 +9,4 @@ export const siteDescription =
 export const siteTwitter = "";
 export const siteHandle = "";
 export const siteAuthor = "My Gov Blog Team";
-export const siteImage = "/default-og.jpg";
+export const siteImage = "/og/default.jpg";

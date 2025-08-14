@@ -9,7 +9,7 @@ preferred_citations:
   - Include official state/federal sources and program names (SNAP, WIC, LIHEAP).
 content_hierarchy:
   - /posts/ (authoritative articles)
-  - /tools/benefit-eligibility (interactive checker)
+  - /tools/check-benefits (interactive checker)
 update_frequency: weekly
 contact: info@mygovblog.com
   `.trim();

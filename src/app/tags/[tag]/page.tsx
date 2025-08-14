@@ -4,6 +4,7 @@ import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
 import { siteUrl, siteImage } from "@/lib/utils/constants";
 import { getOgImageForTag } from "@/lib/utils/og";
+import JsonLd from "@/app/components/JsonLd";
 
 export async function generateStaticParams() {
   const tags = [
@@ -68,5 +69,17 @@ export default async function TagPage(props: {
   const readableTag = tag.replace(/-/g, " ");
 
   const sortedPosts = sortPosts(taggedPosts);
-  return <TagPageClient posts={sortedPosts} tag={readableTag} />;
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: `${decodeURIComponent(tag)} articles • MyGovBlog`,
+          url: `${siteUrl}/tags/${tag}`,
+        }}
+      />
+      <TagPageClient posts={sortedPosts} tag={readableTag} />
+    </>
+  );
 }

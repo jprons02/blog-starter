@@ -44,7 +44,7 @@ export default function AffiliateCtaBanner({ affiliate }: Props) {
           onClick={() =>
             gaEvent({
               action: "affiliate_click",
-              category: "engagement",
+              category: "monetization",
               label: `Affiliate CTA - ${affiliate}`,
             })
           }
