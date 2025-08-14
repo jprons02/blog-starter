@@ -4,21 +4,21 @@ import type { Metadata } from "next";
 import BenefitForm from "@/app/components/forms/BenefitForm";
 
 export const metadata: Metadata = {
-  title: "Benefits Eligibility Checker • MyGovBlog",
+  title: "Benefits Eligibility Checker",
   description:
     "Use our free benefits eligibility checker to quickly see potential programs you may qualify for—like SNAP, WIC, LIHEAP, and Medicaid. Fast, private, and mobile‑friendly.",
   alternates: { canonical: "/tools/check-benefits" },
   openGraph: {
     type: "website",
     url: "/tools/check-benefits",
-    title: "Benefits Eligibility Checker • MyGovBlog",
+    title: "Benefits Eligibility Checker",
     description:
       "Quickly check potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more.",
     images: [{ url: "/og/default.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Benefits Eligibility Checker • MyGovBlog",
+    title: "Benefits Eligibility Checker",
     description:
       "See potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more in minutes.",
     images: ["/og/default.jpg"],

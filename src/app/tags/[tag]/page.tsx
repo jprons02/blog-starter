@@ -75,7 +75,7 @@ export default async function TagPage(props: {
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: `${decodeURIComponent(tag)} articles • MyGovBlog`,
+          name: `${decodeURIComponent(tag)} articles`,
           url: `${siteUrl}/tags/${tag}`,
         }}
       />

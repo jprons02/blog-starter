@@ -70,6 +70,11 @@ export default function RootLayout({
         {/* Resource hints for GA (optional but nice) */}
         <link
           rel="preconnect"
+          href="https://www.google-analytics.com"
+          crossOrigin=""
+        />
+        <link
+          rel="preconnect"
           href="https://www.googletagmanager.com"
           crossOrigin=""
         />

@@ -7,7 +7,7 @@ import { siteUrl } from "@/lib/utils/constants";
 
 // ✅ SEO metadata (canonical + OG/Twitter handled by helper)
 export const metadata = getPageMeta({
-  title: "Browse topics • MyGovBlog",
+  title: "Browse topics",
   description:
     "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
   slug: "tags",
@@ -22,7 +22,7 @@ export default function TagsPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Browse topics • MyGovBlog",
+          name: "Browse topics",
           url: `${siteUrl}/tags`,
         }}
       />
