@@ -1,23 +1,30 @@
 // src/app/tags/page.tsx
+import type { Metadata } from "next";
 import TagsPageClient from "./TagsPageClient";
 import { allPosts } from "contentlayer/generated";
-import { getPageMeta } from "@/lib/utils/seo";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl } from "@/lib/utils/constants";
 
-// ✅ SEO metadata (canonical + OG/Twitter handled by helper)
-export const metadata = getPageMeta({
+export const metadata: Metadata = {
   title: "Browse topics",
   description:
     "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
-  slug: "tags",
-  type: "website",
-});
+  // metadataBase should already be set globally to siteUrl
+  alternates: { canonical: "/tags" }, // ✅ self-canonical
+  robots: { index: true, follow: true }, // ✅ indexable
+  openGraph: {
+    type: "website",
+    url: "/tags",
+    title: "Browse topics",
+    description:
+      "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 export default function TagsPage() {
   return (
     <>
-      {/* CollectionPage schema + breadcrumb for /tags */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
