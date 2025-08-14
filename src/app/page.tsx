@@ -45,11 +45,6 @@ export default function BlogIndexPage() {
           name: "MyGovBlog",
           url: siteUrl,
           inLanguage: "en-US",
-          potentialAction: {
-            "@type": "SearchAction",
-            target: `${siteUrl}/search?q={query}`,
-            "query-input": "required name=query",
-          },
         }}
       />
       <BlogIndexClient posts={allPosts} />

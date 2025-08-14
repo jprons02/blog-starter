@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: `${siteUrl}/tools/benefit-checker`, // NEW
+      url: `${siteUrl}/tools/check-benefits`, // NEW
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,

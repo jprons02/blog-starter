@@ -1,4 +1,4 @@
-// src/app/tools/benefit-checker/page.tsx
+// src/app/tools/check-benefits/page.tsx
 import type { Metadata } from "next";
 // NOTE: adjust this import if your file lives elsewhere:
 import BenefitForm from "@/app/components/forms/BenefitForm";
@@ -7,10 +7,10 @@ export const metadata: Metadata = {
   title: "Benefits Eligibility Checker • MyGovBlog",
   description:
     "Use our free benefits eligibility checker to quickly see potential programs you may qualify for—like SNAP, WIC, LIHEAP, and Medicaid. Fast, private, and mobile‑friendly.",
-  alternates: { canonical: "/tools/benefit-checker" },
+  alternates: { canonical: "/tools/check-benefits" },
   openGraph: {
     type: "website",
-    url: "/tools/benefit-checker",
+    url: "/tools/check-benefits",
     title: "Benefits Eligibility Checker • MyGovBlog",
     description:
       "Quickly check potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more.",
@@ -35,7 +35,7 @@ function JsonLd({ data }: { data: object }) {
 }
 
 export default function BenefitCheckerPage() {
-  const pageUrl = "https://mygovblog.com/tools/benefit-checker";
+  const pageUrl = "https://mygovblog.com/tools/check-benefits";
 
   const webAppJsonLd = {
     "@context": "https://schema.org",
@@ -111,7 +111,7 @@ export default function BenefitCheckerPage() {
   };
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 benefit-checker-page">
+    <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 check-benefits-page">
       {/* JSON-LD */}
       <JsonLd data={webAppJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
