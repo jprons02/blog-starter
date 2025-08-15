@@ -132,6 +132,7 @@ export default function RootLayout({
               //],
             }}
           />
+          {/* WEBSITE BLOCK*/}
           <JsonLd
             data={{
               "@context": "https://schema.org",
