@@ -86,7 +86,7 @@ export default async function PostPage(props: {
             logo: {
               // include logo object
               "@type": "ImageObject",
-              url: `${siteUrl}/og/logo.png`,
+              url: `${siteUrl}/logo/blog_logo_dark.svg`,
               width: 512,
               height: 512,
             },

@@ -48,7 +48,7 @@ export function blogPostingSchema(post: {
       url: site,
       logo: {
         "@type": "ImageObject",
-        url: `${site}/og/logo.png`,
+        url: `${site}/logo/blog_logo_dark.svg`,
         width: 512,
         height: 512,
       },
