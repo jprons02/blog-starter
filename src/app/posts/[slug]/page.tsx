@@ -11,6 +11,15 @@ import PostTags from "./PostTags";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl } from "@/lib/utils/constants";
 
+function hasDateModified(x: unknown): x is { dateModified: string } {
+  return (
+    !!x &&
+    typeof x === "object" &&
+    "dateModified" in x &&
+    typeof (x as Record<string, unknown>).dateModified === "string"
+  );
+}
+
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
 }) {
@@ -26,65 +35,89 @@ export default async function PostPage(props: {
     AffiliateCtaBanner,
     AffiliateDisclosure,
   };
+
+  const canonical = `${siteUrl}/posts/${params.slug}`;
+  const toISO = (d?: string) =>
+    d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
+  const publishedISO = toISO(post.date as string);
+  const modifiedISO = toISO(
+    hasDateModified(post) ? post.dateModified : post.date
+  );
+  const imageObj = post.image
+    ? {
+        "@type": "ImageObject",
+        url: `${siteUrl}${
+          post.image.startsWith("/") ? post.image : `/${post.image}`
+        }`,
+        width: 1200,
+        height: 630,
+      }
+    : undefined;
+
   return (
     <>
+      {/* ✅ BlogPosting */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "BlogPosting",
+          "@id": `${canonical}#blogposting`,
+          mainEntityOfPage: canonical,
           headline: post.title,
           description: post.summary ?? "",
-          datePublished: post.date,
-          dateModified: post.date,
-          isAccessibleForFree: true,
-          inLanguage: "en",
-          image: post.image
-            ? [
-                `${siteUrl}${
-                  post.image.startsWith("/") ? post.image : `/${post.image}`
-                }`,
-              ]
-            : undefined,
+          image: imageObj, // ImageObject with size
+          inLanguage: "en-US",
+          isAccessibleForFree: true, // boolean
+          datePublished: publishedISO, // ISO 8601 w/ timezone
+          dateModified: modifiedISO, // ISO 8601 w/ timezone
           author: post.author
-            ? { "@type": "Person", name: post.author }
-            : { "@type": "Organization", name: "MyGovBlog" },
-          mainEntityOfPage: `${siteUrl}/posts/${post._raw.flattenedPath.replace(
-            /^posts\//,
-            ""
-          )}`,
+            ? { "@type": "Person", name: post.author, url: siteUrl } // add url to silence hint
+            : {
+                "@type": "Organization",
+                name: "MyGovBlog",
+                url: siteUrl,
+                "@id": `${siteUrl}#organization`,
+              },
           publisher: {
             "@type": "Organization",
+            "@id": `${siteUrl}#organization`,
             name: "MyGovBlog",
             url: siteUrl,
+            logo: {
+              // include logo object
+              "@type": "ImageObject",
+              url: `${siteUrl}/og/logo.png`,
+              width: 512,
+              height: 512,
+            },
           },
         }}
       />
 
+      {/* ✅ Breadcrumbs */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
+          "@id": `${canonical}#breadcrumbs`,
           itemListElement: [
             {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: `${siteUrl}/`,
+              item: { "@type": "WebPage", "@id": `${siteUrl}/` },
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Posts",
-              item: `${siteUrl}/posts`,
+              item: { "@type": "WebPage", "@id": `${siteUrl}/posts` },
             },
             {
               "@type": "ListItem",
               position: 3,
               name: post.title,
-              item: `${siteUrl}/posts/${post._raw.flattenedPath.replace(
-                /^posts\//,
-                ""
-              )}`,
+              item: { "@type": "WebPage", "@id": canonical },
             },
           ],
         }}
