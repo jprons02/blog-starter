@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/utils/gtag";
 import { siteUrl } from "@/lib/utils/constants";
+import JsonLd from "@/app/components/JsonLd";
 
 // fonts
 const poppins = Poppins({
@@ -110,6 +111,41 @@ export default function RootLayout({
         <ModalProvider>
           <NavBar />
           <GlobalModal />
+          {/* ✅ Site-wide schema (emit ONCE) */}
+          <JsonLd
+            data={{
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "@id": `${siteUrl}/#organization`,
+              name: "MyGovBlog",
+              url: siteUrl,
+              logo: {
+                "@type": "ImageObject",
+                url: `${siteUrl}/logo/blog_logo_dark.svg`,
+                width: 512,
+                height: 512,
+              },
+              // add real profiles if you have them
+              //sameAs: [
+              // "https://www.facebook.com/yourpage",
+              // "https://x.com/yourhandle",
+              //],
+            }}
+          />
+          <JsonLd
+            data={{
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "@id": `${siteUrl}/#website`,
+              url: siteUrl,
+              name: "MyGovBlog",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${siteUrl}/search?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            }}
+          />
           {children}
           <Toaster position="bottom-right" richColors />
           <Footer />
