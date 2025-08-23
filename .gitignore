@@ -44,3 +44,5 @@ next-env.d.ts
 
 # seo audit script
 seo_audit.ps1
+
+prompts/

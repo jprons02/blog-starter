@@ -1,10 +1,12 @@
+// contentlayer.config.ts
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import rehypePrism from "rehype-prism-plus";
-import rehypeExternalLinks from "rehype-external-links"; // ✅ Import this
+import rehypeExternalLinks from "rehype-external-links";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `**/*.mdx`,
+  // ✅ Only index real posts, not the location template
+  filePathPattern: `posts/**/*.mdx`,
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
@@ -22,16 +24,26 @@ export const Post = defineDocumentType(() => ({
   computedFields: {
     url: {
       type: "string",
-      //resolve: (post) => post._raw.flattenedPath,
       resolve: (post) =>
         `/posts/${post._raw.flattenedPath.replace(/^posts\//, "")}`,
     },
   },
 }));
 
+export const LocationDoc = defineDocumentType(() => ({
+  name: "LocationDoc",
+  // ✅ Exactly the one MDX template we render for every city
+  filePathPattern: "locations/template.mdx",
+  contentType: "mdx",
+  fields: {
+    title: { type: "string", required: true },
+    summary: { type: "string", required: false },
+  },
+}));
+
 export default makeSource({
   contentDirPath: "content",
-  documentTypes: [Post],
+  documentTypes: [Post, LocationDoc],
   mdx: {
     rehypePlugins: [
       rehypePrism,

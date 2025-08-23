@@ -4,7 +4,8 @@ import rehypePrism from "rehype-prism-plus";
 import rehypeExternalLinks from "rehype-external-links";
 var Post = defineDocumentType(() => ({
   name: "Post",
-  filePathPattern: `**/*.mdx`,
+  // ✅ Only index real posts, not the location template
+  filePathPattern: `posts/**/*.mdx`,
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
@@ -22,14 +23,23 @@ var Post = defineDocumentType(() => ({
   computedFields: {
     url: {
       type: "string",
-      //resolve: (post) => post._raw.flattenedPath,
       resolve: (post) => `/posts/${post._raw.flattenedPath.replace(/^posts\//, "")}`
     }
   }
 }));
+var LocationDoc = defineDocumentType(() => ({
+  name: "LocationDoc",
+  // ✅ Exactly the one MDX template we render for every city
+  filePathPattern: "locations/template.mdx",
+  contentType: "mdx",
+  fields: {
+    title: { type: "string", required: true },
+    summary: { type: "string", required: false }
+  }
+}));
 var contentlayer_config_default = makeSource({
   contentDirPath: "content",
-  documentTypes: [Post],
+  documentTypes: [Post, LocationDoc],
   mdx: {
     rehypePlugins: [
       rehypePrism,
@@ -41,7 +51,8 @@ var contentlayer_config_default = makeSource({
   }
 });
 export {
+  LocationDoc,
   Post,
   contentlayer_config_default as default
 };
-//# sourceMappingURL=compiled-contentlayer-config-KQZI6O4T.mjs.map
+//# sourceMappingURL=compiled-contentlayer-config-N2M54LUW.mjs.map

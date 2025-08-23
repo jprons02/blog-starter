@@ -1,3 +1,4 @@
+// /app/posts/[slug]/page.tsx
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import { getMDXComponent } from "next-contentlayer2/hooks";
@@ -10,7 +11,25 @@ import AffiliateDisclosure from "@/app/components/AffiliateDisclaimer";
 import PostTags from "./PostTags";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl } from "@/lib/utils/constants";
+import CrossLink from "@/app/components/mdxHelper/CrossLink";
 
+import {
+  LocationProvider,
+  City,
+  State,
+  IfLocation,
+  IfNoLocation,
+  ResourceLink,
+  type QAItem, // ← reuse FAQ item type
+} from "@/app/locations/_locationsCtx";
+
+import {
+  findLocationModule,
+  type LocationModule,
+  type LocalResource,
+} from "@/data/locations/registry";
+
+/* ---------------- helpers ---------------- */
 function hasDateModified(x: unknown): x is { dateModified: string } {
   return (
     !!x &&
@@ -20,23 +39,89 @@ function hasDateModified(x: unknown): x is { dateModified: string } {
   );
 }
 
+/** Minimal legacy-compatible resource shape we derive for MDX fallbacks */
+type DerivedResource = {
+  applyUrl?: string;
+  countyUrl?: string;
+  stateUrl?: string;
+  infoUrl?: string;
+  phone?: string;
+  contact?: string;
+  email?: string;
+  faqs?: readonly QAItem[];
+  // allow passing through other string fields without widening to `any`
+  [k: string]: string | readonly QAItem[] | undefined;
+};
+
+/** Derive legacy `resources` and `faqByTopic` from a TS LocationModule.
+ *  This keeps existing MDX fallbacks working while supporting <ResourceLink field="faqs" />.
+ */
+function deriveFromModule(mod: LocationModule) {
+  const resources: Record<string, DerivedResource> = {};
+  const faqByTopic: Record<string, readonly QAItem[]> = {};
+
+  const entries = Object.entries(mod.localResources ?? {}) as [
+    string,
+    LocalResource
+  ][];
+
+  for (const [name, obj] of entries) {
+    // Initialize per-key bucket
+    resources[name] = resources[name] ?? {};
+
+    // Primary CTA & common fields
+    if (obj.link) resources[name].applyUrl = obj.link;
+    if (obj.phone) resources[name].phone = obj.phone;
+    if (obj.contact) resources[name].contact = obj.contact;
+    if (obj.email) resources[name].email = obj.email;
+
+    // Copy any additional string fields (e.g., stateUrl, providerSearchUrl)
+    for (const [k, v] of Object.entries(obj)) {
+      if (typeof v === "string" && resources[name][k] == null) {
+        resources[name][k] = v;
+      }
+    }
+
+    // FAQ passthrough for topic-aware usage
+    if (Array.isArray(obj.faqs)) {
+      faqByTopic[name] = obj.faqs;
+      resources[name].faqs = obj.faqs;
+    }
+  }
+
+  return {
+    resources,
+    faqByTopic,
+    localResources: mod.localResources ?? {},
+  };
+}
+
+/* ---------------- page ---------------- */
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ city?: string; state?: string }>;
 }) {
-  const params = await props.params;
-  const post = allPosts.find(
-    (post) => post._raw.flattenedPath === `posts/${params.slug}`
-  );
+  const { slug } = await props.params;
+  const { city, state } = await props.searchParams;
+
+  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
   if (!post) return notFound();
 
   const Content = getMDXComponent(post.body.code);
-  const components = {
+
+  const mdxComponents = {
     BenefitsCtaBanner,
     AffiliateCtaBanner,
     AffiliateDisclosure,
+    City,
+    State,
+    IfLocation,
+    IfNoLocation,
+    ResourceLink,
+    CrossLink,
   };
 
-  const canonical = `${siteUrl}/posts/${params.slug}`;
+  const canonical = `${siteUrl}/posts/${slug}`;
   const toISO = (d?: string) =>
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
@@ -45,7 +130,7 @@ export default async function PostPage(props: {
   );
   const imageObj = post.image
     ? {
-        "@type": "ImageObject",
+        "@type": "ImageObject" as const,
         url: `${siteUrl}${
           post.image.startsWith("/") ? post.image : `/${post.image}`
         }`,
@@ -54,9 +139,9 @@ export default async function PostPage(props: {
       }
     : undefined;
 
-  return (
+  const article = (
     <>
-      {/* ✅ BlogPosting */}
+      {/* BlogPosting */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -65,13 +150,13 @@ export default async function PostPage(props: {
           mainEntityOfPage: canonical,
           headline: post.title,
           description: post.summary ?? "",
-          image: imageObj, // ImageObject with size
+          image: imageObj,
           inLanguage: "en-US",
-          isAccessibleForFree: true, // boolean
-          datePublished: publishedISO, // ISO 8601 w/ timezone
-          dateModified: modifiedISO, // ISO 8601 w/ timezone
+          isAccessibleForFree: true,
+          datePublished: publishedISO,
+          dateModified: modifiedISO,
           author: post.author
-            ? { "@type": "Person", name: post.author, url: siteUrl } // add url to silence hint
+            ? { "@type": "Person", name: post.author, url: siteUrl }
             : {
                 "@type": "Organization",
                 name: "MyGovBlog",
@@ -84,7 +169,6 @@ export default async function PostPage(props: {
             name: "MyGovBlog",
             url: siteUrl,
             logo: {
-              // include logo object
               "@type": "ImageObject",
               url: `${siteUrl}/logo/blog_logo_dark.svg`,
               width: 512,
@@ -94,7 +178,7 @@ export default async function PostPage(props: {
         }}
       />
 
-      {/* ✅ Breadcrumbs */}
+      {/* Breadcrumbs */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -130,13 +214,9 @@ export default async function PostPage(props: {
           </h1>
           <p
             className="font-medium uppercase tracking-wide mb-6"
-            style={{
-              color: "var(--color-muted-text)",
-              fontSize: "0.65rem",
-            }}
+            style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
           >
-            {formatDate(post.date)}
-            &nbsp;&nbsp;•&nbsp;&nbsp;
+            {formatDate(post.date)}&nbsp;&nbsp;•&nbsp;&nbsp;
             {post.author?.toUpperCase() || "STAFF"}
           </p>
         </FadeIn>
@@ -183,17 +263,53 @@ export default async function PostPage(props: {
 
         <FadeIn>
           <div className="markdown-body text-base leading-relaxed">
-            <Content components={components} />
+            <Content components={mdxComponents} />
           </div>
         </FadeIn>
       </article>
     </>
   );
+
+  // TS-only: look up module via registry (no fs/json)
+  if (city && state) {
+    const mod = findLocationModule(state, city);
+    if (mod) {
+      const derived = deriveFromModule(mod);
+      return (
+        <LocationProvider
+          value={{
+            city: mod.city,
+            state: mod.state,
+            resources: derived.resources, // legacy compatibility
+            faqByTopic: derived.faqByTopic,
+            localResources: derived.localResources, // for <ResourceLink field="faqs" />
+          }}
+        >
+          {article}
+        </LocationProvider>
+      );
+    }
+    // Module not found → still wrap so <IfLocation> can render minimally
+    return (
+      <LocationProvider
+        value={{
+          city,
+          state,
+          resources: {},
+          faqByTopic: {},
+          localResources: {},
+        }}
+      >
+        {article}
+      </LocationProvider>
+    );
+  }
+
+  // No location → generic experience
+  return article;
 }
 
-// Dynamically generates SEO metadata for individual blog posts
-// using Contentlayer data and a reusable metadata helper.
-// Includes Open Graph and Twitter card support.
+/* ---------------- metadata ---------------- */
 import { getPageMeta } from "@/lib/utils/seo";
 export async function generateMetadata({
   params,
@@ -202,18 +318,14 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  // Find the matching post from Contentlayer using the flattenedPath format (e.g., 'posts/my-post')
-  const post = allPosts.find(
-    (post) => post._raw.flattenedPath === `posts/${slug}`
-  );
+  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
   if (!post) return {};
 
-  // Generate SEO metadata using a reusable helper
   return getPageMeta({
-    title: post.seoTitle ?? post.title, // Post title for <title> tag, Open Graph, and Twitter
-    description: post.summary || "Helpful guides on US benefit programs.", // Post summary for meta description
-    slug: post._raw.flattenedPath.replace(/^posts\//, ""), // Slug used to build canonical and OG URLs
-    image: post.image, // Optional cover image for OG/Twitter cards
+    title: post.seoTitle ?? post.title,
+    description: post.summary || "Helpful guides on US benefit programs.",
+    slug: post._raw.flattenedPath.replace(/^posts\//, ""),
+    image: post.image,
     type: "article",
   });
 }
