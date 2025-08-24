@@ -1,5 +1,6 @@
 // /src/data/locations/registry.ts
 import phoenix from "./az/phoenix";
+import miami from "./fl/miami";
 
 export type QAString = readonly [string, string]; // readonly tuple
 export type QARichHtml = { html: string } | { qHtml: string; aHtml: string };
@@ -34,6 +35,7 @@ export type LocationModule = {
 // Register TS modules (keys are lowercase "state/city")
 export const LOCATION_REGISTRY: Record<string, LocationModule> = {
   "az/phoenix": phoenix,
+  "fl/miami": miami,
 };
 
 export function findLocationModule(

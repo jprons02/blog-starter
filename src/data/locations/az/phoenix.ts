@@ -156,15 +156,15 @@ const phoenix = {
       ],
     },
 
-    /* ------------------------------ Free contact (Lifeline) ------------------------------ */
-    freePhone: {
+    /* ------------------------------ Free phone (safelink) ------------------------------ */
+    safelink: {
       link: "https://freesmartphone.net/promo?code=free&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=SafeLink",
       contact: "",
       email: "",
       faqs: [
         {
           html:
-            `<p><strong>Can I get a free phone in <City/> with Lifeline?</strong><br/>` +
+            `<p><strong>Can I get a free phone in <City/> with Safelink?</strong><br/>` +
             `Many providers serve <City/>. If you’re on SNAP or Medicaid, you likely qualify. ` +
             `See <a href="https://freesmartphone.net/promo?code=free&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=SafeLink" target="_blank" rel="noopener noreferrer">Freesmartphone.net</a> for details.</p>`,
         },

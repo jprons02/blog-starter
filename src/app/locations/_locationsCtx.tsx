@@ -78,7 +78,7 @@ const LABEL_ALIAS: Record<string, FocusSlug | string> = {
   liheap: "housing", // legacy mapping
   medicaid: "medicaid",
   ccdf: "childcare",
-  freePhone: "freePhone",
+  safelink: "safelink",
   ssdi: "ssdi",
   ssi: "ssi",
   housing: "housing", // new explicit housing block
