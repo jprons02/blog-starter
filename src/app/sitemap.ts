@@ -63,7 +63,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   [
     make("/", now, "daily", 1.0),
     make("/about", now, "monthly", 0.8),
-    make("/posts", now, "weekly", 0.7),
     make("/tools/check-benefits", now, "weekly", 0.9),
     make("/locations", now, "weekly", 0.8),
   ].forEach(add);
