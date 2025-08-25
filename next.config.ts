@@ -4,6 +4,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  productionBrowserSourceMaps: true,
   ...(isDev && {
     experimental: {
       allowDevelopmentBuild: true,
