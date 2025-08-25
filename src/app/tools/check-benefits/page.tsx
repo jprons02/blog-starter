@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 // NOTE: adjust this import if your file lives elsewhere:
 import BenefitForm from "@/app/components/forms/BenefitForm";
+import { siteTitle, siteUrl } from "@/lib/utils/constants";
 
 export const metadata: Metadata = {
   title: "Benefits Eligibility Checker",
@@ -35,7 +36,7 @@ function JsonLd({ data }: { data: object }) {
 }
 
 export default function BenefitCheckerPage() {
-  const pageUrl = "https://mygovblog.com/tools/check-benefits";
+  const pageUrl = `${siteUrl}/tools/check-benefits`;
 
   const webAppJsonLd = {
     "@context": "https://schema.org",
@@ -47,8 +48,8 @@ export default function BenefitCheckerPage() {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: {
       "@type": "Organization",
-      name: "MyGovBlog",
-      url: "https://mygovblog.com",
+      name: siteTitle,
+      url: siteUrl,
     },
   };
 
@@ -60,7 +61,7 @@ export default function BenefitCheckerPage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://mygovblog.com/",
+        item: siteUrl,
       },
       {
         "@type": "ListItem",

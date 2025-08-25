@@ -1,38 +1,34 @@
-"use client";
+// app/components/ui/TagFilterDisplay.tsx
+import Link from "next/link";
+import clsx from "clsx";
 
-import { useRouter } from "next/navigation";
+type Props = {
+  tag: string;
+  className?: string;
+  /** Where “Browse by Tag” should point (defaults to /tags) */
+  browseHref?: string;
+  /** Custom label (defaults to "Browse by Tag") */
+  browseLabel?: string;
+  /** Hide the “Blogs” link when true */
+  hideBlogs?: boolean;
+};
 
-export default function TagFilterDisplay({ tag }: { tag: string }) {
-  const router = useRouter();
-
+export default function TagFilterDisplay({
+  tag,
+  className,
+  browseHref = "/tags",
+  browseLabel = "Browse by Tag",
+}: Props) {
   return (
-    <div>
-      <div className="flex gap-3">
-        <a
-          onClick={() => router.push("/")}
-          className="mr-3 cursor-pointer underline text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
-        >
-          Blogs
-        </a>
-
-        <a
-          onClick={() => router.push("/tags")}
-          className="cursor-pointer underline text-[var(--color-link)] hover:text-[var(--color-link-hover)]"
-        >
-          Browse by Tag
-        </a>
-      </div>
-      <div
-        className="text-sm text-[var(--color-muted-text)]"
-        style={{ marginTop: "0.5rem" }}
-      >
-        <p>
-          Showing posts tagged with:
-          <span className="ml-1 font-semibold text-[var(--color-foreground)]">
-            #{tag}
-          </span>
-        </p>
-      </div>
+    <div className={clsx("flex items-center justify-between", className)}>
+      <nav className="flex items-center gap-4 text-sm">
+        <Link href={browseHref} className="hover:underline">
+          {browseLabel}
+        </Link>
+      </nav>
+      <p className="text-sm text-muted-foreground">
+        Showing posts tagged with: <strong>#{tag.toLowerCase()}</strong>
+      </p>
     </div>
   );
 }

@@ -2,15 +2,13 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { useSearchParams } from "next/navigation";
 import { benefitsFocusMap, type FocusSlug } from "@/lib/utils/benefitsFocusMap";
 
 /* ---------------- Types ---------------- */
-export type QAString = readonly [string, string]; // tuple form
+export type QAString = readonly [string, string];
 export type QARichHtml = { html: string } | { qHtml: string; aHtml: string };
 export type QAItem = QAString | QARichHtml;
 
-/** Legacy JSON resource (kept for backward compatibility) */
 export type LegacyResource = {
   applyUrl?: string;
   countyUrl?: string;
@@ -20,7 +18,6 @@ export type LegacyResource = {
   [k: string]: unknown;
 };
 
-/** Module-based local resource (your .ts city files) */
 export type LocalResource = {
   link?: string;
   phone?: string;
@@ -34,14 +31,8 @@ export type LocationData = {
   city: string;
   state: string;
   county?: string;
-
-  /** Legacy JSON bag (optional in new world) */
   resources: Record<string, LegacyResource>;
-
-  /** Optional topic FAQs (legacy path; you can ignore in .ts approach) */
   faqByTopic?: Record<string, readonly QAItem[]>;
-
-  /** Preferred .ts data bag */
   localResources?: Record<string, LocalResource>;
 };
 
@@ -75,13 +66,13 @@ export function State({ fallback = "your state" }: { fallback?: string }) {
 const LABEL_ALIAS: Record<string, FocusSlug | string> = {
   snap: "snap",
   wic: "wic",
-  liheap: "housing", // legacy mapping
+  liheap: "housing",
   medicaid: "medicaid",
   ccdf: "childcare",
   safelink: "safelink",
   ssdi: "ssdi",
   ssi: "ssi",
-  housing: "housing", // new explicit housing block
+  housing: "housing",
 };
 
 function defaultLabelFor(name: string) {
@@ -163,16 +154,15 @@ export function ResourceLink({
   className?: string;
 }) {
   const v = useLocation();
-  const params = useSearchParams();
-  const city = v?.city || params.get("city") || "";
-  const state = v?.state || params.get("state") || "";
+  const city = v?.city ?? "";
+  const state = v?.state ?? "";
   const tokenize = (s: string) =>
     s.replaceAll("<City/>", city).replaceAll("<State/>", state);
 
   const lr: LocalResource | undefined = v?.localResources?.[name];
   const rs: LegacyResource | undefined = v?.resources?.[name];
 
-  /* --- FAQs mode --- */
+  // FAQs
   if (field === "faqs") {
     const faqs = normalizeFaqs(lr?.faqs) || normalizeFaqs(rs?.faqs);
     if (!faqs?.length) return null;
@@ -216,7 +206,7 @@ export function ResourceLink({
     );
   }
 
-  /* --- specific field (contact, phone, email, etc.) --- */
+  // specific field
   if (field && field !== "faqs") {
     const fromLr = getStringField(
       lr as Record<string, unknown> | undefined,
@@ -245,7 +235,7 @@ export function ResourceLink({
     );
   }
 
-  /* --- primary CTA --- */
+  // primary CTA
   const primary =
     lr?.link ??
     rs?.applyUrl ??

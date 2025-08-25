@@ -1,6 +1,8 @@
 // src/app/robots.ts
+import { siteUrl } from "@/lib/utils/constants";
+
 export default function robots() {
-  const host = "https://mygovblog.com";
+  const host = siteUrl;
   return {
     rules: [
       { userAgent: "*", allow: "/" },

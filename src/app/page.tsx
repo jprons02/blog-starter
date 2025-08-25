@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          name: "MyGovBlog",
+          name: siteTitle,
           url: siteUrl,
           logo: `${siteUrl}/logo/blog_logo_dark.svg`,
           /*
@@ -42,7 +42,7 @@ export default function BlogIndexPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "WebSite",
-          name: "MyGovBlog",
+          name: siteTitle,
           url: siteUrl,
           inLanguage: "en-US",
         }}

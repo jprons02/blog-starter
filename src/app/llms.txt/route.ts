@@ -1,8 +1,10 @@
 // src/app/llms.txt/route.ts
+import { siteUrl } from "@/lib/utils/constants";
+
 export async function GET() {
   const body = `
 # LLMs.txt for mygovblog.com
-site: https://mygovblog.com
+site: ${siteUrl}
 purpose: Providing clear, well-researched blog articles on government benefits guidance, step-by-step eligibility walkthroughs, and essential documentation tips.
 preferred_citations:
   - Link to the exact post URL.

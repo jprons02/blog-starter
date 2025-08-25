@@ -1,0 +1,16 @@
+{
+  "title": "Location Template\r",
+  "body": {
+    "raw": "\r\n# Services in <City/>, <State/>\r\n\r\n<IfLocation>\r\n  <div className=\"not-prose my-12 p-4 rounded-xl border border-[3px] bg-muted\">\r\n    <p className=\"mb-2\">\r\n      <strong>Quick links for <City/>, <State/>:</strong>\r\n    </p>\r\n    <ul className=\"list-disc ml-5 space-y-1\">\r\n      <li>\r\n        <ResourceLink name=\"ssdi\">\r\n          Apply for SSDI (Social Security Disability Insurance)\r\n        </ResourceLink>\r\n      </li>\r\n      <li>\r\n        <ResourceLink name=\"ssi\">\r\n          Apply for SSI (Supplemental Security Income)\r\n        </ResourceLink>\r\n      </li>\r\n      <li>\r\n        <ResourceLink name=\"ssi\" field=\"contact\">\r\n          SSI Contacts\r\n        </ResourceLink>\r\n      </li>\r\n    </ul>\r\n  </div>\r\n</IfLocation>\r\n",
+    "code": "var Component=(()=>{var h=Object.create;var c=Object.defineProperty;var f=Object.getOwnPropertyDescriptor;var x=Object.getOwnPropertyNames;var S=Object.getPrototypeOf,y=Object.prototype.hasOwnProperty;var _=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),b=(t,e)=>{for(var i in e)c(t,i,{get:e[i],enumerable:!0})},a=(t,e,i,o)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let r of x(e))!y.call(t,r)&&r!==i&&c(t,r,{get:()=>e[r],enumerable:!(o=f(e,r))||o.enumerable});return t};var I=(t,e,i)=>(i=t!=null?h(S(t)):{},a(e||!t||!t.__esModule?c(i,\"default\",{value:t,enumerable:!0}):i,t)),g=t=>a(c({},\"__esModule\",{value:!0}),t);var m=_((C,d)=>{d.exports=_jsx_runtime});var L={};b(L,{default:()=>u,frontmatter:()=>j});var n=I(m()),j={title:\"Location Template\"};function p(t){let e={h1:\"h1\",p:\"p\",...t.components},{City:i,IfLocation:o,ResourceLink:r,State:l}=e;return i||s(\"City\",!0),o||s(\"IfLocation\",!0),r||s(\"ResourceLink\",!0),l||s(\"State\",!0),(0,n.jsxs)(n.Fragment,{children:[(0,n.jsxs)(e.h1,{children:[\"Services in \",(0,n.jsx)(i,{}),\", \",(0,n.jsx)(l,{})]}),`\n`,(0,n.jsx)(o,{children:(0,n.jsxs)(\"div\",{className:\"not-prose my-12 p-4 rounded-xl border border-[3px] bg-muted\",children:[(0,n.jsx)(\"p\",{className:\"mb-2\",children:(0,n.jsxs)(\"strong\",{children:[\"Quick links for \",(0,n.jsx)(i,{}),\", \",(0,n.jsx)(l,{}),\":\"]})}),(0,n.jsxs)(\"ul\",{className:\"list-disc ml-5 space-y-1\",children:[(0,n.jsx)(\"li\",{children:(0,n.jsx)(r,{name:\"ssdi\",children:(0,n.jsx)(e.p,{children:\"Apply for SSDI (Social Security Disability Insurance)\"})})}),(0,n.jsx)(\"li\",{children:(0,n.jsx)(r,{name:\"ssi\",children:(0,n.jsx)(e.p,{children:\"Apply for SSI (Supplemental Security Income)\"})})}),(0,n.jsx)(\"li\",{children:(0,n.jsx)(r,{name:\"ssi\",field:\"contact\",children:(0,n.jsx)(e.p,{children:\"SSI Contacts\"})})})]})]})})]})}function u(t={}){let{wrapper:e}=t.components||{};return e?(0,n.jsx)(e,{...t,children:(0,n.jsx)(p,{...t})}):p(t)}function s(t,e){throw new Error(\"Expected \"+(e?\"component\":\"object\")+\" `\"+t+\"` to be defined: you likely forgot to import, pass, or provide it.\")}return g(L);})();\n;return Component;"
+  },
+  "_id": "locations/template.mdx",
+  "_raw": {
+    "sourceFilePath": "locations/template.mdx",
+    "sourceFileName": "template.mdx",
+    "sourceFileDir": "locations",
+    "contentType": "mdx",
+    "flattenedPath": "locations/template"
+  },
+  "type": "LocationDoc"
+}

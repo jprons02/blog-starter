@@ -10,3 +10,6 @@ export const siteTwitter = "";
 export const siteHandle = "";
 export const siteAuthor = "My Gov Blog Team";
 export const siteImage = "/og/default.jpg";
+export const facebook = "";
+export const instagram = "";
+export const tiktok = "";

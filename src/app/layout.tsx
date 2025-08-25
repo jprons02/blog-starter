@@ -7,10 +7,11 @@ import { ModalProvider } from "@/app/hooks/useModal";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/utils/gtag";
-import { siteUrl } from "@/lib/utils/constants";
+import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import JsonLd from "@/app/components/JsonLd";
+import { Suspense } from "react";
+import GoogleAnalytics from "@/app/components/GoogleAnalytics";
 
-// fonts
 const poppins = Poppins({
   variable: "--font-heading",
   subsets: ["latin"],
@@ -28,25 +29,17 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Global site defaults
 export const metadata = {
-  metadataBase: new URL(siteUrl), // e.g., "https://mygovblog.com"
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "MyGovBlog — Government help, explained simply",
-    template: "%s • MyGovBlog",
+    default: `${siteTitle} — Government help, explained simply`,
+    template: `%s • ${siteTitle}`,
   },
   description:
-    "Step‑by‑step guides for SNAP, WIC, LIHEAP, Medicaid, and more — no jargon.",
-  // Optional global social defaults; per‑post overrides will come from generateMetadata
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: "MyGovBlog",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-  robots: { index: true, follow: true }, // robots.txt still the source of truth; this is a helpful hint
+    "Step-by-step guides for SNAP, WIC, LIHEAP, Medicaid, and more — no jargon.",
+  openGraph: { type: "website", url: siteUrl, siteName: siteTitle },
+  twitter: { card: "summary_large_image" },
+  robots: { index: true, follow: true },
 } satisfies import("next").Metadata;
 
 export const viewport = {
@@ -68,7 +61,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Resource hints for GA (optional but nice) */}
+        {/* Resource hints for GA */}
         <link
           rel="preconnect"
           href="https://www.google-analytics.com"
@@ -81,10 +74,10 @@ export default function RootLayout({
         />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
 
-        {/* Site verification you already had */}
+        {/* Site verification */}
         <meta name="fo-verify" content="159ed184-dd4f-414f-adca-e688d3ddc0cc" />
 
-        {/* GA4 - keep ONLY ONE approach. If you keep this, remove your <GoogleAnalytics /> component */}
+        {/* GA4: load library + define gtag/dataLayer; DO NOT call 'config' here */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"
@@ -94,30 +87,33 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}', { anonymize_ip: true, page_path: window.location.pathname });
           `}
         </Script>
 
-        {/* reCAPTCHA — keep only this include */}
+        {/* reCAPTCHA */}
         <Script
           src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
           strategy="afterInteractive"
         />
       </head>
 
-      {/* REMOVE the duplicate raw <script> for reCAPTCHA */}
-
       <body>
         <ModalProvider>
           <NavBar />
           <GlobalModal />
-          {/* ✅ Site-wide schema (emit ONCE) */}
+
+          {/* Fire GA page_path on first paint + route/query changes */}
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
+
+          {/* Site-wide schema */}
           <JsonLd
             data={{
               "@context": "https://schema.org",
               "@type": "Organization",
               "@id": `${siteUrl}/#organization`,
-              name: "MyGovBlog",
+              name: siteTitle,
               url: siteUrl,
               logo: {
                 "@type": "ImageObject",
@@ -125,21 +121,15 @@ export default function RootLayout({
                 width: 512,
                 height: 512,
               },
-              // add real profiles if you have them
-              //sameAs: [
-              // "https://www.facebook.com/yourpage",
-              // "https://x.com/yourhandle",
-              //],
             }}
           />
-          {/* WEBSITE BLOCK*/}
           <JsonLd
             data={{
               "@context": "https://schema.org",
               "@type": "WebSite",
               "@id": `${siteUrl}/#website`,
               url: siteUrl,
-              name: "MyGovBlog",
+              name: siteTitle,
               potentialAction: {
                 "@type": "SearchAction",
                 target: `${siteUrl}/search?q={search_term_string}`,
@@ -147,17 +137,11 @@ export default function RootLayout({
               },
             }}
           />
+
           {children}
           <Toaster position="bottom-right" richColors />
           <Footer />
         </ModalProvider>
-
-        {/* If you prefer to keep a <GoogleAnalytics /> component instead of the inline gtag above,
-            then REMOVE the GA <Script> tags in <head> and just render the component here.
-            Don't do both. */}
-        {/* <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense> */}
       </body>
     </html>
   );

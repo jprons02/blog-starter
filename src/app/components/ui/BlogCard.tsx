@@ -1,6 +1,7 @@
+// app/components/ui/BlogCard.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Tag from "@/app/components/ui/Tag";
@@ -11,18 +12,30 @@ type Props = {
   post: Post;
   selectedTag?: string | null;
   onTagClick?: (tag: string) => void;
+  /** Optional override for the destination URL (e.g., /locations/:state/:city/posts/:slug) */
+  href?: string;
 };
 
-export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
-  const [date, setDate] = useState("");
+export default function BlogCard({
+  post,
+  onTagClick,
+  selectedTag,
+  href,
+}: Props) {
+  const date = useMemo(() => formatDate(post.date), [post.date]);
 
-  useEffect(() => {
-    setDate(formatDate(post.date));
-  }, [post.date]);
+  // Build a slug fallback if Contentlayer’s post.url isn’t what we want
+  const slug = useMemo(
+    () => post._raw?.flattenedPath?.replace(/^posts\//, "") ?? "",
+    [post._raw?.flattenedPath]
+  );
+
+  // ✅ prefer the explicit override, else contentlayer url, else /posts/:slug
+  const target = href ?? post.url ?? (slug ? `/posts/${slug}` : "/posts");
 
   return (
     <Link
-      href={post.url}
+      href={target}
       className="group block rounded-2xl shadow-sm hover:shadow-md transition overflow-hidden"
       style={{
         backgroundColor: "var(--color-card-bg)",
@@ -43,7 +56,6 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
       )}
 
       <div className="pt-3 pb-6 px-6">
-        {/* Date + Author */}
         <p
           className="font-medium uppercase tracking-wide mb-4"
           style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
@@ -51,7 +63,6 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           {date} • {post.author?.toUpperCase() || "STAFF"}
         </p>
 
-        {/* Title */}
         <h2
           className="text-xl font-semibold group-hover:underline mb-1"
           style={{ color: "var(--color-foreground)" }}
@@ -59,7 +70,6 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           {post.title}
         </h2>
 
-        {/* Summary */}
         <p
           className="text-sm leading-relaxed line-clamp-3"
           style={{ color: "var(--color-muted-text)" }}
@@ -67,7 +77,6 @@ export default function BlogCard({ post, onTagClick, selectedTag }: Props) {
           {post.summary}
         </p>
 
-        {/* Tags */}
         {Array.isArray(post.tags) && post.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-4">
             {post.tags.map((tag) => (

@@ -10,24 +10,17 @@ import AffiliateCtaBanner from "@/app/components/AffiliateCtaBanner";
 import AffiliateDisclosure from "@/app/components/AffiliateDisclaimer";
 import PostTags from "./PostTags";
 import JsonLd from "@/app/components/JsonLd";
-import { siteUrl } from "@/lib/utils/constants";
+import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
 
+// ✅ bring back the MDX tokens so MDX can resolve them
 import {
-  LocationProvider,
   City,
   State,
   IfLocation,
   IfNoLocation,
   ResourceLink,
-  type QAItem, // ← reuse FAQ item type
 } from "@/app/locations/_locationsCtx";
-
-import {
-  findLocationModule,
-  type LocationModule,
-  type LocalResource,
-} from "@/data/locations/registry";
 
 /* ---------------- helpers ---------------- */
 function hasDateModified(x: unknown): x is { dateModified: string } {
@@ -39,86 +32,28 @@ function hasDateModified(x: unknown): x is { dateModified: string } {
   );
 }
 
-/** Minimal legacy-compatible resource shape we derive for MDX fallbacks */
-type DerivedResource = {
-  applyUrl?: string;
-  countyUrl?: string;
-  stateUrl?: string;
-  infoUrl?: string;
-  phone?: string;
-  contact?: string;
-  email?: string;
-  faqs?: readonly QAItem[];
-  // allow passing through other string fields without widening to `any`
-  [k: string]: string | readonly QAItem[] | undefined;
-};
-
-/** Derive legacy `resources` and `faqByTopic` from a TS LocationModule.
- *  This keeps existing MDX fallbacks working while supporting <ResourceLink field="faqs" />.
- */
-function deriveFromModule(mod: LocationModule) {
-  const resources: Record<string, DerivedResource> = {};
-  const faqByTopic: Record<string, readonly QAItem[]> = {};
-
-  const entries = Object.entries(mod.localResources ?? {}) as [
-    string,
-    LocalResource
-  ][];
-
-  for (const [name, obj] of entries) {
-    // Initialize per-key bucket
-    resources[name] = resources[name] ?? {};
-
-    // Primary CTA & common fields
-    if (obj.link) resources[name].applyUrl = obj.link;
-    if (obj.phone) resources[name].phone = obj.phone;
-    if (obj.contact) resources[name].contact = obj.contact;
-    if (obj.email) resources[name].email = obj.email;
-
-    // Copy any additional string fields (e.g., stateUrl, providerSearchUrl)
-    for (const [k, v] of Object.entries(obj)) {
-      if (typeof v === "string" && resources[name][k] == null) {
-        resources[name][k] = v;
-      }
-    }
-
-    // FAQ passthrough for topic-aware usage
-    if (Array.isArray(obj.faqs)) {
-      faqByTopic[name] = obj.faqs;
-      resources[name].faqs = obj.faqs;
-    }
-  }
-
-  return {
-    resources,
-    faqByTopic,
-    localResources: mod.localResources ?? {},
-  };
-}
-
 /* ---------------- page ---------------- */
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ city?: string; state?: string }>;
 }) {
   const { slug } = await props.params;
-  const { city, state } = await props.searchParams;
 
   const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
   if (!post) return notFound();
 
   const Content = getMDXComponent(post.body.code);
 
+  // ✅ include the location-aware tokens; they’ll no-op without a provider
   const mdxComponents = {
     BenefitsCtaBanner,
     AffiliateCtaBanner,
     AffiliateDisclosure,
+    CrossLink,
     City,
     State,
     IfLocation,
     IfNoLocation,
     ResourceLink,
-    CrossLink,
   };
 
   const canonical = `${siteUrl}/posts/${slug}`;
@@ -139,9 +74,9 @@ export default async function PostPage(props: {
       }
     : undefined;
 
-  const article = (
+  return (
     <>
-      {/* BlogPosting */}
+      {/* BlogPosting JSON-LD */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -159,14 +94,14 @@ export default async function PostPage(props: {
             ? { "@type": "Person", name: post.author, url: siteUrl }
             : {
                 "@type": "Organization",
-                name: "MyGovBlog",
+                name: siteTitle,
                 url: siteUrl,
                 "@id": `${siteUrl}#organization`,
               },
           publisher: {
             "@type": "Organization",
             "@id": `${siteUrl}#organization`,
-            name: "MyGovBlog",
+            name: siteTitle,
             url: siteUrl,
             logo: {
               "@type": "ImageObject",
@@ -178,7 +113,7 @@ export default async function PostPage(props: {
         }}
       />
 
-      {/* Breadcrumbs */}
+      {/* Breadcrumbs JSON-LD */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -269,53 +204,17 @@ export default async function PostPage(props: {
       </article>
     </>
   );
-
-  // TS-only: look up module via registry (no fs/json)
-  if (city && state) {
-    const mod = findLocationModule(state, city);
-    if (mod) {
-      const derived = deriveFromModule(mod);
-      return (
-        <LocationProvider
-          value={{
-            city: mod.city,
-            state: mod.state,
-            resources: derived.resources, // legacy compatibility
-            faqByTopic: derived.faqByTopic,
-            localResources: derived.localResources, // for <ResourceLink field="faqs" />
-          }}
-        >
-          {article}
-        </LocationProvider>
-      );
-    }
-    // Module not found → still wrap so <IfLocation> can render minimally
-    return (
-      <LocationProvider
-        value={{
-          city,
-          state,
-          resources: {},
-          faqByTopic: {},
-          localResources: {},
-        }}
-      >
-        {article}
-      </LocationProvider>
-    );
-  }
-
-  // No location → generic experience
-  return article;
 }
 
 /* ---------------- metadata ---------------- */
+import type { Metadata } from "next";
 import { getPageMeta } from "@/lib/utils/seo";
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
 
   const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);

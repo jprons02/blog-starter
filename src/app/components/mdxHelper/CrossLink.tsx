@@ -1,42 +1,37 @@
-// /lib/utils/mdxCrosslinks.ts
+// /lib/utils/mdxCrosslinks.tsx  (note: .tsx because it renders JSX)
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { PropsWithChildren } from "react";
+import { useLocation } from "@/app/locations/_locationsCtx";
 
 type CrossLinkProps = {
-  href: string; // relative path like "./some-article" or "/posts/some-article"
+  href: string; // e.g. "./slug" or "/posts/slug" or "/tags/phones"
   className?: string;
   prefetch?: boolean;
 };
 
-/**
- * CrossLink component
- * Renders an internal link that automatically appends ?city=&state=
- * if the current URL already has those params.
- *
- * Example usage in MDX:
- *
- * <CrossLink href="./single-parent-these-government-programs-can-help-with-food-rent-and-more">
- *   Help for Single Parents
- * </CrossLink>
- */
+function normalizeToPostPath(href: string) {
+  if (href.startsWith("./")) return `/posts/${href.slice(2)}`;
+  return href;
+}
+
 export default function CrossLink({
   href,
   children,
   ...rest
 }: PropsWithChildren<CrossLinkProps>) {
-  const params = useSearchParams();
-  const city = params.get("city");
-  const state = params.get("state");
+  const loc = useLocation();
+  let target = normalizeToPostPath(href);
 
-  let target = href;
-  if (city && state) {
-    const sep = href.includes("?") ? "&" : "?";
-    target = `${href}${sep}city=${encodeURIComponent(
-      city
-    )}&state=${encodeURIComponent(state)}`;
+  // If we have location context and the link is internal, rewrite to localized
+  if (loc && !/^https?:\/\//i.test(target)) {
+    if (target.startsWith("/posts/")) {
+      target = `/locations/${loc.state.toLowerCase()}/${loc.city.toLowerCase()}${target}`;
+    } else if (target.startsWith("/tags/")) {
+      target = `/locations/${loc.state.toLowerCase()}/${loc.city.toLowerCase()}${target}`;
+    }
+    // else: leave other internal routes alone
   }
 
   return (

@@ -1,4 +1,6 @@
 // utils/schema.ts
+import { siteTitle, siteUrl } from "./constants";
+
 export function blogPostingSchema(post: {
   slug: string;
   title: string;
@@ -7,8 +9,7 @@ export function blogPostingSchema(post: {
   date: string; // "2025-03-27"
   dateModified?: string; // optional
 }) {
-  const site = "https://mygovblog.com";
-  const canonical = `${site}/posts/${post.slug}`;
+  const canonical = `${siteUrl}/posts/${post.slug}`;
 
   const toISO = (d?: string) =>
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
@@ -26,7 +27,7 @@ export function blogPostingSchema(post: {
     image: post.image
       ? {
           "@type": "ImageObject",
-          url: `${site}${post.image}`, // absolute URL
+          url: `${siteUrl}${post.image}`, // absolute URL
           width: 1200,
           height: 630,
         }
@@ -37,18 +38,18 @@ export function blogPostingSchema(post: {
     dateModified: modifiedISO, // ✅ ISO 8601 w/ timezone
     author: {
       "@type": "Organization",
-      "@id": `${site}#organization`,
-      name: "MyGovBlog",
-      url: site, // ✅ add url to satisfy hint
+      "@id": `${siteUrl}#organization`,
+      name: siteTitle,
+      url: siteUrl, // ✅ add url to satisfy hint
     },
     publisher: {
       "@type": "Organization",
-      "@id": `${site}#organization`,
-      name: "MyGovBlog",
-      url: site,
+      "@id": `${siteUrl}#organization`,
+      name: siteTitle,
+      url: siteUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${site}/logo/blog_logo_dark.svg`,
+        url: `${siteUrl}/logo/blog_logo_dark.svg`,
         width: 512,
         height: 512,
       },
@@ -57,19 +58,18 @@ export function blogPostingSchema(post: {
 }
 
 export function breadcrumbsSchema(slug: string, title: string) {
-  const site = "https://mygovblog.com";
-  const canonical = `${site}/posts/${slug}`;
+  const canonical = `${siteUrl}/posts/${slug}`;
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "@id": `${canonical}#breadcrumbs`,
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${site}/` },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
       {
         "@type": "ListItem",
         position: 2,
         name: "Posts",
-        item: `${site}/posts`,
+        item: `${siteUrl}/posts`,
       },
       { "@type": "ListItem", position: 3, name: title, item: canonical },
     ],
