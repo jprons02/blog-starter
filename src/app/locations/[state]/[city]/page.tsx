@@ -5,7 +5,7 @@ import JsonLd from "@/app/components/JsonLd";
 import { allPosts } from "contentlayer/generated";
 import { siteUrl } from "@/lib/utils/constants";
 
-// Server-only data helpers (no "use client")
+// Server-only data helpers
 import {
   getAllLocations,
   findLocation,
@@ -22,7 +22,7 @@ import {
 // Your client page component
 import TagsPageClient from "@/app/tags/TagsPageClient";
 
-// ── Types you can move to src/types if you like
+/* ------------------------------- Types -------------------------------- */
 type Params = { state: string; city: string };
 type HeaderData = { title: string; subtitle?: string };
 type TagsPageLocation = {
@@ -32,7 +32,7 @@ type TagsPageLocation = {
   cityName: string;
 };
 
-// Build legacy-friendly bags from typed localResources
+/* ------- Legacy-friendly bags from typed localResources (for tokens) ------- */
 function deriveFromLocalResources(
   localResources: Record<string, LocalResource>
 ) {
@@ -47,14 +47,27 @@ function deriveFromLocalResources(
     if (obj.phone) out.phone = obj.phone;
     if (obj.contact) out.contact = obj.contact;
     if (obj.email) out.email = obj.email;
+
+    // copy any additional string fields (e.g., providerSearchUrl)
     for (const [k, v] of Object.entries(obj)) {
       if (typeof v === "string") out[k] = v;
     }
     resources[name] = out;
+
     if (Array.isArray(obj.faqs)) faqByTopic[name] = obj.faqs;
   }
 
   return { resources, faqByTopic };
+}
+
+/* -------------------------- Simple FAQ tuple guard ------------------------- */
+function isTupleQA(x: unknown): x is readonly [string, string] {
+  return (
+    Array.isArray(x) &&
+    x.length === 2 &&
+    typeof x[0] === "string" &&
+    typeof x[1] === "string"
+  );
 }
 
 /* ---------------------------------- Page ---------------------------------- */
@@ -89,7 +102,7 @@ export default async function CityPage({
 
   const { resources, faqByTopic } = deriveFromLocalResources(localResources);
 
-  // Build props for your client component
+  // Build props for your client component (generic, city-focused copy)
   const header: HeaderData = {
     title: `Browse ${loc.cityName}, ${loc.stateName} articles`,
     subtitle: `City-focused articles and trusted links tailored to government assistance programs in ${loc.cityName}.`,
@@ -107,6 +120,7 @@ export default async function CityPage({
 
   const canonical = `${siteUrl}/locations/${s}/${c}`;
 
+  // ItemList JSON-LD mirrors your initial visible grid
   const DEFAULT_CATEGORY = "Housing & Utilities"; // matches your client’s initial tab
   const initialPosts = allPosts.filter((p) =>
     p.category?.some(
@@ -114,16 +128,28 @@ export default async function CityPage({
     )
   );
 
-  // limit to items you actually show (e.g., first 20 on the grid)
   const itemListElements = initialPosts.slice(0, 20).map((post, i) => {
     const slug = post._raw.flattenedPath.replace(/^posts\//, "");
     return {
-      "@type": "ListItem",
+      "@type": "ListItem" as const,
       position: i + 1,
       url: `${siteUrl}/locations/${s}/${c}/posts/${slug}`,
       name: post.title,
     };
   });
+
+  // Optional: aggregate tuple FAQs for FAQPage JSON-LD (limit to keep lean)
+  const faqTuples: Array<readonly [string, string]> = [];
+  for (const v of Object.values(localResources)) {
+    const faqs = (v as LocalResource).faqs;
+    if (Array.isArray(faqs)) {
+      for (const item of faqs) {
+        if (isTupleQA(item)) faqTuples.push(item);
+        if (faqTuples.length >= 10) break; // soft cap
+      }
+    }
+    if (faqTuples.length >= 10) break;
+  }
 
   return (
     <>
@@ -158,6 +184,8 @@ export default async function CityPage({
           ],
         }}
       />
+
+      {/* ItemList JSON-LD (reflect the initial grid) */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -190,6 +218,22 @@ export default async function CityPage({
         }}
       />
 
+      {/* Optional FAQPage JSON-LD (only if we found tuple Q&As) */}
+      {faqTuples.length > 0 && (
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": `${canonical}#faq`,
+            mainEntity: faqTuples.map(([q, a]) => ({
+              "@type": "Question",
+              name: q,
+              acceptedAnswer: { "@type": "Answer", text: a },
+            })),
+          }}
+        />
+      )}
+
       {/* Provide location context so your tokens/components work */}
       <LocationProvider
         value={{
@@ -200,7 +244,7 @@ export default async function CityPage({
           localResources, // full typed bag
         }}
       >
-        {/* Your client page takes plain data props */}
+        {/* Client page: list UI + cards linking to localized posts */}
         <TagsPageClient
           header={header}
           locations={locations}
@@ -229,23 +273,24 @@ export async function generateMetadata({
   const loc = findLocation(s, c);
   if (!loc) return {};
 
-  const title = `Government Assistance in ${loc.cityName}, ${loc.stateName} (2025): SNAP, WIC, LIHEAP & Medicaid`;
   const pathUrl = `/locations/${s}/${c}`;
+  const title = `Local guides in ${loc.cityName}, ${loc.stateName} — articles & resources (2025)`;
+  const description = `City-focused articles with curated links and tips for navigating government assistance in ${loc.cityName}, ${loc.stateName}.`;
 
   return {
     title,
-    description: `How to apply for SNAP, WIC, LIHEAP, and Medicaid in ${loc.cityName}, ${loc.stateName}. Local offices, phone numbers, and official links — plus a free eligibility checker.`,
+    description,
     alternates: { canonical: pathUrl },
     openGraph: {
-      type: "article",
+      type: "website",
       url: pathUrl,
       title,
-      description: `Apply for benefits in ${loc.cityName}, ${loc.stateName}.`,
+      description,
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: `Apply for benefits in ${loc.cityName}, ${loc.stateName}.`,
+      description,
     },
     robots: { index: true, follow: true },
   };

@@ -1,85 +1,140 @@
+// app/tags/[tag]/page.tsx
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
-import { siteUrl, siteImage } from "@/lib/utils/constants";
+import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
 import { getOgImageForTag } from "@/lib/utils/og";
 import JsonLd from "@/app/components/JsonLd";
 
-export async function generateStaticParams() {
-  const tags = [
-    ...new Set(
-      allPosts.flatMap((post) => post.tags?.map((t) => t.toLowerCase()) || [])
-    ),
-  ];
+const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
+const unslug = (s: string) => decodeURIComponent(s).replace(/-/g, " ");
 
-  // Turn "affordable connectivity" into "affordable-connectivity"
-  return tags.map((tag) => ({
-    tag: tag.replace(/\s+/g, "-"),
-  }));
+export async function generateStaticParams() {
+  const tags = new Set<string>();
+  for (const p of allPosts) {
+    for (const t of p.tags ?? []) tags.add(slugify(t));
+  }
+  return Array.from(tags).map((tag) => ({ tag }));
 }
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ tag: string }>;
-}) {
-  const { tag } = await params;
-  const displayTag = tag.replace(/-/g, " ");
-  const ogImage = getOgImageForTag(displayTag) || siteImage;
+}): Promise<Metadata> {
+  const { tag } = await params; // kebab-case in URL
+  const human = unslug(tag);
+  const path = `/tags/${encodeURIComponent(tag)}`;
+
+  // newest related post -> freshness proxy
+  const newest = allPosts
+    .filter((p) => (p.tags ?? []).some((t) => slugify(t) === tag))
+    .map((p) => new Date(p.date))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+
+  const ogImage = getOgImageForTag?.(human) ?? siteImage;
 
   return {
-    title: `Posts tagged with "${displayTag}"`,
-    description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
+    title: `Posts tagged “${human}” — ${siteTitle}`,
+    description: `Explore articles about ${human}. Guides, how-tos, and resources.`,
+    alternates: { canonical: path },
     openGraph: {
-      title: `Posts tagged with "${displayTag}"`,
-      description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
-      url: `${siteUrl}/tags/${tag}`,
       type: "website",
-      images: [ogImage],
+      url: path,
+      title: `Posts tagged “${human}” — ${siteTitle}`,
+      description: `Articles on ${human}.`,
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `Posts tagged with "${displayTag}"`,
-      description: `Explore all blog posts categorized under the "${displayTag}" tag.`,
+      title: `Posts tagged “${human}” — ${siteTitle}`,
+      description: `Articles on ${human}.`,
       images: [ogImage],
     },
-    alternates: {
-      canonical: `${siteUrl}/tags/${tag}`,
-    },
+    other: newest ? { lastmod: newest.toISOString() } : undefined,
   };
 }
 
 export default async function TagPage(props: {
   params: Promise<{ tag: string }>;
 }) {
-  const { tag } = await props.params; // URL param (already kebab-case)
+  const { tag } = await props.params; // kebab-case
+  const human = unslug(tag);
 
-  // Helper to normalize tags to kebab-case
-  const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, "-");
-
-  // Match posts where a normalized tag equals the kebab-case route param
   const taggedPosts = allPosts.filter((post) =>
-    post.tags?.some((t) => normalize(t) === tag)
+    (post.tags ?? []).some((t) => slugify(t) === tag)
   );
-
   if (!taggedPosts.length) return notFound();
 
-  // Pass human-readable tag (e.g., "Affordable Connectivity") to the UI
-  const readableTag = tag.replace(/-/g, " ");
-
   const sortedPosts = sortPosts(taggedPosts);
+
+  // For ItemList JSON-LD (limit to what you actually render initially)
+  const list = sortedPosts.slice(0, 20).map((p, i) => {
+    const slug = p._raw.flattenedPath.replace(/^posts\//, "");
+    return {
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${siteUrl}/posts/${slug}`,
+      name: p.title,
+    };
+  });
+
   return (
     <>
+      {/* Breadcrumbs */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "@id": `${siteUrl}/tags/${encodeURIComponent(tag)}#breadcrumbs`,
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: `${siteUrl}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Tags",
+              item: `${siteUrl}/tags`,
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: human,
+              item: `${siteUrl}/tags/${encodeURIComponent(tag)}`,
+            },
+          ],
+        }}
+      />
+
+      {/* Collection + ItemList (discovery boost) */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: `${decodeURIComponent(tag)} articles`,
-          url: `${siteUrl}/tags/${tag}`,
+          "@id": `${siteUrl}/tags/${encodeURIComponent(tag)}#collection`,
+          name: `${human} articles`,
+          url: `${siteUrl}/tags/${encodeURIComponent(tag)}`,
         }}
       />
-      <TagPageClient posts={sortedPosts} tag={readableTag} />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          numberOfItems: list.length,
+          itemListElement: list,
+        }}
+      />
+
+      <TagPageClient posts={sortedPosts} tag={human} />
     </>
   );
 }
+
+// Rebuild this page’s data at most once per day
+export const revalidate = 86400;
