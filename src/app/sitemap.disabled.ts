@@ -158,6 +158,7 @@ export const revalidate = 86400;
 */
 
 // app/sitemap.ts
+/*
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -191,3 +192,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
 }
 
 export const revalidate = 86400; // daily
+*/
