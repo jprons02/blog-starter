@@ -44,6 +44,10 @@ function hasDateModified(x: unknown): x is { dateModified: string } {
   );
 }
 
+// Normalize date-only strings to UTC midnight so SSR/CSR stay in sync
+const toISO = (d?: string) =>
+  d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
+
 // Build legacy-friendly bags from typed localResources so your MDX keeps working
 function deriveFromLocalResources(
   localResources: Record<string, LocalResource>
@@ -75,7 +79,6 @@ function deriveFromLocalResources(
   return { resources, faqByTopic };
 }
 
-/* ---------------- page ---------------- */
 type Params = { state: string; city: string; slug: string };
 
 export default async function LocalizedPostPage({
@@ -115,12 +118,11 @@ export default async function LocalizedPostPage({
 
   // 4) Canonical + JSON-LD (localized)
   const canonical = `${siteUrl}/locations/${s}/${c}/posts/${slug}`;
-  const toISO = (d?: string) =>
-    d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
   const modifiedISO = toISO(
     hasDateModified(post) ? post.dateModified : post.date
   );
+
   const imageObj = post.image
     ? {
         "@type": "ImageObject" as const,
@@ -134,7 +136,6 @@ export default async function LocalizedPostPage({
 
   return (
     <>
-      {/* BlogPosting JSON-LD (localized canonical) */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -177,7 +178,6 @@ export default async function LocalizedPostPage({
         }}
       />
 
-      {/* Breadcrumbs JSON-LD */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -218,7 +218,6 @@ export default async function LocalizedPostPage({
         }}
       />
 
-      {/* ⬇️ Identical visual output to /posts/[slug], just with LocationProvider */}
       <LocationProvider
         value={{
           city: loc.cityName,
@@ -236,6 +235,8 @@ export default async function LocalizedPostPage({
             <p
               className="font-medium uppercase tracking-wide mb-6"
               style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
+              /* Prevent hydration warnings if client/server format differ */
+              suppressHydrationWarning
             >
               {formatDate(post.date)}&nbsp;&nbsp;•&nbsp;&nbsp;
               {post.author?.toUpperCase() || "STAFF"}

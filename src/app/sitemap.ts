@@ -1,12 +1,10 @@
 // app/sitemap.ts
-/*
+
 import type { MetadataRoute } from "next";
 import { allPosts, type Post } from "contentlayer/generated";
 import { siteUrl } from "@/lib/utils/constants";
 import { getAllLocations } from "@/app/locations/_locationsData";
 import { localizedPostSlugs } from "@/constants/localizedPosts";
-
-
 
 type MaybeFrontmatterDates = {
   updatedAt?: string;
@@ -51,8 +49,6 @@ const make = (
 
 const slugifyTag = (t: string) =>
   encodeURIComponent(t.toLowerCase().replace(/\s+/g, "-"));
-
-
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -153,43 +149,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 }
 
-
 export const revalidate = 86400;
-*/
-
-// app/sitemap.ts
-/*
-import type { MetadataRoute } from "next";
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date(); // simple, deterministic
-  return [
-    {
-      url: "https://mygovblog.com/",
-      lastModified: now,
-      changeFrequency: "daily",
-      priority: 1,
-    },
-    {
-      url: "https://mygovblog.com/about",
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: "https://mygovblog.com/tools/check-benefits",
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: "https://mygovblog.com/locations",
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-  ];
-}
-
-export const revalidate = 86400; // daily
-*/
