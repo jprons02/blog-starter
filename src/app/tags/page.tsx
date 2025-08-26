@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import TagsPageClient from "./TagsPageClient";
 import { allPosts } from "contentlayer/generated";
-import JsonLd from "@/app/components/JsonLd";
-import { siteUrl } from "@/lib/utils/constants";
 
 export const metadata: Metadata = {
   title: "Browse topics",
@@ -25,34 +23,6 @@ export const metadata: Metadata = {
 export default function TagsPage() {
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          name: "Browse topics",
-          url: `${siteUrl}/tags`,
-        }}
-      />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: `${siteUrl}/`,
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Tags",
-              item: `${siteUrl}/tags`,
-            },
-          ],
-        }}
-      />
       <TagsPageClient allPosts={allPosts} />
     </>
   );

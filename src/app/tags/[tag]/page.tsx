@@ -4,9 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
-import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
+import { siteImage, siteTitle } from "@/lib/utils/constants";
 import { getOgImageForTag } from "@/lib/utils/og";
-import JsonLd from "@/app/components/JsonLd";
 
 const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
 const unslug = (s: string) => decodeURIComponent(s).replace(/-/g, " ");
@@ -70,67 +69,8 @@ export default async function TagPage(props: {
 
   const sortedPosts = sortPosts(taggedPosts);
 
-  // For ItemList JSON-LD (limit to what you actually render initially)
-  const list = sortedPosts.slice(0, 20).map((p, i) => {
-    const slug = p._raw.flattenedPath.replace(/^posts\//, "");
-    return {
-      "@type": "ListItem",
-      position: i + 1,
-      url: `${siteUrl}/posts/${slug}`,
-      name: p.title,
-    };
-  });
-
   return (
     <>
-      {/* Breadcrumbs */}
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "@id": `${siteUrl}/tags/${encodeURIComponent(tag)}#breadcrumbs`,
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: `${siteUrl}/`,
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Tags",
-              item: `${siteUrl}/tags`,
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: human,
-              item: `${siteUrl}/tags/${encodeURIComponent(tag)}`,
-            },
-          ],
-        }}
-      />
-
-      {/* Collection + ItemList (discovery boost) */}
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          "@id": `${siteUrl}/tags/${encodeURIComponent(tag)}#collection`,
-          name: `${human} articles`,
-          url: `${siteUrl}/tags/${encodeURIComponent(tag)}`,
-        }}
-      />
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          numberOfItems: list.length,
-          itemListElement: list,
-        }}
-      />
-
       <TagPageClient posts={sortedPosts} tag={human} />
     </>
   );

@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 // NOTE: adjust this import if your file lives elsewhere:
 import BenefitForm from "@/app/components/forms/BenefitForm";
-import { siteTitle, siteUrl } from "@/lib/utils/constants";
 
 export const metadata: Metadata = {
   title: "Benefits Eligibility Checker",
@@ -26,98 +25,9 @@ export const metadata: Metadata = {
   },
 };
 
-function JsonLd({ data }: { data: object }) {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
-}
-
 export default function BenefitCheckerPage() {
-  const pageUrl = `${siteUrl}/tools/check-benefits`;
-
-  const webAppJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Benefits Eligibility Checker",
-    url: pageUrl,
-    applicationCategory: "PublicService",
-    operatingSystem: "Web",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    publisher: {
-      "@type": "Organization",
-      name: siteTitle,
-      url: siteUrl,
-    },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: siteUrl,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Benefits Checker",
-        item: pageUrl,
-      },
-    ],
-  };
-
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Is this the official application?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "No. This is a free screening tool to help you understand potential eligibility. We link to official state and federal resources for applications.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "How accurate are the results?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Results are estimates based on your answers and public guidelines. Final eligibility is determined by the administering agency. Our calculations are generally accurate because we use the official U.S. government API for poverty levels, ensuring income thresholds are based on the latest federal data.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "What information do I need?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Basic household size, ZIP code, monthly income range, and a few situational questions (e.g., children, disability, veteran status).",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Is it free and private?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. The checker is free. If you opt in, we may email you resources to help with next steps.",
-        },
-      },
-    ],
-  };
-
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-16 check-benefits-page">
-      {/* JSON-LD */}
-      <JsonLd data={webAppJsonLd} />
-      <JsonLd data={breadcrumbJsonLd} />
-      <JsonLd data={faqJsonLd} />
-
       <header className="mb-6">
         <h1
           className="text-3xl font-bold mb-6"

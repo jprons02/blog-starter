@@ -9,19 +9,7 @@ import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
 import AffiliateCtaBanner from "@/app/components/AffiliateCtaBanner";
 import AffiliateDisclosure from "@/app/components/AffiliateDisclaimer";
 import PostTags from "./PostTags";
-import JsonLd from "@/app/components/JsonLd";
-import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
-
-/* ---------------- helpers ---------------- */
-function hasDateModified(x: unknown): x is { dateModified: string } {
-  return (
-    !!x &&
-    typeof x === "object" &&
-    "dateModified" in x &&
-    typeof (x as Record<string, unknown>).dateModified === "string"
-  );
-}
 
 /* ---------------- page ---------------- */
 export default async function PostPage(props: {
@@ -42,92 +30,8 @@ export default async function PostPage(props: {
     CrossLink,
   };
 
-  const canonical = `${siteUrl}/posts/${slug}`;
-  const toISO = (d?: string) =>
-    d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
-  const publishedISO = toISO(post.date as string);
-  const modifiedISO = toISO(
-    hasDateModified(post) ? post.dateModified : post.date
-  );
-  const imageObj = post.image
-    ? {
-        "@type": "ImageObject" as const,
-        url: `${siteUrl}${
-          post.image.startsWith("/") ? post.image : `/${post.image}`
-        }`,
-        width: 1200,
-        height: 630,
-      }
-    : undefined;
-
   return (
     <>
-      {/* BlogPosting JSON-LD */}
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "@id": `${canonical}#blogposting`,
-          mainEntityOfPage: canonical,
-          headline: post.title,
-          description: post.summary ?? "",
-          image: imageObj,
-          inLanguage: "en-US",
-          isAccessibleForFree: true,
-          datePublished: publishedISO,
-          dateModified: modifiedISO,
-          author: post.author
-            ? { "@type": "Person", name: post.author, url: siteUrl }
-            : {
-                "@type": "Organization",
-                name: siteTitle,
-                url: siteUrl,
-                "@id": `${siteUrl}#organization`,
-              },
-          publisher: {
-            "@type": "Organization",
-            "@id": `${siteUrl}#organization`,
-            name: siteTitle,
-            url: siteUrl,
-            logo: {
-              "@type": "ImageObject",
-              url: `${siteUrl}/logo/blog_logo_dark.svg`,
-              width: 512,
-              height: 512,
-            },
-          },
-        }}
-      />
-
-      {/* Breadcrumbs JSON-LD */}
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "@id": `${canonical}#breadcrumbs`,
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: { "@type": "WebPage", "@id": `${siteUrl}/` },
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Posts",
-              item: { "@type": "WebPage", "@id": `${siteUrl}/posts` },
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: post.title,
-              item: { "@type": "WebPage", "@id": canonical },
-            },
-          ],
-        }}
-      />
-
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <FadeIn>
           <h1 className="text-3xl font-bold tracking-tight mb-2">
