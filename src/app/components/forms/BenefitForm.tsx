@@ -30,13 +30,9 @@ const steps = [
 
 type Props = {
   focus?: string;
-  variant?: "modal" | "page";
 };
 
-export default function BenefitEligibilityForm({
-  focus,
-  variant = "modal",
-}: Props) {
+export default function BenefitEligibilityForm({ focus }: Props) {
   const { closeModal } = useModal();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,29 +54,6 @@ export default function BenefitEligibilityForm({
     PAYSUTILS: "yes",
     WEBSITE: "mygovblog.com",
   });
-
-  const resetForm = () => {
-    setStep(0);
-    setErrors({});
-    setStatus("idle");
-    setResults([]);
-    setForm({
-      FNAME: "",
-      LNAME: "",
-      EMAIL: "",
-      PHONE: "",
-      STATE: "",
-      CITY: "",
-      ZIP: "",
-      HSHLDSIZE: 1,
-      INCOME: "",
-      FACTORS: [],
-      PAYSUTILS: "yes",
-      WEBSITE: "mygovblog.com",
-    });
-    // optional: scroll to top
-    formRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   const formRef = useRef<HTMLDivElement>(null);
   const isValidFocusKey = (key: string): key is FocusSlug =>
@@ -786,23 +759,12 @@ export default function BenefitEligibilityForm({
               </div>
             )}
 
-            {variant === "modal" ? (
-              <button
-                onClick={closeModal}
-                className="tw-form-submit-base bg-[var(--color-primary)] text-white mt-4"
-              >
-                Close
-              </button>
-            ) : (
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  onClick={resetForm}
-                  className="tw-form-submit-base bg-[var(--color-primary)] text-white"
-                >
-                  Start over
-                </button>
-              </div>
-            )}
+            <button
+              onClick={closeModal}
+              className="tw-form-submit-base bg-[var(--color-primary)] text-white mt-4"
+            >
+              Close
+            </button>
           </div>
         );
     }
