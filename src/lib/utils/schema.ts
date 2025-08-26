@@ -1,4 +1,5 @@
 // utils/schema.ts
+/*
 import { siteTitle, siteUrl } from "./constants";
 
 export function blogPostingSchema(post: {
@@ -75,3 +76,4 @@ export function breadcrumbsSchema(slug: string, title: string) {
     ],
   };
 }
+*/
