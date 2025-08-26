@@ -137,7 +137,7 @@ export default function BenefitCheckerPage() {
 
       {/* Inline form (same component your modal uses) */}
       <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-background)] p-4 md:p-6 shadow-sm max-w-[500px]">
-        <BenefitForm variant="page" />
+        <BenefitForm />
       </section>
 
       {/* On-page FAQ so the FAQPage JSON-LD reflects visible content */}
