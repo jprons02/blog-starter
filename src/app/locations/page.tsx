@@ -29,15 +29,13 @@ export default function LocationsIndex() {
           .map((state) => (
             <section key={state}>
               <h2 className="text-xl font-semibold mb-3">
-                <Link href={`/locations/${state}`}>
-                  {stateNames[state] ?? state}
-                </Link>
+                {stateNames[state] ?? state}
               </h2>
               <ul className="grid sm:grid-cols-2 gap-2">
                 {byState[state]
                   .sort((a, b) => a.city.localeCompare(b.city))
                   .map(({ city }) => (
-                    <li key={city}>
+                    <li key={city} className="underline">
                       <Link href={`/locations/${state}/${city}`}>
                         {city.replace(/-/g, " ")}
                       </Link>
