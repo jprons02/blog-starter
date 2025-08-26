@@ -13,15 +13,6 @@ import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
 
-// ✅ bring back the MDX tokens so MDX can resolve them
-import {
-  City,
-  State,
-  IfLocation,
-  IfNoLocation,
-  ResourceLink,
-} from "@/app/locations/_locationsCtx";
-
 /* ---------------- helpers ---------------- */
 function hasDateModified(x: unknown): x is { dateModified: string } {
   return (
@@ -49,11 +40,6 @@ export default async function PostPage(props: {
     AffiliateCtaBanner,
     AffiliateDisclosure,
     CrossLink,
-    City,
-    State,
-    IfLocation,
-    IfNoLocation,
-    ResourceLink,
   };
 
   const canonical = `${siteUrl}/posts/${slug}`;

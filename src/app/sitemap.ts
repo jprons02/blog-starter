@@ -3,8 +3,6 @@
 import type { MetadataRoute } from "next";
 import { allPosts, type Post } from "contentlayer/generated";
 import { siteUrl } from "@/lib/utils/constants";
-import { getAllLocations } from "@/app/locations/_locationsData";
-import { localizedPostSlugs } from "@/constants/localizedPosts";
 
 type MaybeFrontmatterDates = {
   updatedAt?: string;
@@ -64,16 +62,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     make("/locations", now, "weekly", 0.8),
   ].forEach(add);
 
-  // 2) State hubs & city hubs
-  const locs = getAllLocations();
-  const states = Array.from(new Set(locs.map((l) => l.state)));
-  states.forEach((state) =>
-    add(make(`/locations/${state}`, now, "weekly", 0.7))
-  );
-  locs.forEach(({ state, city }) =>
-    add(make(`/locations/${state}/${city}`, now, "weekly", 0.6))
-  );
-
   // 3) Canonical (non-localized) posts
   const visiblePosts = allPosts.filter(isVisible);
   visiblePosts.forEach((post) => {
@@ -89,7 +77,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // 4) Localized post variants (curated)
-  const curated = localizedPostSlugs();
   const lastModBySlug = new Map<string, Date>();
   visiblePosts.forEach((p) =>
     lastModBySlug.set(
@@ -97,15 +84,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModifiedOf(p, now)
     )
   );
-
-  locs.forEach(({ state, city }) => {
-    curated.forEach((slug) => {
-      const lm = clampFuture(lastModBySlug.get(slug) ?? now, now);
-      add(
-        make(`/locations/${state}/${city}/posts/${slug}`, lm, "monthly", 0.55)
-      );
-    });
-  });
 
   // 5) Global tags hub + /tags/:tag (dated by freshest related post)
   add(make("/tags", now, "weekly", 0.5));
@@ -128,20 +106,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   topTagEntries.forEach(([tagSlug, lm]) =>
     add(make(`/tags/${tagSlug}`, clampFuture(lm, now), "weekly", 0.45))
   );
-
-  // 6) Localized tag pages: /locations/:state/:city/tags/:tag
-  locs.forEach(({ state, city }) => {
-    topTagEntries.forEach(([tagSlug, lm]) => {
-      add(
-        make(
-          `/locations/${state}/${city}/tags/${tagSlug}`,
-          clampFuture(lm, now),
-          "weekly",
-          0.42
-        )
-      );
-    });
-  });
 
   // 7) Return stable, alpha-sorted list
   return Array.from(entries.values()).sort((a, b) =>

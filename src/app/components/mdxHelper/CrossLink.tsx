@@ -3,7 +3,6 @@
 
 import Link from "next/link";
 import { PropsWithChildren } from "react";
-import { useLocation } from "@/app/locations/_locationsCtx";
 
 type CrossLinkProps = {
   href: string; // e.g. "./slug" or "/posts/slug" or "/tags/phones"
@@ -21,18 +20,7 @@ export default function CrossLink({
   children,
   ...rest
 }: PropsWithChildren<CrossLinkProps>) {
-  const loc = useLocation();
-  let target = normalizeToPostPath(href);
-
-  // If we have location context and the link is internal, rewrite to localized
-  if (loc && !/^https?:\/\//i.test(target)) {
-    if (target.startsWith("/posts/")) {
-      target = `/locations/${loc.state.toLowerCase()}/${loc.city.toLowerCase()}${target}`;
-    } else if (target.startsWith("/tags/")) {
-      target = `/locations/${loc.state.toLowerCase()}/${loc.city.toLowerCase()}${target}`;
-    }
-    // else: leave other internal routes alone
-  }
+  const target = normalizeToPostPath(href);
 
   return (
     <Link href={target} {...rest}>

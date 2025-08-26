@@ -30,9 +30,13 @@ const steps = [
 
 type Props = {
   focus?: string;
+  variant?: "modal" | "page";
 };
 
-export default function BenefitEligibilityForm({ focus }: Props) {
+export default function BenefitEligibilityForm({
+  focus,
+  variant = "modal",
+}: Props) {
   const { closeModal } = useModal();
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -54,6 +58,29 @@ export default function BenefitEligibilityForm({ focus }: Props) {
     PAYSUTILS: "yes",
     WEBSITE: "mygovblog.com",
   });
+
+  const resetForm = () => {
+    setStep(0);
+    setErrors({});
+    setStatus("idle");
+    setResults([]);
+    setForm({
+      FNAME: "",
+      LNAME: "",
+      EMAIL: "",
+      PHONE: "",
+      STATE: "",
+      CITY: "",
+      ZIP: "",
+      HSHLDSIZE: 1,
+      INCOME: "",
+      FACTORS: [],
+      PAYSUTILS: "yes",
+      WEBSITE: "mygovblog.com",
+    });
+    // optional: scroll to top
+    formRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const formRef = useRef<HTMLDivElement>(null);
   const isValidFocusKey = (key: string): key is FocusSlug =>
@@ -128,62 +155,6 @@ export default function BenefitEligibilityForm({ focus }: Props) {
       };
     });
   };
-
-  /*
-  const handleSubmit = async () => {
-    if (validateContact()) {
-      if (!form.ZIP || !/^\d{5}$/.test(form.ZIP)) {
-        setErrors({ ZIP: 'Please enter a valid 5-digit ZIP code.' });
-        return;
-      }
-      setStatus('sending');
-      const { city, state } = await getCityStateFromZip(form.ZIP);
-      const updatedForm = {
-        ...form,
-        CITY: city || '',
-        STATE: state?.toLowerCase() || 'us',
-      };
-      setForm(updatedForm);
-      try {
-        const res = await sendMailchimpLead(updatedForm);
-        const data = await res.json();
-
-        if (res.ok) {
-          let benefits = await getEligibilityResults(updatedForm);
-          if (focusKey && focusData) {
-            const priority = benefits.find((b) =>
-              b.name.toLowerCase().includes(searchKey)
-            );
-            const rest = benefits.filter(
-              (b) => !b.name.toLowerCase().includes(searchKey)
-            );
-            benefits = priority ? [priority, ...rest] : benefits;
-          }
-
-          setResults(benefits);
-          setStatus('sent');
-
-          gaEvent({
-            action: 'benefits_form_submit',
-            category: 'conversion',
-            label: 'Eligibility Form',
-          });
-
-          setStep((prev) => Math.min(prev + 1, steps.length - 1));
-        } else {
-          setStatus('error');
-          toast.error(
-            data.error.detail || 'Something went wrong. Please try again.'
-          );
-        }
-      } catch (err) {
-        console.log('Submission failed:', err);
-        setStatus('error');
-        toast.error('Submission failed. Please try again.');
-      }
-    }
-  };
-  */
 
   const handleSubmit = async () => {
     if (validateContact()) {
@@ -759,12 +730,23 @@ export default function BenefitEligibilityForm({ focus }: Props) {
               </div>
             )}
 
-            <button
-              onClick={closeModal}
-              className="tw-form-submit-base bg-[var(--color-primary)] text-white mt-4"
-            >
-              Close
-            </button>
+            {variant === "modal" ? (
+              <button
+                onClick={closeModal}
+                className="tw-form-submit-base bg-[var(--color-primary)] text-white mt-4"
+              >
+                Close
+              </button>
+            ) : (
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  onClick={resetForm}
+                  className="tw-form-submit-base bg-[var(--color-primary)] text-white"
+                >
+                  Start over
+                </button>
+              </div>
+            )}
           </div>
         );
     }
