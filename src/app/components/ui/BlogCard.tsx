@@ -1,7 +1,7 @@
 // app/components/ui/BlogCard.tsx
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Tag from "@/app/components/ui/Tag";
@@ -22,7 +22,10 @@ export default function BlogCard({
   selectedTag,
   href,
 }: Props) {
-  const date = useMemo(() => formatDate(post.date), [post.date]);
+  const [date, setDate] = useState("");
+  useEffect(() => {
+    setDate(formatDate(post.date));
+  }, [post.date]);
 
   // Build a slug fallback if Contentlayer’s post.url isn’t what we want
   const slug = useMemo(
