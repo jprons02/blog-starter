@@ -1,43 +1,40 @@
 // app/locations/[state]/[city]/posts/[slug]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-//import { getMDXComponent } from "next-contentlayer2/hooks";
+import { getMDXComponent } from "next-contentlayer2/hooks";
 import { allPosts } from "contentlayer/generated";
 
-//import Image from "next/image";
-//import FadeIn from "@/app/components/ui/FadeIn";
-//import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
-//import AffiliateCtaBanner from "@/app/components/AffiliateCtaBanner";
-//import AffiliateDisclosure from "@/app/components/AffiliateDisclaimer";
-//import PostTags from "@/app/posts/[slug]/PostTags";
-//import JsonLd from "@/app/components/JsonLd";
-//import CrossLink from "@/app/components/mdxHelper/CrossLink";
-//import { formatDate } from "@/lib/utils/formatDate";
-//import { siteUrl } from "@/lib/utils/constants";
+import Image from "next/image";
+import FadeIn from "@/app/components/ui/FadeIn";
+import BenefitsCtaBanner from "@/app/components/BenefitsCtaBanner";
+import AffiliateCtaBanner from "@/app/components/AffiliateCtaBanner";
+import AffiliateDisclosure from "@/app/components/AffiliateDisclaimer";
+import PostTags from "@/app/posts/[slug]/PostTags";
+import JsonLd from "@/app/components/JsonLd";
+import CrossLink from "@/app/components/mdxHelper/CrossLink";
+import { formatDate } from "@/lib/utils/formatDate";
+import { siteUrl, siteTitle } from "@/lib/utils/constants";
 
 // server data (no "use client")
 import {
   getAllLocations,
   findLocation,
-  //loadLocalResources,
+  loadLocalResources,
 } from "@/app/locations/_locationsData";
 
 // client tokens/context for MDX
-/*
 import {
-  //LocationProvider,
-  //City,
-  //State,
-  //IfLocation,
-  //IfNoLocation,
-  //ResourceLink,
+  LocationProvider,
+  City,
+  State,
+  IfLocation,
+  IfNoLocation,
+  ResourceLink,
   type QAItem,
   type LocalResource,
 } from "@/app/locations/_locationsCtx";
-*/
 
 /* ---------------- helpers ---------------- */
-/*
 function hasDateModified(x: unknown): x is { dateModified: string } {
   return (
     !!x &&
@@ -46,17 +43,8 @@ function hasDateModified(x: unknown): x is { dateModified: string } {
     typeof (x as Record<string, unknown>).dateModified === "string"
   );
 }
-*/
-
-// Normalize date-only strings to UTC midnight so SSR/CSR stay in sync
-
-/*
-const toISO = (d?: string) =>
-  d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
-*/
 
 // Build legacy-friendly bags from typed localResources so your MDX keeps working
-/*
 function deriveFromLocalResources(
   localResources: Record<string, LocalResource>
 ) {
@@ -86,8 +74,8 @@ function deriveFromLocalResources(
 
   return { resources, faqByTopic };
 }
-*/
 
+/* ---------------- page ---------------- */
 type Params = { state: string; city: string; slug: string };
 
 export default async function LocalizedPostPage({
@@ -105,107 +93,48 @@ export default async function LocalizedPostPage({
   if (!post || !loc) return notFound();
 
   // 2) Load per-city resources (ok if missing)
-  /*
   const localResources = (await loadLocalResources(s, c)) as Record<
     string,
     LocalResource
   >;
-  */
-
-  //const { resources, faqByTopic } = deriveFromLocalResources(localResources);
+  const { resources, faqByTopic } = deriveFromLocalResources(localResources);
 
   // 3) Same MDX renderer + components as /posts/[slug], plus location tokens
-  //const Content = getMDXComponent(post.body.code);
-  //const mdxComponents = {
-  //BenefitsCtaBanner,
-  //AffiliateCtaBanner,
-  //AffiliateDisclosure,
-  //CrossLink,
-  //City,
-  //State,
-  //IfLocation,
-  //IfNoLocation,
-  //ResourceLink,
-  //};
+  const Content = getMDXComponent(post.body.code);
+  const mdxComponents = {
+    BenefitsCtaBanner,
+    AffiliateCtaBanner,
+    AffiliateDisclosure,
+    CrossLink,
+    City,
+    State,
+    IfLocation,
+    IfNoLocation,
+    ResourceLink,
+  };
 
   // 4) Canonical + JSON-LD (localized)
-  /*
   const canonical = `${siteUrl}/locations/${s}/${c}/posts/${slug}`;
+  const toISO = (d?: string) =>
+    d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
   const modifiedISO = toISO(
     hasDateModified(post) ? post.dateModified : post.date
   );
-  */
+  const imageObj = post.image
+    ? {
+        "@type": "ImageObject" as const,
+        url: `${siteUrl}${
+          post.image.startsWith("/") ? post.image : `/${post.image}`
+        }`,
+        width: 1200,
+        height: 630,
+      }
+    : undefined;
 
-  //const imageObj = post.image
-  //? {
-  //  "@type": "ImageObject" as const,
-  //url: `${siteUrl}${
-  //post.image.startsWith("/") ? post.image : `/${post.image}`
-  //}`,
-  //width: 1200,
-  //height: 630,
-  //}
-  //: undefined;
-
-  return <>Hello.</>;
-}
-
-/* ---------------- metadata ---------------- */
-import { localizedPostSlugs } from "@/constants/localizedPosts";
-
-export async function generateStaticParams(): Promise<Params[]> {
-  const slugs = localizedPostSlugs();
-  const locs = getAllLocations();
-  const out: Params[] = [];
-  for (const { state, city } of locs) {
-    for (const slug of slugs) out.push({ state, city, slug });
-  }
-  return out;
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<Params>;
-}): Promise<Metadata> {
-  const { state, city, slug } = await params;
-  const s = state.toLowerCase();
-  const c = city.toLowerCase();
-
-  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
-  const loc = findLocation(s, c);
-  if (!post || !loc) return {};
-
-  const title = `${post.seoTitle ?? post.title} — ${loc.cityName}, ${
-    loc.stateName
-  }`;
-  const description =
-    post.summary ??
-    `Guidance for ${loc.cityName}, ${loc.stateName} on benefits programs.`;
-  const pathUrl = `/locations/${s}/${c}/posts/${slug}`;
-
-  return {
-    title,
-    description,
-    alternates: { canonical: pathUrl },
-    openGraph: {
-      type: "article",
-      url: pathUrl,
-      title,
-      description,
-    },
-    twitter: { card: "summary_large_image", title, description },
-    robots: { index: true, follow: true },
-  };
-}
-
-export const revalidate = 86400;
-
-/*
-
-return (
+  return (
     <>
+      {/* BlogPosting JSON-LD (localized canonical) */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -248,6 +177,7 @@ return (
         }}
       />
 
+      {/* Breadcrumbs JSON-LD */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -288,6 +218,7 @@ return (
         }}
       />
 
+      {/* ⬇️ Identical visual output to /posts/[slug], just with LocationProvider */}
       <LocationProvider
         value={{
           city: loc.cityName,
@@ -305,7 +236,6 @@ return (
             <p
               className="font-medium uppercase tracking-wide mb-6"
               style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
-              suppressHydrationWarning
             >
               {formatDate(post.date)}&nbsp;&nbsp;•&nbsp;&nbsp;
               {post.author?.toUpperCase() || "STAFF"}
@@ -361,5 +291,55 @@ return (
       </LocationProvider>
     </>
   );
+}
 
-*/
+/* ---------------- metadata ---------------- */
+import { localizedPostSlugs } from "@/constants/localizedPosts";
+
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = localizedPostSlugs();
+  const locs = getAllLocations();
+  const out: Params[] = [];
+  for (const { state, city } of locs) {
+    for (const slug of slugs) out.push({ state, city, slug });
+  }
+  return out;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { state, city, slug } = await params;
+  const s = state.toLowerCase();
+  const c = city.toLowerCase();
+
+  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
+  const loc = findLocation(s, c);
+  if (!post || !loc) return {};
+
+  const title = `${post.seoTitle ?? post.title} — ${loc.cityName}, ${
+    loc.stateName
+  }`;
+  const description =
+    post.summary ??
+    `Guidance for ${loc.cityName}, ${loc.stateName} on benefits programs.`;
+  const pathUrl = `/locations/${s}/${c}/posts/${slug}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: pathUrl },
+    openGraph: {
+      type: "article",
+      url: pathUrl,
+      title,
+      description,
+    },
+    twitter: { card: "summary_large_image", title, description },
+    robots: { index: true, follow: true },
+  };
+}
+
+export const revalidate = 86400;
