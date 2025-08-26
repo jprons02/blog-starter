@@ -60,6 +60,7 @@ export default function BlogIndexClient({ posts }: Props) {
                   fill
                   className="object-cover group-hover:brightness-110 transition"
                   priority
+                  sizes="100vw"
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">

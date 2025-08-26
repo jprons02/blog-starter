@@ -54,6 +54,7 @@ export default async function PostPage(props: {
                 height={400}
                 className="rounded-xl w-full h-auto object-cover"
                 priority
+                sizes="(max-width: 1024px) 100vw, 800px"
               />
               <figcaption className="text-sm mt-2 text-muted">
                 Photo by{" "}
