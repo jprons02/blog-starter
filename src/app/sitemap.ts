@@ -3,7 +3,6 @@ import type { MetadataRoute } from "next";
 import { allPosts, type Post } from "contentlayer/generated";
 import { siteUrl } from "@/lib/utils/constants";
 import { getAllLocations } from "@/app/locations/_locationsData";
-import { localizedPostSlugs } from "@/constants/localizedPosts";
 
 /* ----------------------------- helpers (typed) ----------------------------- */
 
@@ -78,17 +77,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModBySlug.set(slug, lastModifiedOf(p, now));
   });
 
-  // 2) City hubs with meaningful lastmod (newest among curated localized posts)
+  const allSlugs = Array.from(lastModBySlug.keys());
+  const newestVisiblePost = clampFuture(
+    new Date(
+      Math.max(0, ...visiblePosts.map((p) => lastModifiedOf(p, now).getTime()))
+    ),
+    now
+  );
+
+  // 2) City hubs with meaningful lastmod (newest among ALL visible posts)
   const locs = getAllLocations();
-  const curated = localizedPostSlugs();
   locs.forEach(({ state, city }) => {
-    let ts = 0;
-    for (const slug of curated) {
-      const d = lastModBySlug.get(slug);
-      if (d) ts = Math.max(ts, d.getTime());
-    }
-    const lm = clampFuture(ts ? new Date(ts) : now, now);
-    add(make(`/locations/${state}/${city}`, lm, "weekly", 0.6));
+    add(make(`/locations/${state}/${city}`, newestVisiblePost, "weekly", 0.6));
   });
 
   // 3) Canonical (non-localized) posts
@@ -98,9 +98,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     add(make(`/posts/${slug}`, lm, "weekly", 0.6));
   });
 
-  // 4) Localized post variants (curated)
+  // 4) Localized post variants — include ALL visible posts for EVERY location
   locs.forEach(({ state, city }) => {
-    curated.forEach((slug) => {
+    allSlugs.forEach((slug) => {
       const lm = clampFuture(lastModBySlug.get(slug) ?? now, now);
       add(
         make(`/locations/${state}/${city}/posts/${slug}`, lm, "monthly", 0.55)
