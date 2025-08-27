@@ -1,377 +1,259 @@
-// src/data/locations/fl/miami.ts
-// Location data module for Miami, FL.
-// Powers <ResourceLink name="..." field="..."> inside MDX.
-// Notes:
-// - Use <City/> and <State/> tokens inside FAQ HTML. They are replaced at render time.
-// - Keep links official (.gov > .edu > reputable .org). Use provider .com only when appropriate (e.g., Lifeline).
-// - If a field is unknown, leave it as "" (never null/undefined).
-
 export const localResources = {
-  /* ------------------------------ SNAP ------------------------------ */
   snap: {
-    link: "https://myaccess.myflfamilies.com/Help/ABTIP/ABTIP-1.html", // How to apply (ACCESS Florida)
-    contact:
-      "https://www.myflfamilies.com/about-us/accessible-customer-service/access-florida-customer-service",
+    link: "https://www.myflfamilies.com/access",
+    contact: "https://www.myflfamilies.com/contact-us",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>How do I apply for SNAP in <City/>, <State/>?</strong><br/>` +
-          `Start at Florida’s ACCESS portal: <a href="https://myaccess.myflfamilies.com/Help/ABTIP/ABTIP-1.html" target="_blank" rel="noopener noreferrer">How to Apply</a>. You can submit online, by mail, or at a local service center.</p>`,
+        html: '<p><strong>How do I start SNAP in <City/>, <State/>?</strong><br/>Apply or manage your case through Florida’s ACCESS portal: <a href="https://www.myflfamilies.com/access" target="_blank" rel="noopener noreferrer">myflfamilies.com/access</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Is there a local office near <City/> for in-person help?</strong><br/>` +
-          `Yes. See office options and assistance lines on <a href="https://www.myflfamilies.com/about-us/accessible-customer-service/access-florida-customer-service" target="_blank" rel="noopener noreferrer">ACCESS Florida Customer Service</a>.</p>`,
+        html: '<p><strong>Is there a phone number for help?</strong><br/>For application questions or case help, use the state contact options listed here: <a href="https://www.myflfamilies.com/contact-us" target="_blank" rel="noopener noreferrer">DCF Contact Us</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Do I need an interview?</strong><br/>` +
-          `Most cases require a brief interview, often by phone. Answer calls and check your ACCESS account messages to avoid delays.</p>`,
+        html: "<p><strong>What documents should I have ready?</strong><br/>ID, proof of income, household size, and expenses (rent/child care). You can upload documents through ACCESS after you start the application.</p>",
       },
     ],
   },
 
-  /* ------------------------ UNEMPLOYMENT (UI) ------------------------ */
   unemployment: {
     link: "https://www.floridajobs.org/Reemployment-Assistance-Service-Center/reemployment-assistance/claimants/apply-for-benefits",
-    contact:
-      "https://www.floridajobs.org/Reemployment-Assistance-Service-Center/reemployment-assistance/claimants",
+    contact: "https://floridajobs.org/help-center---contact-us",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Where do I start a UI claim in <State/>?</strong><br/>` +
-          `Use Florida’s RA page: <a href="https://www.floridajobs.org/Reemployment-Assistance-Service-Center/reemployment-assistance/claimants/apply-for-benefits" target="_blank" rel="noopener noreferrer">Apply for Benefits</a>. Create an account and follow the prompts.</p>`,
+        html: '<p><strong>Where do I file for unemployment in <City/>, <State/>?</strong><br/>File online through Florida’s Reemployment Assistance system: <a href="https://www.floridajobs.org/Reemployment-Assistance-Service-Center/reemployment-assistance/claimants/apply-for-benefits" target="_blank" rel="noopener noreferrer">Apply for benefits</a>.</p>',
       },
       {
-        html:
-          `<p><strong>How do weekly certifications work?</strong><br/>` +
-          `Certify each benefit week through the RA portal. Missing weeks can pause payments; set reminders to file on time.</p>`,
+        html: '<p><strong>Who can I call for help?</strong><br/>See phones and hours on the state contact page: <a href="https://floridajobs.org/help-center---contact-us" target="_blank" rel="noopener noreferrer">RA Contact</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Who can help if my claim gets stuck?</strong><br/>` +
-          `Check the claimant help hub at <a href="https://www.floridajobs.org/Reemployment-Assistance-Service-Center/reemployment-assistance/claimants" target="_blank" rel="noopener noreferrer">RA Claimants</a> for phone lines, guides, and common issue fixes.</p>`,
+        html: "<p><strong>What info do I need?</strong><br/>Recent work history, employer details, dates worked, and reason for separation. Filing weekly claims on time helps avoid delays.</p>",
       },
     ],
   },
 
-  /* ------------------------------ WIC ------------------------------ */
   wic: {
-    link: "https://miamidade.floridahealth.gov/programs-and-services/clinical-and-nutrition-services/wic/index.html",
-    contact: "https://miamidade.floridahealth.gov/locations/index.html",
+    link: "https://miamidade.floridahealth.gov/programs-and-services/wic/how-to-apply.html",
+    contact:
+      "https://miamidade.floridahealth.gov/programs-and-services/wic/_documents/wic-program-locations-032024.pdf",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>How do I get WIC in <City/>, <State/>?</strong><br/>` +
-          `Start with the county WIC page: <a href="https://miamidade.floridahealth.gov/programs-and-services/clinical-and-nutrition-services/wic/index.html" target="_blank" rel="noopener noreferrer">Miami-Dade WIC</a>. Call to schedule eligibility screening.</p>`,
+        html: '<p><strong>How do I apply for WIC in <City/>, <State/>?</strong><br/>Start with the county WIC page for eligibility and steps: <a href="https://miamidade.floridahealth.gov/programs-and-services/wic/how-to-apply.html" target="_blank" rel="noopener noreferrer">Miami-Dade WIC</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Where are WIC clinics near me?</strong><br/>` +
-          `See locations on the county site: <a href="https://miamidade.floridahealth.gov/locations/index.html" target="_blank" rel="noopener noreferrer">Miami-Dade DOH Locations</a>.</p>`,
+        html: '<p><strong>Where are clinics near me?</strong><br/>Use the county locations list with phone numbers and addresses: <a href="https://miamidade.floridahealth.gov/programs-and-services/wic/_documents/wic-program-locations-032024.pdf" target="_blank" rel="noopener noreferrer">WIC clinic locations</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Can I get WIC while on SNAP or Medicaid?</strong><br/>` +
-          `Yes—these programs are separate. Many families in <City/> qualify for more than one based on income and household size.</p>`,
+        html: "<p><strong>What should I bring?</strong><br/>Photo ID, proof of address in <City/>, <State/>, proof of income, and the child’s immunization/medical info if available.</p>",
       },
     ],
   },
 
-  /* ------------------------------ LIHEAP (utilities) ------------------------------ */
   liheap: {
-    link: "https://www.miamidade.gov/global/service.page?Mduid_service=ser1601486570634647", // Utility Assistance (LIHEAP)
-    contact: "https://www.miamidade.gov/global/cahsd/home.page",
+    link: "https://floridajobs.org/community-planning-and-development/community-services/low-income-home-energy-assistance-program",
+    contact:
+      "https://floridajobs.org/community-planning-and-development/community-services/low-income-home-energy-assistance-program",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Who runs LIHEAP in <City/>, <State/>?</strong><br/>` +
-          `Miami-Dade’s Community Action and Human Services Department (CAHSD). See <a href="https://www.miamidade.gov/global/service.page?Mduid_service=ser1601486570634647" target="_blank" rel="noopener noreferrer">Utility Assistance</a> for how to apply.</p>`,
+        html: '<p><strong>How do I get help with my light bill in <City/>, <State/>?</strong><br/>Review eligibility and statewide details here: <a href="https://floridajobs.org/community-planning-and-development/community-services/low-income-home-energy-assistance-program" target="_blank" rel="noopener noreferrer">Florida LIHEAP</a>, then contact Miami-Dade CAHSD for local intake.</p>',
       },
       {
-        html:
-          `<p><strong>Can LIHEAP help with a shutoff notice?</strong><br/>` +
-          `Often yes. Bring your notice and ID when applying. Start with CAHSD’s <a href="https://www.miamidade.gov/global/cahsd/home.page" target="_blank" rel="noopener noreferrer">program hub</a>.</p>`,
+        html: '<p><strong>Is there a local office?</strong><br/>Yes—Miami-Dade Community Action and Human Services lists phone and address info here: <a href="https://floridajobs.org/community-planning-and-development/community-services/low-income-home-energy-assistance-program" target="_blank" rel="noopener noreferrer">CAHSD Contact</a>.</p>',
       },
       {
-        html:
-          `<p><strong>How frequently can I receive help?</strong><br/>` +
-          `Rules vary by funding and need. Ask CAHSD staff about seasonal limits and emergency options.</p>`,
+        html: "<p><strong>What to have ready?</strong><br/>A recent utility bill, ID, proof of address in <City/>, <State/>, and income documentation for your household.</p>",
       },
     ],
   },
 
-  /* ------------------------------ Medicaid ------------------------------ */
   medicaid: {
-    link: "https://myaccess.myflfamilies.com/Help/ABTIP/ABTIP-1.html",
-    contact: "https://ahca.myflorida.com/medicaid/index.shtml",
+    link: "https://www.myflfamilies.com/services/public-assistance",
+    contact: "https://www.myflfamilies.com/contact-us",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>How do I apply for Medicaid in <City/>, <State/>?</strong><br/>` +
-          `Eligibility is handled through ACCESS: <a href="https://myaccess.myflfamilies.com/Help/ABTIP/ABTIP-1.html" target="_blank" rel="noopener noreferrer">How to Apply</a>. Coverage is administered by AHCA.</p>`,
+        html: '<p><strong>Where do I apply for Medicaid?</strong><br/>Apply through Florida’s ACCESS portal and learn about eligibility here: <a href="https://www.myflfamilies.com/services/public-assistance" target="_blank" rel="noopener noreferrer">Florida Medicaid (DCF)</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Where can I find Medicaid plan information?</strong><br/>` +
-          `Visit AHCA’s Medicaid portal: <a href="https://ahca.myflorida.com/medicaid/index.shtml" target="_blank" rel="noopener noreferrer">AHCA Medicaid</a> for member resources.</p>`,
+        html: '<p><strong>Who can I call locally?</strong><br/>See the Agency for Health Care Administration Medicaid field offices and contacts: <a href="https://www.myflfamilies.com/contact-us" target="_blank" rel="noopener noreferrer">AHCA Medicaid contacts</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Do adults get dental or vision?</strong><br/>` +
-          `Benefits vary by plan and category. Review your plan’s handbook and AHCA’s benefits pages for specifics.</p>`,
+        html: "<p><strong>What information is needed?</strong><br/>Household size, income, immigration/citizenship details, and any current health coverage.</p>",
       },
     ],
   },
 
-  /* ------------------------------ Child Care (CCDF) ------------------------------ */
   ccdf: {
-    link: "https://familyservices.floridaearlylearning.com/Account/LogIn",
-    contact: "https://www.elcmdm.org/contact-us",
+    link: "https://www.fldoe.org/schools/early-learning/parents/school-readiness.stml",
+    contact: "https://www.elcmdm.org/page/locations",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>What is the School Readiness program in <City/>, <State/>?</strong><br/>` +
-          `It helps eligible families pay for child care. Apply via the <a href="https://familyservices.floridaearlylearning.com/Account/LogIn" target="_blank" rel="noopener noreferrer">Family Portal</a>.</p>`,
+        html: '<p><strong>How do I get child care help (CCDF) in <City/>, <State/>?</strong><br/>Start with the Florida School Readiness overview for eligibility and steps: <a href="https://www.fldoe.org/schools/early-learning/parents/school-readiness.stml" target="_blank" rel="noopener noreferrer">School Readiness</a>, then apply through the local coalition.</p>',
       },
       {
-        html:
-          `<p><strong>Who provides local support?</strong><br/>` +
-          `The Early Learning Coalition of Miami-Dade/Monroe: <a href="https://www.elcmdm.org/contact-us" target="_blank" rel="noopener noreferrer">contact</a> for help with documents and waitlist questions.</p>`,
+        html: '<p><strong>Who serves Miami-Dade?</strong><br/>The Early Learning Coalition of Miami-Dade/Monroe lists office locations and contacts here: <a href="https://www.elcmdm.org/page/locations" target="_blank" rel="noopener noreferrer">ELCMDM Locations</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Do I need a provider before applying?</strong><br/>` +
-          `No. You can apply first, then choose an approved provider that accepts School Readiness funding.</p>`,
+        html: "<p><strong>What will I need?</strong><br/>Proof of identity, residency in <City/>, <State/>, income, and your work/school schedule to determine eligibility and copay.</p>",
       },
     ],
   },
 
-  /* ------------------------------ SafeLink / Lifeline ------------------------------ */
   safelink: {
-    link: "https://www.safelinkwireless.com/",
-    contact: "https://www.lifelinesupport.org/",
+    link: "https://freesmartphone.net/promo?code=free&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=SafeLink",
+    contact: "",
     email: "",
     faqs: [
       {
         html:
-          `<p><strong>Can I get a free phone in <City/> with Lifeline?</strong><br/>` +
-          `If you’re on SNAP or Medicaid, you may qualify. Start at <a href="https://www.safelinkwireless.com/" target="_blank" rel="noopener noreferrer">SafeLink</a> or learn about eligibility on <a href="https://www.lifelinesupport.org/" target="_blank" rel="noopener noreferrer">Lifeline Support</a>.</p>`,
-      },
-      {
-        html:
-          `<p><strong>What documents should I have ready?</strong><br/>` +
-          `Proof of identity, address, and program participation (like SNAP or Medicaid) speeds up approval.</p>`,
-      },
-      {
-        html:
-          `<p><strong>Does Lifeline work with ACP?</strong><br/>` +
-          `ACP ended in 2024; check provider sites for any replacement discounts available in <City/>.</p>`,
+          `<p><strong>Can I get a free phone in <City/> with Safelink?</strong><br/>` +
+          `Many providers serve <City/>. If you’re on SNAP or Medicaid, you likely qualify. ` +
+          `See <a href="https://freesmartphone.net/promo?code=free&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=SafeLink" target="_blank" rel="noopener noreferrer">Freesmartphone.net</a> for details.</p>`,
       },
     ],
   },
 
-  /* ------------------------------ Housing (local PHA) ------------------------------ */
   housing: {
-    link: "https://www.miamigov.com/Residents/Housing",
-    contact: "https://www.miamidade.gov/global/housing/section-8.page",
+    link: "https://www.miamidade.gov/global/housing/home.page",
+    contact:
+      "https://www.miamidade.gov/global/housing/contact-public-housing-and-community-development.page",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Where do I find housing programs in <City/>, <State/>?</strong><br/>` +
-          `Start at the City’s housing page: <a href="https://www.miamigov.com/Residents/Housing" target="_blank" rel="noopener noreferrer">Miami Housing</a>. Section 8 is administered countywide by Miami-Dade PHCD.</p>`,
+        html: '<p><strong>Where do I start with housing help in <City/>, <State/>?</strong><br/>Review Miami-Dade housing programs and links here: <a href="https://www.miamidade.gov/global/housing/home.page" target="_blank" rel="noopener noreferrer">County Housing</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Is the Section 8 waitlist open?</strong><br/>` +
-          `Check Miami-Dade’s HCV page for status: <a href="https://www.miamidade.gov/global/housing/section-8.page" target="_blank" rel="noopener noreferrer">Section 8 (HCV)</a>.</p>`,
+        html: '<p><strong>How do I reach the City of Miami Housing office?</strong><br/>Use the department’s Contact Us page for phones and addresses: <a href="https://www.miamidade.gov/global/housing/contact-public-housing-and-community-development.page" target="_blank" rel="noopener noreferrer">City Housing — Contact</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Can I get help with security deposits?</strong><br/>` +
-          `Ask local nonprofits or PHCD about one-time assistance programs available in <City/>.</p>`,
+        html: "<p><strong>Is Section 8 open?</strong><br/>Waitlists open and close. Check county and city notices regularly for updates before applying.</p>",
       },
     ],
   },
 
-  /* ------------------------------ Social Security DDS ------------------------------ */
   dds: {
     link: "https://www.ssa.gov/onlineservices/",
-    contact: "https://www.ssa.gov/locator/",
+    contact: "https://secure.ssa.gov/ICON/main.jsp",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Who reviews disability medical evidence in <State/>?</strong><br/>` +
-          `Florida’s Disability Determination Services (DDS) works with SSA. File and track your claim via <a href="https://www.ssa.gov/onlineservices/" target="_blank" rel="noopener noreferrer">SSA Online Services</a>.</p>`,
+        html: '<p><strong>What is DDS?</strong><br/>Florida’s Disability Determination Services works with SSA on disability claims. Start or manage claims using SSA online services: <a href="https://www.ssa.gov/onlineservices/" target="_blank" rel="noopener noreferrer">SSA Online Services</a>.</p>',
       },
       {
-        html:
-          `<p><strong>How do I find the nearest SSA office to <City/>?</strong><br/>` +
-          `Use the <a href="https://www.ssa.gov/locator/" target="_blank" rel="noopener noreferrer">SSA Office Locator</a> for addresses and hours.</p>`,
+        html: '<p><strong>How do I find a local SSA office near <City/>?</strong><br/>Use the SSA office locator: <a href="https://secure.ssa.gov/ICON/main.jsp" target="_blank" rel="noopener noreferrer">Find an office</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Missed a consultative exam?</strong><br/>` +
-          `Contact the number on your exam notice immediately to reschedule and avoid a denial for insufficient evidence.</p>`,
+        html: "<p><strong>Do I need an appointment?</strong><br/>Walk-in service is limited; using online services or calling ahead can reduce wait times.</p>",
       },
     ],
   },
 
-  /* ------------------------------ SSDI ------------------------------ */
   ssdi: {
     link: "https://www.ssa.gov/benefits/disability/",
-    contact: "https://www.ssa.gov/agency/contact/phone.html",
+    contact: "https://secure.ssa.gov/ICON/main.jsp",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>How do I apply for SSDI in <City/>, <State/>?</strong><br/>` +
-          `Apply online at <a href="https://www.ssa.gov/benefits/disability/" target="_blank" rel="noopener noreferrer">ssa.gov/benefits/disability</a> or call <a href="tel:18007721213">1-800-772-1213</a> for assistance.</p>`,
+        html: '<p><strong>Where do I apply for SSDI?</strong><br/>Apply online and review eligibility: <a href="https://www.ssa.gov/benefits/disability/" target="_blank" rel="noopener noreferrer">SSDI overview</a>.</p>',
       },
       {
-        html:
-          `<p><strong>What records should I gather?</strong><br/>` +
-          `Medical records, provider contacts, work history, and recent earnings help speed up your claim.</p>`,
+        html: "<p><strong>How long does a decision take?</strong><br/>Several months is common; providing complete medical records can help avoid delays.</p>",
       },
       {
-        html:
-          `<p><strong>Can I work while my SSDI claim is pending?</strong><br/>` +
-          `Limited earnings may be allowed. Report changes promptly to SSA to avoid overpayments.</p>`,
+        html: '<p><strong>Can I talk to someone locally?</strong><br/>Yes—use the SSA office locator: <a href="https://secure.ssa.gov/ICON/main.jsp" target="_blank" rel="noopener noreferrer">Find an office</a>.</p>',
       },
     ],
   },
 
-  /* ------------------------------ SSI ------------------------------ */
   ssi: {
     link: "https://www.ssa.gov/ssi/",
-    contact: "https://www.ssa.gov/agency/contact/phone.html",
+    contact: "https://secure.ssa.gov/ICON/main.jsp",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>How do I apply for SSI in <City/>, <State/>?</strong><br/>` +
-          `Start at <a href="https://www.ssa.gov/ssi/" target="_blank" rel="noopener noreferrer">ssa.gov/ssi</a> or call <a href="tel:18007721213">1-800-772-1213</a> (TTY <a href="tel:18003250778">1-800-325-0778</a>) to schedule an interview.</p>`,
+        html: '<p><strong>Who qualifies for SSI?</strong><br/>People with limited income/resources who are older (65+), blind, or disabled. Learn more: <a href="https://www.ssa.gov/ssi/" target="_blank" rel="noopener noreferrer">SSI overview</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Will SSI in <State/> connect me to Medicaid?</strong><br/>` +
-          `SSI recipients in <State/> often qualify for Medicaid; confirm current rules with ACCESS Florida and AHCA.</p>`,
+        html: "<p><strong>Can I apply online?</strong><br/>You can start online and SSA may contact you to finish your application.</p>",
       },
       {
-        html:
-          `<p><strong>What if I don’t have a stable mailing address?</strong><br/>` +
-          `SSA can work with you on alternatives or a representative payee. Ask your local office via the <a href="https://www.ssa.gov/locator/" target="_blank" rel="noopener noreferrer">SSA Office Locator</a>.</p>`,
+        html: '<p><strong>Is there a local office for help?</strong><br/>Use SSA’s office locator for addresses/phones near <City/>, <State/>: <a href="https://secure.ssa.gov/ICON/main.jsp" target="_blank" rel="noopener noreferrer">Find an office</a>.</p>',
       },
     ],
   },
 
-  /* ------------------------------ VA (Benefits) ------------------------------ */
   va: {
-    link: "https://www.benefits.va.gov/stpetersburg/",
-    contact:
-      "https://www.va.gov/find-locations/?facilityType=benefits&address=Miami%2C%20FL",
+    link: "https://www.va.gov/find-locations/facility/vba_317q",
+    contact: "https://www.va.gov/directory/guide/state.asp?STATE=FL&dnum=3",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Where do Miami veterans file VA benefit claims?</strong><br/>` +
-          `Florida’s Regional Office is in St. Petersburg: <a href="https://www.benefits.va.gov/stpetersburg/" target="_blank" rel="noopener noreferrer">VA St. Petersburg</a>. Local VSOs in <City/> can help you prepare claims.</p>`,
+        html: '<p><strong>Where are VA benefits handled for <City/>, <State/>?</strong><br/>The St. Petersburg Regional Benefit Office serves Florida: <a href="https://www.va.gov/find-locations/facility/vba_317q" target="_blank" rel="noopener noreferrer">Regional Office</a>.</p>',
       },
       {
-        html:
-          `<p><strong>How do I find a nearby VA benefits office?</strong><br/>` +
-          `Use VA’s locator filtered to <City/>: <a href="https://www.va.gov/find-locations/?facilityType=benefits&address=Miami%2C%20FL" target="_blank" rel="noopener noreferrer">Find VA Benefits Offices</a>.</p>`,
+        html: '<p><strong>How do I find VA benefits contacts in Florida?</strong><br/>Use the state directory: <a href="https://www.va.gov/directory/guide/state.asp?STATE=FL&dnum=3" target="_blank" rel="noopener noreferrer">VA benefits directory (FL)</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Missed a C&amp;P exam?</strong><br/>` +
-          `Call the scheduler on your notice ASAP to reschedule. Keep records of every call and letter.</p>`,
+        html: "<p><strong>Can I get help with a claim?</strong><br/>Accredited VSO reps and the regional office can assist with applications and appeals.</p>",
       },
     ],
   },
 
-  /* ------------------------------ VA Health ------------------------------ */
   vaHealth: {
     link: "https://www.va.gov/miami-health-care/",
-    contact:
-      "https://www.va.gov/find-locations/?facilityType=health&address=Miami%2C%20FL",
+    contact: "https://www.va.gov/miami-health-care/locations/",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Where do I get VA health care in <City/>?</strong><br/>` +
-          `Start with the Miami VA Healthcare System: <a href="https://www.va.gov/miami-health-care/" target="_blank" rel="noopener noreferrer">Miami VA Health Care</a>.</p>`,
+        html: '<p><strong>Where do I get VA health care in <City/>, <State/>?</strong><br/>Start with the Miami VA Healthcare System: <a href="https://www.va.gov/miami-health-care/" target="_blank" rel="noopener noreferrer">Miami VA Health Care</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Is Community Care available?</strong><br/>` +
-          `Yes, if eligibility criteria are met (e.g., drive times, limited services). Ask your VA care team about referrals.</p>`,
+        html: '<p><strong>How do I find clinics and phone numbers?</strong><br/>Use the locations directory: <a href="https://www.va.gov/miami-health-care/locations/" target="_blank" rel="noopener noreferrer">VA locations & contacts</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Need transportation?</strong><br/>` +
-          `Ask about travel reimbursement or local ride options. Check the VA locator: <a href="https://www.va.gov/find-locations/?facilityType=health&address=Miami%2C%20FL" target="_blank" rel="noopener noreferrer">Find VA Health Facilities</a>.</p>`,
+        html: "<p><strong>Do I need to enroll?</strong><br/>Yes—check eligibility and enroll online or by phone before scheduling routine care.</p>",
       },
     ],
   },
 
-  /* ------------------------------ ERA (rental assistance) ------------------------------ */
   era: {
-    link: "https://www.miamidade.gov/global/housing/renters.page",
-    contact: "https://www.211miami.org/",
+    link: "https://www.miami.gov/Housing-Assistance-Recovery/Housing-Assistance",
+    contact: "https://www.miami.gov/Government/Quick-Contacts#section-15",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>Is emergency rental aid still open in <City/>?</strong><br/>` +
-          `Programs change. Start with <a href="https://www.miamidade.gov/global/housing/renters.page" target="_blank" rel="noopener noreferrer">Miami-Dade Renters</a> and call <a href="https://www.211miami.org/" target="_blank" rel="noopener noreferrer">2-1-1 Miami</a> for current options.</p>`,
+        html: '<p><strong>Is ERA still available in <City/>, <State/>?</strong><br/>See the City of Miami ERA page for current status and any alternative resources: <a href="https://www.miami.gov/Housing-Assistance-Recovery/Housing-Assistance" target="_blank" rel="noopener noreferrer">City ERA</a>.</p>',
       },
       {
-        html:
-          `<p><strong>Can assistance pay the landlord directly?</strong><br/>` +
-          `Most programs pay landlords; some offer direct-to-tenant aid when landlords won’t participate.</p>`,
+        html: '<p><strong>Where can I ask questions?</strong><br/>Use the City Housing contact page for phone and address details: <a href="https://www.miami.gov/Government/Quick-Contacts#section-15" target="_blank" rel="noopener noreferrer">Contact Housing</a>.</p>',
       },
       {
-        html:
-          `<p><strong>What documents should I collect?</strong><br/>` +
-          `Lease, ID, income proof, and any eviction or past-due notices—upload clear scans to speed up review.</p>`,
+        html: "<p><strong>What if ERA is closed?</strong><br/>Check county and state housing pages for rental assistance alternatives or 2-1-1 Miami for referrals.</p>",
       },
     ],
   },
 
-  /* ------------------------------ Credit & Reports ------------------------------ */
   creditScore: {
-    link: "https://www.annualcreditreport.com",
-    contact: "https://www.annualcreditreport.com/contactUs.action",
+    link: "https://www.usa.gov/credit-reports",
+    contact: "https://www.consumerfinance.gov/about-us/contact-us/",
     email: "",
     faqs: [
       {
-        html:
-          `<p><strong>How do I check my credit for free in <City/>?</strong><br/>` +
-          `Use <a href="https://www.annualcreditreport.com" target="_blank" rel="noopener noreferrer">AnnualCreditReport.com</a> for reports; many banks show scores in-app.</p>`,
+        html: '<p><strong>How do I get my free credit reports?</strong><br/>Learn how to request them at <a href="https://www.usa.gov/credit-reports" target="_blank" rel="noopener noreferrer">USA.gov — Credit reports</a>.</p>',
       },
       {
-        html:
-          `<p><strong>How often can I pull reports?</strong><br/>` +
-          `You can obtain free reports from the major bureaus; check the site for current frequency and offers.</p>`,
+        html: '<p><strong>Who can answer credit-report questions?</strong><br/>Contact the Consumer Financial Protection Bureau: <a href="https://www.consumerfinance.gov/about-us/contact-us/" target="_blank" rel="noopener noreferrer">CFPB Contact</a>.</p>',
       },
       {
-        html:
-          `<p><strong>See an error?</strong><br/>` +
-          `Dispute with the bureau online and keep copies of all submissions and letters.</p>`,
+        html: "<p><strong>Why check your credit?</strong><br/>Catching errors early can help when applying for housing, utilities, or loans in <City/>, <State/>.</p>",
       },
     ],
   },
 
-  /* ------------------------------ Rent Reporting ------------------------------ */
   rentReporting: {
     link: "https://www.boompay.app/boomreport?source=MYGOVBLOG&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=Boompay",
     contact:
@@ -381,18 +263,13 @@ export const localResources = {
       {
         html:
           `<p><strong>Do landlords in <City/> report rent by default?</strong><br/>` +
-          `Usually not. Consider a <a href="https://www.boompay.app/boomreport?source=MYGOVBLOG&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=Boompay" target="_blank" rel="noopener noreferrer">rent-reporting service</a> or ask your property manager.</p>`,
+          `Usually not. Consider a <a href="https://www.boompay.app/boomreport?source=MYGOVBLOG&utm_source=mygovblog&utm_medium=affiliate&utm_campaign=affiliate_cta&utm_content=Boompay" target="_blank" rel="noopener noreferrer">rent-reporting service</a> or ask your property manager if they participate.</p>`,
       },
       {
         html:
           `<p><strong>Can past rent be reported?</strong><br/>` +
-          `Some services allow up to <strong>24 months</strong> of back-reporting with documentation.</p>`,
-      },
-      {
-        html:
-          `<p><strong>Will this replace paying on time?</strong><br/>` +
-          `No—on-time payments are still essential. Reporting can help establish history, not fix late payments.</p>`,
+          `Some services allow up to <strong>24 months</strong> of back-reporting with documentation, which can speed up score building.</p>`,
       },
     ],
   },
-};
+} as const;

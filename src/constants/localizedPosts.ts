@@ -1,4 +1,5 @@
 // Slugs must match your Contentlayer slugs (file names under /posts)
+// THIS IS WRONG
 export const LOCALIZED_POSTS = new Set<string>([
   "how-to-apply-for-snap-benefits-food-stamps-without-the-confusion",
   "wic-benefits-how-to-apply",

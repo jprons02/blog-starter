@@ -35,8 +35,15 @@ export default function CrossLink({
   }
 
   return (
-    <Link href={target} {...rest}>
-      {children}
-    </Link>
+    <div className="mt-12">
+      <blockquote
+        className="border-l-4 pl-4 italic text-[var(--color-muted-text)] text-base"
+        style={{ borderColor: "var(--color-primary) !important" }}
+      >
+        <Link href={target} {...rest}>
+          {children}
+        </Link>
+      </blockquote>
+    </div>
   );
 }
