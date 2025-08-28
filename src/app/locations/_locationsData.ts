@@ -10,6 +10,36 @@ const LOCATIONS = [
     stateName: "Arizona",
     cityName: "Phoenix",
   },
+  {
+    state: "new-york",
+    city: "new-york",
+    stateName: "New York",
+    cityName: "New York",
+  },
+  {
+    state: "california",
+    city: "los-angeles",
+    stateName: "California",
+    cityName: "Los Angeles",
+  },
+  {
+    state: "illinois",
+    city: "chicago",
+    stateName: "Illinois",
+    cityName: "Chicago",
+  },
+  {
+    state: "texas",
+    city: "houston",
+    stateName: "Texas",
+    cityName: "Houston",
+  },
+  {
+    state: "georgia",
+    city: "atlanta",
+    stateName: "Georgia",
+    cityName: "Atlanta",
+  },
 ] satisfies LocationEntry[];
 
 // Export helpers for sitemap/static generation/metadata
