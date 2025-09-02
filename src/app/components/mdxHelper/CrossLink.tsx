@@ -1,19 +1,14 @@
-// /lib/utils/mdxCrosslinks.tsx  (note: .tsx because it renders JSX)
+// /lib/utils/mdxCrosslinks.tsx
 "use client";
 
 import Link from "next/link";
 import { PropsWithChildren } from "react";
 import { useLocation } from "@/app/locations/_locationsCtx";
 
-type CrossLinkProps = {
-  href: string; // e.g. "./slug" or "/posts/slug" or "/tags/phones"
-  className?: string;
-  prefetch?: boolean;
-};
+type CrossLinkProps = { href: string; className?: string; prefetch?: boolean };
 
 function normalizeToPostPath(href: string) {
-  if (href.startsWith("./")) return `/posts/${href.slice(2)}`;
-  return href;
+  return href.startsWith("./") ? `/posts/${href.slice(2)}` : href;
 }
 
 export default function CrossLink({
@@ -24,14 +19,15 @@ export default function CrossLink({
   const loc = useLocation();
   let target = normalizeToPostPath(href);
 
-  // If we have location context and the link is internal, rewrite to localized
-  if (loc && !/^https?:\/\//i.test(target)) {
-    if (target.startsWith("/posts/")) {
-      target = `/locations/${loc.state.toLowerCase()}/${loc.city.toLowerCase()}${target}`;
-    } else if (target.startsWith("/tags/")) {
-      target = `/locations/${loc.state.toLowerCase()}/${loc.city.toLowerCase()}${target}`;
+  const isExternal = /^https?:\/\//i.test(target);
+  const isAlreadyLocalized = /^\/locations\//.test(target);
+
+  if (loc && !isExternal && !isAlreadyLocalized) {
+    const state = encodeURIComponent(loc.stateSlug);
+    const city = encodeURIComponent(loc.citySlug);
+    if (target.startsWith("/posts/") || target.startsWith("/tags/")) {
+      target = `/locations/${state}/${city}${target}`;
     }
-    // else: leave other internal routes alone
   }
 
   return (

@@ -14,6 +14,7 @@ import JsonLd from "@/app/components/JsonLd";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
 import { formatDate } from "@/lib/utils/formatDate";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
+import MDXClient from "@/app/components/MDXClient"; // "use client" wrapper
 
 // server data (no "use client")
 import {
@@ -221,8 +222,13 @@ export default async function LocalizedPostPage({
       {/* ⬇️ Identical visual output to /posts/[slug], just with LocationProvider */}
       <LocationProvider
         value={{
-          city: loc.cityName,
-          state: loc.stateName,
+          // Display names
+          cityName: loc.cityName,
+          stateName: loc.stateName,
+          // URL slugs (use these for links in CrossLink, etc.)
+          citySlug: loc.city, // "los-angeles"
+          stateSlug: loc.state, // "california"
+          // Data bags
           resources,
           faqByTopic,
           localResources,
@@ -284,7 +290,9 @@ export default async function LocalizedPostPage({
 
           <FadeIn>
             <div className="markdown-body text-base leading-relaxed">
-              <Content components={mdxComponents} />
+              <MDXClient>
+                <Content components={mdxComponents} />
+              </MDXClient>
             </div>
           </FadeIn>
         </article>

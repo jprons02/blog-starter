@@ -28,9 +28,17 @@ export type LocalResource = {
 };
 
 export type LocationData = {
-  city: string;
-  state: string;
+  // Display-friendly (for UI text / token replacement)
+  cityName: string; // e.g., "Los Angeles"
+  stateName: string; // e.g., "California"
+
+  // URL-safe (for building paths)
+  citySlug: string; // e.g., "los-angeles"
+  stateSlug: string; // e.g., "california"
+
   county?: string;
+
+  // Data bags
   resources: Record<string, LegacyResource>;
   faqByTopic?: Record<string, readonly QAItem[]>;
   localResources?: Record<string, LocalResource>;
@@ -55,11 +63,11 @@ export function useLocation() {
 /* -------------- tokens -------------- */
 export function City({ fallback = "your city" }: { fallback?: string }) {
   const v = useLocation();
-  return <>{v?.city ?? fallback}</>;
+  return <>{v?.cityName ?? fallback}</>;
 }
 export function State({ fallback = "your state" }: { fallback?: string }) {
   const v = useLocation();
-  return <>{v?.state ?? fallback}</>;
+  return <>{v?.stateName ?? fallback}</>;
 }
 
 /* -------------- labels / fallbacks -------------- */
@@ -154,10 +162,12 @@ export function ResourceLink({
   className?: string;
 }) {
   const v = useLocation();
-  const city = v?.city ?? "";
-  const state = v?.state ?? "";
+
+  // Use display names for token replacement in copy/HTML
+  const cityName = v?.cityName ?? "";
+  const stateName = v?.stateName ?? "";
   const tokenize = (s: string) =>
-    s.replaceAll("<City/>", city).replaceAll("<State/>", state);
+    s.replaceAll("<City/>", cityName).replaceAll("<State/>", stateName);
 
   const lr: LocalResource | undefined = v?.localResources?.[name];
   const rs: LegacyResource | undefined = v?.resources?.[name];
@@ -206,7 +216,7 @@ export function ResourceLink({
     );
   }
 
-  // specific field
+  // Specific field -> renders as a link or plain contact method
   if (field && field !== "faqs") {
     const fromLr = getStringField(
       lr as Record<string, unknown> | undefined,
@@ -235,7 +245,7 @@ export function ResourceLink({
     );
   }
 
-  // primary CTA
+  // Primary CTA with fallbacks
   const primary =
     lr?.link ??
     rs?.applyUrl ??
@@ -259,6 +269,7 @@ export function ResourceLink({
   const targetProps = isExternal
     ? { target: "_blank", rel: "noopener noreferrer" }
     : {};
+
   return (
     <a href={href} {...targetProps} className={className}>
       {label}
