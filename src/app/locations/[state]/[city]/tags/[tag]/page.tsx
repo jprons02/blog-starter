@@ -4,10 +4,7 @@ import { notFound } from "next/navigation";
 import { allPosts, type Post } from "contentlayer/generated";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl } from "@/lib/utils/constants";
-import {
-  findLocation,
-  loadLocalResources,
-} from "@/app/locations/_locationsData";
+import { findLocation } from "@/app/locations/_locationsData";
 import { LocationProvider } from "@/app/locations/_locationsCtx";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 
@@ -34,9 +31,6 @@ export default async function LocalTagPage({
 
   // Filter posts for this tag (by slug)
   const posts = allPosts.filter((p) => postHasTag(p, tag));
-
-  // Optional: load city resources so <ResourceLink/> etc. would work if used
-  const localResources = await loadLocalResources(s, c);
 
   const canonical = `${siteUrl}/locations/${s}/${c}/tags/${encodeURIComponent(
     tag
@@ -111,11 +105,18 @@ export default async function LocalTagPage({
       {/* Provide city/state context for any location-aware components */}
       <LocationProvider
         value={{
-          city: loc.cityName,
-          state: loc.stateName,
-          resources: {},
-          faqByTopic: {},
-          localResources,
+          // Display names
+          cityName: loc.cityName,
+          stateName: loc.stateName,
+
+          // URL slugs
+          citySlug: loc.city, // e.g. "los-angeles"
+          stateSlug: loc.state, // e.g. "california"
+
+          // Data bags (resources is required; others optional)
+          resources: {}, // or your real bag if you have one here
+          faqByTopic: {}, // optional; include if your MDX reads it
+          // localResources: {},   // optional
         }}
       >
         {/* Reuse your existing client page, but we’ll give it “current” below */}

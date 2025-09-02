@@ -237,11 +237,18 @@ export default async function CityPage({
       {/* Provide location context so your tokens/components work */}
       <LocationProvider
         value={{
-          city: loc.cityName,
-          state: loc.stateName,
+          // ✅ display names
+          cityName: loc.cityName,
+          stateName: loc.stateName,
+
+          // ✅ URL slugs (from _locationsData)
+          citySlug: loc.city, // e.g. "los-angeles"
+          stateSlug: loc.state, // e.g. "california"
+
+          // ✅ data bags
           resources, // string-only bag for legacy bits
           faqByTopic, // for <ResourceLink field="faqs" />
-          localResources, // full typed bag
+          localResources, // typed per-city resources
         }}
       >
         {/* Client page: list UI + cards linking to localized posts */}
