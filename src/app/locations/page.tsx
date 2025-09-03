@@ -1,11 +1,31 @@
 // app/locations/page.tsx
 import Link from "next/link";
 import { getAllLocations } from "@/app/locations/_locationsData";
-import { siteTitle, siteDescription } from "@/lib/utils/constants";
+import { siteTitle, siteDescription, siteUrl } from "@/lib/utils/constants";
+
+const ogImage = `${siteUrl}/og/default.jpg`;
 
 export const metadata = {
   title: `Locations • ${siteTitle}`,
   description: siteDescription,
+  alternates: { canonical: "/locations" },
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    url: "/locations",
+    siteName: siteTitle,
+    title: `Locations • ${siteTitle}`,
+    description: siteDescription,
+    images: [
+      { url: ogImage, width: 1200, height: 630, alt: "Browse locations" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Locations • ${siteTitle}`,
+    description: siteDescription,
+    images: [ogImage],
+  },
 };
 
 export default function LocationsIndex() {

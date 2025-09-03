@@ -5,21 +5,29 @@ import { allPosts } from "contentlayer/generated";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl } from "@/lib/utils/constants";
 
+const ogImage = `${siteUrl}/og/default.jpg`;
+
 export const metadata: Metadata = {
   title: "Browse topics",
   description:
     "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
-  // metadataBase should already be set globally to siteUrl
   alternates: { canonical: "/tags" }, // ✅ self-canonical
-  robots: { index: true, follow: true }, // ✅ indexable
+  robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     url: "/tags",
     title: "Browse topics",
     description:
       "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
+    images: [{ url: ogImage, width: 1200, height: 630, alt: "Browse topics" }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Browse topics",
+    description:
+      "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
+    images: [ogImage],
+  },
 };
 
 export default function TagsPage() {
@@ -31,6 +39,12 @@ export default function TagsPage() {
           "@type": "CollectionPage",
           name: "Browse topics",
           url: `${siteUrl}/tags`,
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: ogImage,
+            width: 1200,
+            height: 630,
+          },
         }}
       />
       <JsonLd

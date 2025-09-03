@@ -2,17 +2,30 @@
 import { siteTitle, siteUrl } from "@/lib/utils/constants";
 import AboutClient from "./AboutClient";
 
+const ogImage = `${siteUrl}/og/default.jpg`;
+
 export const metadata = {
   title: `About Us | ${siteTitle}`,
   description: "Learn more about the mission behind My Gov Blog.",
   alternates: {
     canonical: `${siteUrl}/about`,
   },
+  robots: { index: true, follow: true },
   openGraph: {
     title: `About Us | ${siteTitle}`,
     description: "Learn more about the mission behind My Gov Blog.",
     type: "website",
     url: `${siteUrl}/about`,
+    siteName: siteTitle,
+    images: [
+      { url: ogImage, width: 1200, height: 630, alt: "About My Gov Blog" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `About Us | ${siteTitle}`,
+    description: "Learn more about the mission behind My Gov Blog.",
+    images: [ogImage],
   },
 };
 
