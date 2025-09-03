@@ -8,6 +8,7 @@ export const LOCALIZED_SLUGS = [
   "unemployment-benefits-and-job-search-tips",
   "mental-health-tips-for-unemployed-job-seekers",
   "how-to-get-help-with-utility-bills-liheap-and-other-resources",
+  "registered-apprenticeships-earn-while-you-learn",
 ] as const;
 
 export type LocalizedSlug = (typeof LOCALIZED_SLUGS)[number];
