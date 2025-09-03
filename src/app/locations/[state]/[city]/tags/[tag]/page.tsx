@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { allPosts, type Post } from "contentlayer/generated";
 import JsonLd from "@/app/components/JsonLd";
-import { siteUrl } from "@/lib/utils/constants";
+import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import { findLocation } from "@/app/locations/_locationsData";
 import { LocationProvider } from "@/app/locations/_locationsCtx";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
@@ -48,6 +48,8 @@ export default async function LocalTagPage({
     };
   });
 
+  const ogDefault = `${siteUrl}/og/default.jpg`;
+
   return (
     <>
       <JsonLd
@@ -91,6 +93,12 @@ export default async function LocalTagPage({
           url: canonical,
           name: `Posts tagged “${tagHuman}” in ${loc.cityName}, ${loc.stateName}`,
           inLanguage: "en-US",
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: ogDefault,
+            width: 1200,
+            height: 630,
+          },
         }}
       />
       <JsonLd
@@ -148,21 +156,34 @@ export async function generateMetadata({
 
   const tagHuman = decodeURIComponent(tag).replace(/-/g, " ");
   const pathUrl = `/locations/${s}/${c}/tags/${encodeURIComponent(tag)}`;
+  const canonicalAbs = `${siteUrl}${pathUrl}`;
+  const ogImage = `${siteUrl}/og/default.jpg`;
 
   return {
     title: `“${tagHuman}” in ${loc.cityName}, ${loc.stateName} — local guides`,
     description: `Articles about ${tagHuman} for ${loc.cityName}, ${loc.stateName}.`,
-    alternates: { canonical: pathUrl },
+    alternates: { canonical: canonicalAbs },
     openGraph: {
       type: "website",
-      url: pathUrl,
+      url: canonicalAbs,
+      siteName: siteTitle,
       title: `“${tagHuman}” in ${loc.cityName}, ${loc.stateName}`,
       description: `Local articles about ${tagHuman}.`,
+      locale: "en_US",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `Posts tagged “${tagHuman}” in ${loc.cityName}, ${loc.stateName}`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `“${tagHuman}” in ${loc.cityName}, ${loc.stateName}`,
       description: `Local articles about ${tagHuman}.`,
+      images: [ogImage],
     },
     robots: { index: true, follow: true },
   };

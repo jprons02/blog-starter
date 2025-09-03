@@ -4,8 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
-import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
-import { getOgImageForTag } from "@/lib/utils/og";
+import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import JsonLd from "@/app/components/JsonLd";
 
 const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
@@ -27,6 +26,7 @@ export async function generateMetadata({
   const { tag } = await params; // kebab-case in URL
   const human = unslug(tag);
   const path = `/tags/${encodeURIComponent(tag)}`;
+  const canonicalAbs = `${siteUrl}${path}`;
 
   // newest related post -> freshness proxy
   const newest = allPosts
@@ -34,17 +34,19 @@ export async function generateMetadata({
     .map((p) => new Date(p.date))
     .sort((a, b) => b.getTime() - a.getTime())[0];
 
-  const ogImage = getOgImageForTag?.(human) ?? siteImage;
+  const ogImage = `${siteUrl}/og/default.jpg`;
 
   return {
     title: `Posts tagged “${human}” — ${siteTitle}`,
     description: `Explore articles about ${human}. Guides, how-tos, and resources.`,
-    alternates: { canonical: path },
+    alternates: { canonical: canonicalAbs },
     openGraph: {
       type: "website",
-      url: path,
+      url: canonicalAbs,
+      siteName: siteTitle,
       title: `Posts tagged “${human}” — ${siteTitle}`,
       description: `Articles on ${human}.`,
+      locale: "en_US",
       images: [{ url: ogImage, width: 1200, height: 630 }],
     },
     twitter: {
@@ -120,6 +122,12 @@ export default async function TagPage(props: {
           "@id": `${siteUrl}/tags/${encodeURIComponent(tag)}#collection`,
           name: `${human} articles`,
           url: `${siteUrl}/tags/${encodeURIComponent(tag)}`,
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            url: `${siteUrl}/og/default.jpg`,
+            width: 1200,
+            height: 630,
+          },
         }}
       />
       <JsonLd

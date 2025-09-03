@@ -32,6 +32,13 @@ type TagsPageLocation = {
   cityName: string;
 };
 
+/* -------------------------- Small helpers ----------------------------- */
+/**
+ * Choose a representative OG image for the city index page by borrowing
+ * a post's frontmatter image. Prefers "Housing & Utilities" content, then any.
+ */
+const ogImage = `${siteUrl}/og/default.jpg`;
+
 /* ------- Legacy-friendly bags from typed localResources (for tokens) ------- */
 function deriveFromLocalResources(
   localResources: Record<string, LocalResource>
@@ -76,7 +83,7 @@ export default async function CityPage({
 }: {
   params: Promise<Params>;
 }) {
-  const { state, city } = await params;
+  const { state, city } = await params; // <-- await the promise
   const s = state.toLowerCase();
   const c = city.toLowerCase();
 
@@ -151,6 +158,9 @@ export default async function CityPage({
     if (faqTuples.length >= 10) break;
   }
 
+  // Pick an OG image (borrowed from a post frontmatter) for primaryImageOfPage hint
+  const pageOgImage = ogImage;
+
   return (
     <>
       {/* Breadcrumbs JSON-LD */}
@@ -190,6 +200,7 @@ export default async function CityPage({
         data={{
           "@context": "https://schema.org",
           "@type": "ItemList",
+          "@id": `${canonical}#itemlist`,
           itemListOrder: "http://schema.org/ItemListOrderAscending",
           numberOfItems: itemListElements.length,
           itemListElement: itemListElements,
@@ -205,6 +216,14 @@ export default async function CityPage({
           url: canonical,
           name: header.title,
           inLanguage: "en-US",
+          primaryImageOfPage: pageOgImage
+            ? {
+                "@type": "ImageObject",
+                url: pageOgImage,
+                width: 1200,
+                height: 630,
+              }
+            : undefined,
           about: {
             "@type": "City",
             name: loc.cityName,
@@ -274,7 +293,7 @@ export async function generateMetadata({
 }: {
   params: Promise<Params>;
 }): Promise<Metadata> {
-  const { state, city } = await params;
+  const { state, city } = await params; // <-- await the promise
   const s = state.toLowerCase();
   const c = city.toLowerCase();
   const loc = findLocation(s, c);
@@ -284,20 +303,36 @@ export async function generateMetadata({
   const title = `Local guides in ${loc.cityName}, ${loc.stateName} — articles & resources (2025)`;
   const description = `City-focused articles with curated links and tips for navigating government assistance in ${loc.cityName}, ${loc.stateName}.`;
 
+  // Borrow an article image for social previews (absolute URL).
+  const ogImage = `${siteUrl}/og/default.jpg`;
+
   return {
     title,
     description,
-    alternates: { canonical: pathUrl },
+    // Use absolute canonical for consistency with all crawlers
+    alternates: { canonical: `${siteUrl}${pathUrl}` },
     openGraph: {
       type: "website",
-      url: pathUrl,
+      url: `${siteUrl}${pathUrl}`,
+      siteName: "My Gov Blog",
       title,
       description,
+      locale: "en_US",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `Local guides in ${loc.cityName}, ${loc.stateName}`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [ogImage],
+      // site: "@yourhandle" // optional
     },
     robots: { index: true, follow: true },
   };

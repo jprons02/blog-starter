@@ -32,6 +32,13 @@ function hasDateModified(x: unknown): x is { dateModified: string } {
   );
 }
 
+const abs = (u?: string) =>
+  !u
+    ? undefined
+    : u.startsWith("http")
+    ? u
+    : `${siteUrl}${u.startsWith("/") ? u : `/${u}`}`;
+
 /* ---------------- page ---------------- */
 export default async function PostPage(props: {
   params: Promise<{ slug: string }>;
@@ -63,12 +70,11 @@ export default async function PostPage(props: {
   const modifiedISO = toISO(
     hasDateModified(post) ? post.dateModified : post.date
   );
-  const imageObj = post.image
+  const imageAbs = abs(post.image);
+  const imageObj = imageAbs
     ? {
         "@type": "ImageObject" as const,
-        url: `${siteUrl}${
-          post.image.startsWith("/") ? post.image : `/${post.image}`
-        }`,
+        url: imageAbs,
         width: 1200,
         height: 630,
       }
@@ -208,7 +214,6 @@ export default async function PostPage(props: {
 
 /* ---------------- metadata ---------------- */
 import type { Metadata } from "next";
-import { getPageMeta } from "@/lib/utils/seo";
 
 export async function generateMetadata({
   params,
@@ -220,11 +225,43 @@ export async function generateMetadata({
   const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
   if (!post) return {};
 
-  return getPageMeta({
-    title: post.seoTitle ?? post.title,
-    description: post.summary || "Helpful guides on US benefit programs.",
-    slug: post._raw.flattenedPath.replace(/^posts\//, ""),
-    image: post.image,
-    type: "article",
-  });
+  const title = post.seoTitle ?? post.title;
+  const description = post.summary || "Helpful guides on US benefit programs.";
+  const pathUrl = `/posts/${slug}`;
+  const canonicalAbs = `${siteUrl}${pathUrl}`;
+
+  const imageAbs = abs(post.image);
+  const toISO = (d?: string) =>
+    d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
+  const publishedTime = toISO(post.date as string);
+  const modifiedTime = toISO(
+    hasDateModified(post) ? post.dateModified : post.date
+  );
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalAbs },
+    openGraph: {
+      type: "article",
+      url: canonicalAbs,
+      siteName: siteTitle,
+      title,
+      description,
+      locale: "en_US",
+      publishedTime,
+      modifiedTime,
+      images: imageAbs
+        ? [{ url: imageAbs, width: 1200, height: 630, alt: title }]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: imageAbs ? [imageAbs] : undefined,
+      // other: { "twitter:image:alt": title }, // add if you want explicit alt
+    },
+    robots: { index: true, follow: true },
+  };
 }

@@ -36,7 +36,8 @@ import {
 } from "@/app/locations/_locationsCtx";
 
 /* ---------------- helpers ---------------- */
-function hasDateModified(x: unknown): x is { dateModified: string } {
+type WithDateModified = { dateModified: string };
+function hasDateModified(x: unknown): x is WithDateModified {
   return (
     !!x &&
     typeof x === "object" &&
@@ -122,12 +123,15 @@ export default async function LocalizedPostPage({
   const modifiedISO = toISO(
     hasDateModified(post) ? post.dateModified : post.date
   );
-  const imageObj = post.image
+
+  const imageAbs = post.image
+    ? `${siteUrl}${post.image.startsWith("/") ? post.image : `/${post.image}`}`
+    : undefined;
+
+  const imageObj = imageAbs
     ? {
         "@type": "ImageObject" as const,
-        url: `${siteUrl}${
-          post.image.startsWith("/") ? post.image : `/${post.image}`
-        }`,
+        url: imageAbs,
         width: 1200,
         height: 630,
       }
@@ -334,18 +338,42 @@ export async function generateMetadata({
     post.summary ??
     `Guidance for ${loc.cityName}, ${loc.stateName} on benefits programs.`;
   const pathUrl = `/locations/${s}/${c}/posts/${slug}`;
+  const canonicalAbs = `${siteUrl}${pathUrl}`;
+
+  const toISO = (d?: string) =>
+    d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
+  const publishedTime = toISO(post.date as string);
+  const modifiedTime = toISO(
+    hasDateModified(post) ? post.dateModified : post.date
+  );
+
+  const imageAbs = post.image
+    ? `${siteUrl}${post.image.startsWith("/") ? post.image : `/${post.image}`}`
+    : undefined;
 
   return {
     title,
     description,
-    alternates: { canonical: pathUrl },
+    alternates: { canonical: canonicalAbs },
     openGraph: {
       type: "article",
-      url: pathUrl,
+      url: canonicalAbs,
+      siteName: siteTitle,
       title,
       description,
+      locale: "en_US",
+      publishedTime,
+      modifiedTime,
+      images: imageAbs
+        ? [{ url: imageAbs, width: 1200, height: 630, alt: post.title }]
+        : undefined,
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: imageAbs ? [imageAbs] : undefined,
+    },
     robots: { index: true, follow: true },
   };
 }
