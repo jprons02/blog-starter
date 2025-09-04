@@ -6,7 +6,7 @@ import { siteTitle, siteDescription, siteUrl } from "@/lib/utils/constants";
 const ogImage = `${siteUrl}/og/default.jpg`;
 
 export const metadata = {
-  title: `Locations • ${siteTitle}`,
+  title: `Locations`,
   description: siteDescription,
   alternates: { canonical: "/locations" },
   robots: { index: true, follow: true },
@@ -14,7 +14,7 @@ export const metadata = {
     type: "website",
     url: "/locations",
     siteName: siteTitle,
-    title: `Locations • ${siteTitle}`,
+    title: `Locations`,
     description: siteDescription,
     images: [
       { url: ogImage, width: 1200, height: 630, alt: "Browse locations" },
@@ -22,7 +22,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Locations • ${siteTitle}`,
+    title: `Locations`,
     description: siteDescription,
     images: [ogImage],
   },
