@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import TagsPageClient from "./TagsPageClient";
 import { allPosts } from "contentlayer/generated";
 import JsonLd from "@/app/components/JsonLd";
-import { siteUrl } from "@/lib/utils/constants";
+import { siteUrl, siteImage } from "@/lib/utils/constants";
 
-const ogImage = `${siteUrl}/og/default.jpg`;
+const ogImage = `${siteUrl}${siteImage}`;
 
 export const metadata: Metadata = {
   title: "Browse topics",

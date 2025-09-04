@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { allPosts, type Post } from "contentlayer/generated";
 import JsonLd from "@/app/components/JsonLd";
-import { siteUrl, siteTitle } from "@/lib/utils/constants";
+import { siteUrl, siteTitle, siteImage } from "@/lib/utils/constants";
 import { findLocation } from "@/app/locations/_locationsData";
 import { LocationProvider } from "@/app/locations/_locationsCtx";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
@@ -48,7 +48,7 @@ export default async function LocalTagPage({
     };
   });
 
-  const ogDefault = `${siteUrl}/og/default.jpg`;
+  const ogDefault = `${siteUrl}${siteImage}`;
 
   return (
     <>
@@ -157,7 +157,7 @@ export async function generateMetadata({
   const tagHuman = decodeURIComponent(tag).replace(/-/g, " ");
   const pathUrl = `/locations/${s}/${c}/tags/${encodeURIComponent(tag)}`;
   const canonicalAbs = `${siteUrl}${pathUrl}`;
-  const ogImage = `${siteUrl}/og/default.jpg`;
+  const ogImage = `${siteUrl}${siteImage}`;
 
   return {
     title: `“${tagHuman}” in ${loc.cityName}, ${loc.stateName} — local guides`,

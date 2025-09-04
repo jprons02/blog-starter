@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import JsonLd from "@/app/components/JsonLd";
 import { allPosts } from "contentlayer/generated";
-import { siteUrl } from "@/lib/utils/constants";
+import { siteUrl, siteImage } from "@/lib/utils/constants";
 
 // Server-only data helpers
 import {
@@ -37,7 +37,7 @@ type TagsPageLocation = {
  * Choose a representative OG image for the city index page by borrowing
  * a post's frontmatter image. Prefers "Housing & Utilities" content, then any.
  */
-const ogImage = `${siteUrl}/og/default.jpg`;
+const ogImage = `${siteUrl}${siteImage}`;
 
 /* ------- Legacy-friendly bags from typed localResources (for tokens) ------- */
 function deriveFromLocalResources(
@@ -158,9 +158,6 @@ export default async function CityPage({
     if (faqTuples.length >= 10) break;
   }
 
-  // Pick an OG image (borrowed from a post frontmatter) for primaryImageOfPage hint
-  const pageOgImage = ogImage;
-
   return (
     <>
       {/* Breadcrumbs JSON-LD */}
@@ -216,10 +213,10 @@ export default async function CityPage({
           url: canonical,
           name: header.title,
           inLanguage: "en-US",
-          primaryImageOfPage: pageOgImage
+          primaryImageOfPage: ogImage
             ? {
                 "@type": "ImageObject",
-                url: pageOgImage,
+                url: ogImage,
                 width: 1200,
                 height: 630,
               }
@@ -304,7 +301,7 @@ export async function generateMetadata({
   const description = `City-focused articles with curated links and tips for navigating government assistance in ${loc.cityName}, ${loc.stateName}.`;
 
   // Borrow an article image for social previews (absolute URL).
-  const ogImage = `${siteUrl}/og/default.jpg`;
+  const ogImage = `${siteUrl}${siteImage}`;
 
   return {
     title,

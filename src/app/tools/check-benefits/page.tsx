@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 // NOTE: adjust this import if your file lives elsewhere:
 import BenefitForm from "@/app/components/forms/BenefitForm";
-import { siteTitle, siteUrl } from "@/lib/utils/constants";
+import { siteTitle, siteUrl, siteImage } from "@/lib/utils/constants";
 
 export const metadata: Metadata = {
   title: "Benefits Eligibility Checker",
@@ -15,14 +15,14 @@ export const metadata: Metadata = {
     title: "Benefits Eligibility Checker",
     description:
       "Quickly check potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more.",
-    images: [{ url: "/og/default.jpg" }],
+    images: [{ url: `${siteImage}` }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Benefits Eligibility Checker",
     description:
       "See potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more in minutes.",
-    images: ["/og/default.jpg"],
+    images: [`${siteImage}`],
   },
 };
 

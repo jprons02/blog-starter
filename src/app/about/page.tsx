@@ -1,8 +1,8 @@
 // app/about/page.tsx — stays server component (no 'use client')
-import { siteTitle, siteUrl } from "@/lib/utils/constants";
+import { siteTitle, siteUrl, siteImage } from "@/lib/utils/constants";
 import AboutClient from "./AboutClient";
 
-const ogImage = `${siteUrl}/og/default.jpg`;
+const ogImage = `${siteUrl}${siteImage}`;
 
 export const metadata = {
   title: `About Us`,

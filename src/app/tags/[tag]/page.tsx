@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
-import { siteUrl, siteTitle } from "@/lib/utils/constants";
+import { siteUrl, siteTitle, siteImage } from "@/lib/utils/constants";
 import JsonLd from "@/app/components/JsonLd";
 
 const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
@@ -34,7 +34,7 @@ export async function generateMetadata({
     .map((p) => new Date(p.date))
     .sort((a, b) => b.getTime() - a.getTime())[0];
 
-  const ogImage = `${siteUrl}/og/default.jpg`;
+  const ogImage = `${siteUrl}${siteImage}`;
 
   return {
     title: `Posts tagged “${human}” — ${siteTitle}`,
@@ -124,7 +124,7 @@ export default async function TagPage(props: {
           url: `${siteUrl}/tags/${encodeURIComponent(tag)}`,
           primaryImageOfPage: {
             "@type": "ImageObject",
-            url: `${siteUrl}/og/default.jpg`,
+            url: `${siteUrl}${siteImage}`,
             width: 1200,
             height: 630,
           },

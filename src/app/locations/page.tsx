@@ -1,9 +1,14 @@
 // app/locations/page.tsx
 import Link from "next/link";
 import { getAllLocations } from "@/app/locations/_locationsData";
-import { siteTitle, siteDescription, siteUrl } from "@/lib/utils/constants";
+import {
+  siteTitle,
+  siteDescription,
+  siteUrl,
+  siteImage,
+} from "@/lib/utils/constants";
 
-const ogImage = `${siteUrl}/og/default.jpg`;
+const ogImage = `${siteUrl}${siteImage}`;
 
 export const metadata = {
   title: `Locations`,
