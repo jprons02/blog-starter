@@ -37,21 +37,21 @@ export async function generateMetadata({
   const ogImage = `${siteUrl}${siteImage}`;
 
   return {
-    title: `Posts tagged “${human}” — ${siteTitle}`,
+    title: `Posts tagged “${human}”`,
     description: `Explore articles about ${human}. Guides, how-tos, and resources.`,
     alternates: { canonical: canonicalAbs },
     openGraph: {
       type: "website",
       url: canonicalAbs,
       siteName: siteTitle,
-      title: `Posts tagged “${human}” — ${siteTitle}`,
+      title: `Posts tagged “${human}”`,
       description: `Articles on ${human}.`,
       locale: "en_US",
       images: [{ url: ogImage, width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `Posts tagged “${human}” — ${siteTitle}`,
+      title: `Posts tagged “${human}”`,
       description: `Articles on ${human}.`,
       images: [ogImage],
     },
