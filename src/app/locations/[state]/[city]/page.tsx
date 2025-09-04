@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import JsonLd from "@/app/components/JsonLd";
 import { allPosts } from "contentlayer/generated";
-import { siteUrl, siteImage } from "@/lib/utils/constants";
+import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
 
 // Server-only data helpers
 import {
@@ -311,7 +311,7 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       url: `${siteUrl}${pathUrl}`,
-      siteName: "My Gov Blog",
+      siteName: `${siteTitle}`,
       title,
       description,
       locale: "en_US",

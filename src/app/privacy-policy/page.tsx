@@ -2,7 +2,7 @@ import { siteTitle, siteUrl } from "@/lib/utils/constants";
 import { ModalTrigger } from "@/app/components/modals/ModalTrigger";
 
 export const metadata = {
-  title: "Privacy Policy | My Gov Blog",
+  title: "Privacy Policy",
   description:
     "Read our Privacy Policy to understand how we collect, use, and protect your personal information on My Gov Blog.",
   robots: "noindex, nofollow",
