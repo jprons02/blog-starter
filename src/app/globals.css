@@ -420,3 +420,38 @@ input[type="number"] {
   border-radius: 0.25rem;
   font-family: var(--font-mono);
 }
+
+/* =====================
+   /locations
+   ===================== */
+
+.locations-page ul,
+.locations-page ol {
+  list-style: none;
+  padding-left: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 767px) {
+  .locations-page ul,
+  .locations-page ol {
+    padding-left: 0.5rem;
+  }
+}
+
+.locations-page li {
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding-left: 1rem; /* space for bullet */
+  line-height: 1.7;
+  color: var(--color-muted-text);
+}
+
+.locations-page li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  font-size: 0.75em; /* smaller bullet */
+  color: var(--color-primary);
+}
