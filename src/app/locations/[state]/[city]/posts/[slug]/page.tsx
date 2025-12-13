@@ -15,6 +15,7 @@ import CrossLink from "@/app/components/mdxHelper/CrossLink";
 import { formatDate } from "@/lib/utils/formatDate";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import MDXClient from "@/app/components/MDXClient"; // "use client" wrapper
+import AdSlot from "@/app/components/ads/AdSlot";
 
 // server data (no "use client")
 import {
@@ -113,6 +114,7 @@ export default async function LocalizedPostPage({
     IfLocation,
     IfNoLocation,
     ResourceLink,
+    AdSlot,
   };
 
   // 4) Canonical + JSON-LD (localized)

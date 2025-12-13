@@ -12,6 +12,7 @@ import PostTags from "./PostTags";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
+import AdSlot from "@/app/components/ads/AdSlot";
 
 // ✅ bring back the MDX tokens so MDX can resolve them
 import {
@@ -61,6 +62,7 @@ export default async function PostPage(props: {
     IfLocation,
     IfNoLocation,
     ResourceLink,
+    AdSlot,
   };
 
   const canonical = `${siteUrl}/posts/${slug}`;
