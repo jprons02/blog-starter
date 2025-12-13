@@ -95,6 +95,12 @@ export default function RootLayout({
           src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
           strategy="afterInteractive"
         />
+        {/* Google Adsense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6322184553331913"
+          crossOrigin="anonymous"
+        ></script>
       </head>
 
       <body>
