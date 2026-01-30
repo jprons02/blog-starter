@@ -37,9 +37,37 @@ export const metadata = {
   },
   description:
     "Step-by-step guides for SNAP, WIC, LIHEAP, Medicaid, and more — no jargon.",
-  openGraph: { type: "website", url: siteUrl, siteName: siteTitle },
+  keywords: [
+    "SNAP benefits",
+    "food stamps",
+    "WIC program",
+    "LIHEAP",
+    "Medicaid",
+    "government assistance",
+    "housing assistance",
+    "Section 8",
+    "benefit eligibility",
+    "low income help",
+    "SSI",
+    "SSDI",
+    "disability benefits",
+  ],
+  authors: [{ name: siteTitle, url: siteUrl }],
+  creator: siteTitle,
+  publisher: siteTitle,
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: siteTitle,
+    locale: "en_US",
+  },
   twitter: { card: "summary_large_image" },
   robots: { index: true, follow: true },
+  alternates: {
+    types: {
+      "application/rss+xml": `${siteUrl}/rss.xml`,
+    },
+  },
 } satisfies import("next").Metadata;
 
 export const viewport = {

@@ -37,8 +37,8 @@ const abs = (u?: string) =>
   !u
     ? undefined
     : u.startsWith("http")
-    ? u
-    : `${siteUrl}${u.startsWith("/") ? u : `/${u}`}`;
+      ? u
+      : `${siteUrl}${u.startsWith("/") ? u : `/${u}`}`;
 
 /* ---------------- page ---------------- */
 export default async function PostPage(props: {
@@ -70,7 +70,7 @@ export default async function PostPage(props: {
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
   const modifiedISO = toISO(
-    hasDateModified(post) ? post.dateModified : post.date
+    hasDateModified(post) ? post.dateModified : post.date,
   );
   const imageAbs = abs(post.image);
   const imageObj = imageAbs
@@ -237,12 +237,13 @@ export async function generateMetadata({
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedTime = toISO(post.date as string);
   const modifiedTime = toISO(
-    hasDateModified(post) ? post.dateModified : post.date
+    hasDateModified(post) ? post.dateModified : post.date,
   );
 
   return {
     title,
     description,
+    authors: post.author ? [{ name: post.author }] : [{ name: siteTitle }],
     alternates: { canonical: canonicalAbs },
     openGraph: {
       type: "article",
@@ -253,6 +254,8 @@ export async function generateMetadata({
       locale: "en_US",
       publishedTime,
       modifiedTime,
+      authors: post.author ? [post.author] : [siteTitle],
+      tags: post.tags ?? [],
       images: imageAbs
         ? [{ url: imageAbs, width: 1200, height: 630, alt: title }]
         : undefined,
@@ -262,7 +265,6 @@ export async function generateMetadata({
       title,
       description,
       images: imageAbs ? [imageAbs] : undefined,
-      // other: { "twitter:image:alt": title }, // add if you want explicit alt
     },
     robots: { index: true, follow: true },
   };

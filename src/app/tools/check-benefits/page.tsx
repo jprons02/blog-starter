@@ -4,25 +4,36 @@ import type { Metadata } from "next";
 import BenefitForm from "@/app/components/forms/BenefitForm";
 import { siteTitle, siteUrl, siteImage } from "@/lib/utils/constants";
 
+const ogImage = `${siteUrl}${siteImage}`;
+
 export const metadata: Metadata = {
   title: "Benefits Eligibility Checker",
   description:
     "Use our free benefits eligibility checker to quickly see potential programs you may qualify for—like SNAP, WIC, LIHEAP, and Medicaid. Fast, private, and mobile‑friendly.",
-  alternates: { canonical: "/tools/check-benefits" },
+  alternates: { canonical: `${siteUrl}/tools/check-benefits` },
+  robots: { index: true, follow: true },
   openGraph: {
     type: "website",
-    url: "/tools/check-benefits",
+    url: `${siteUrl}/tools/check-benefits`,
+    siteName: siteTitle,
     title: "Benefits Eligibility Checker",
     description:
       "Quickly check potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more.",
-    images: [{ url: `${siteImage}` }],
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Benefits Eligibility Checker",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Benefits Eligibility Checker",
     description:
       "See potential eligibility for SNAP, WIC, LIHEAP, Medicaid, and more in minutes.",
-    images: [`${siteImage}`],
+    images: [ogImage],
   },
 };
 

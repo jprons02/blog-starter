@@ -8,22 +8,31 @@ import { siteUrl, siteImage } from "@/lib/utils/constants";
 const ogImage = `${siteUrl}${siteImage}`;
 
 export const metadata: Metadata = {
-  title: "Browse topics",
+  title: "Browse Topics — Government Assistance Articles by Category",
   description:
     "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
-  alternates: { canonical: "/tags" }, // ✅ self-canonical
+  alternates: { canonical: `${siteUrl}/tags` },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
-    url: "/tags",
-    title: "Browse topics",
+    url: `${siteUrl}/tags`,
+    siteName: "My Gov Blog",
+    locale: "en_US",
+    title: "Browse Topics — Government Assistance Articles by Category",
     description:
       "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
-    images: [{ url: ogImage, width: 1200, height: 630, alt: "Browse topics" }],
+    images: [
+      {
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Browse topics on My Gov Blog",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Browse topics",
+    title: "Browse Topics — Government Assistance Articles by Category",
     description:
       "Explore articles by topic to find help with housing, utilities, food, financial aid, and more.",
     images: [ogImage],
