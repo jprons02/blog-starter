@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/app/components/JsonLd";
 import { allPosts } from "contentlayer/generated";
 import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 
 // Server-only data helpers
 import {
@@ -41,7 +42,7 @@ const ogImage = `${siteUrl}${siteImage}`;
 
 /* ------- Legacy-friendly bags from typed localResources (for tokens) ------- */
 function deriveFromLocalResources(
-  localResources: Record<string, LocalResource>
+  localResources: Record<string, LocalResource>,
 ) {
   const resources: Record<string, Record<string, string>> = {};
   const faqByTopic: Record<string, readonly QAItem[]> = {};
@@ -131,12 +132,12 @@ export default async function CityPage({
   const DEFAULT_CATEGORY = "Housing & Utilities"; // matches your client’s initial tab
   const initialPosts = allPosts.filter((p) =>
     p.category?.some(
-      (cat) => cat.toLowerCase() === DEFAULT_CATEGORY.toLowerCase()
-    )
+      (cat) => cat.toLowerCase() === DEFAULT_CATEGORY.toLowerCase(),
+    ),
   );
 
   const itemListElements = initialPosts.slice(0, 20).map((post, i) => {
-    const slug = post._raw.flattenedPath.replace(/^posts\//, "");
+    const slug = getPostSlug(post._raw.flattenedPath);
     return {
       "@type": "ListItem" as const,
       position: i + 1,

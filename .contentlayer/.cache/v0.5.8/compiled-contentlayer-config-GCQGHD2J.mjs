@@ -2,8 +2,7 @@
 import { defineDocumentType, makeSource } from "contentlayer2/source-files";
 import rehypePrism from "rehype-prism-plus";
 import rehypeExternalLinks from "rehype-external-links";
-
-export const Post = defineDocumentType(() => ({
+var Post = defineDocumentType(() => ({
   name: "Post",
   // ✅ Only index real posts, not the location template
   filePathPattern: `posts/**/*.mdx`,
@@ -19,33 +18,30 @@ export const Post = defineDocumentType(() => ({
     author: { type: "string", required: false },
     featured: { type: "boolean", required: false },
     imageCreditName: { type: "string", required: false },
-    imageCreditUrl: { type: "string", required: false },
+    imageCreditUrl: { type: "string", required: false }
   },
   computedFields: {
     url: {
       type: "string",
       resolve: (post) => {
-        // Remove posts/ prefix and any MM-YYYY/ folder to get just the slug
         const path = post._raw.flattenedPath.replace(/^posts\//, "");
-        const slug = path.replace(/^\d{2}-\d{4}\//, ""); // Remove MM-YYYY/ if present
+        const slug = path.replace(/^\d{2}-\d{4}\//, "");
         return `/posts/${slug}`;
-      },
-    },
-  },
+      }
+    }
+  }
 }));
-
-export const LocationDoc = defineDocumentType(() => ({
+var LocationDoc = defineDocumentType(() => ({
   name: "LocationDoc",
   // ✅ Exactly the one MDX template we render for every city
   filePathPattern: "locations/template.mdx",
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
-    summary: { type: "string", required: false },
-  },
+    summary: { type: "string", required: false }
+  }
 }));
-
-export default makeSource({
+var contentlayer_config_default = makeSource({
   contentDirPath: "content",
   documentTypes: [Post, LocationDoc],
   mdx: {
@@ -53,8 +49,14 @@ export default makeSource({
       rehypePrism,
       [
         rehypeExternalLinks,
-        { target: "_blank", rel: ["noopener", "noreferrer"] },
-      ],
-    ],
-  },
+        { target: "_blank", rel: ["noopener", "noreferrer"] }
+      ]
+    ]
+  }
 });
+export {
+  LocationDoc,
+  Post,
+  contentlayer_config_default as default
+};
+//# sourceMappingURL=compiled-contentlayer-config-GCQGHD2J.mjs.map
