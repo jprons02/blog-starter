@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
 import { sortPosts } from "@/lib/posts";
 import { siteUrl, siteTitle, siteImage } from "@/lib/utils/constants";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 import JsonLd from "@/app/components/JsonLd";
 
 const slugify = (s: string) => s.toLowerCase().replace(/\s+/g, "-");
@@ -66,7 +67,7 @@ export default async function TagPage(props: {
   const human = unslug(tag);
 
   const taggedPosts = allPosts.filter((post) =>
-    (post.tags ?? []).some((t) => slugify(t) === tag)
+    (post.tags ?? []).some((t) => slugify(t) === tag),
   );
   if (!taggedPosts.length) return notFound();
 
@@ -74,7 +75,7 @@ export default async function TagPage(props: {
 
   // For ItemList JSON-LD (limit to what you actually render initially)
   const list = sortedPosts.slice(0, 20).map((p, i) => {
-    const slug = p._raw.flattenedPath.replace(/^posts\//, "");
+    const slug = getPostSlug(p._raw.flattenedPath);
     return {
       "@type": "ListItem",
       position: i + 1,

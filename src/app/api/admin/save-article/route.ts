@@ -28,28 +28,45 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Save the file
+    // Extract date from frontmatter to determine folder
+    const dateMatch = content.match(/date:\s*["'](\d{4})-(\d{2})-\d{2}["']/);
+    if (!dateMatch) {
+      return NextResponse.json(
+        { error: "Could not extract date from frontmatter" },
+        { status: 400 },
+      );
+    }
+
+    const year = dateMatch[1];
+    const month = dateMatch[2];
+    const folderName = `${month}-${year}`;
+
+    // Create folder structure: content/posts/MM-YYYY/
     const postsDir = path.join(process.cwd(), "content", "posts");
-    const filePath = path.join(postsDir, `${slug}.mdx`);
+    const monthYearDir = path.join(postsDir, folderName);
+    const filePath = path.join(monthYearDir, `${slug}.mdx`);
 
     // Check if file already exists
     try {
       await fs.access(filePath);
       return NextResponse.json(
-        { error: `File already exists: ${slug}.mdx` },
+        { error: `File already exists: ${folderName}/${slug}.mdx` },
         { status: 409 },
       );
     } catch {
       // File doesn't exist, we can proceed
     }
 
+    // Create the month-year directory if it doesn't exist
+    await fs.mkdir(monthYearDir, { recursive: true });
+
     await fs.writeFile(filePath, content, "utf-8");
 
     return NextResponse.json({
       success: true,
-      message: `Article saved: ${slug}.mdx`,
+      message: `Article saved: ${folderName}/${slug}.mdx`,
       slug,
-      filePath: `content/posts/${slug}.mdx`,
+      filePath: `content/posts/${folderName}/${slug}.mdx`,
     });
   } catch (error) {
     console.error("Error saving article:", error);

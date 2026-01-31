@@ -2,6 +2,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { allPosts } from "contentlayer/generated";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -55,7 +56,7 @@ export default async function SearchPage(props: {
           </p>
           <ul className="space-y-5">
             {results.map((p) => {
-              const slug = p._raw.flattenedPath.replace(/^posts\//, "");
+              const slug = getPostSlug(p._raw.flattenedPath);
               return (
                 <li key={p._id}>
                   <h3 className="font-semibold text-lg">

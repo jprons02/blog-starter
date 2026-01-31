@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { allPosts, type Post } from "contentlayer/generated";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteTitle, siteImage } from "@/lib/utils/constants";
 import { findLocation } from "@/app/locations/_locationsData";
@@ -33,13 +34,13 @@ export default async function LocalTagPage({
   const posts = allPosts.filter((p) => postHasTag(p, tag));
 
   const canonical = `${siteUrl}/locations/${s}/${c}/tags/${encodeURIComponent(
-    tag
+    tag,
   )}`;
   const tagHuman = unslugTag(tag);
 
   // --- JSON-LD: Breadcrumbs + WebPage + ItemList (first 20 items) ---
   const itemListElements = posts.slice(0, 20).map((p, i) => {
-    const slug = p._raw.flattenedPath.replace(/^posts\//, "");
+    const slug = getPostSlug(p._raw.flattenedPath);
     return {
       "@type": "ListItem",
       position: i + 1,
