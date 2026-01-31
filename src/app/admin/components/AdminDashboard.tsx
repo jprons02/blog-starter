@@ -997,8 +997,8 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                   {!urlValidation && !isValidatingUrls && (
                     <p className="text-xs text-muted-foreground">
-                      Click &quot;Check Links&quot; to verify all reference URLs are valid
-                      and accessible.
+                      Click &quot;Check Links&quot; to verify all reference URLs
+                      are valid and accessible.
                     </p>
                   )}
                 </div>
