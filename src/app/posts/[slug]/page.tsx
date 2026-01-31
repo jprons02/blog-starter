@@ -46,7 +46,14 @@ export default async function PostPage(props: {
 }) {
   const { slug } = await props.params;
 
-  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
+  // Find post by slug, ignoring the date folder prefix
+  const post = allPosts.find((p) => {
+    const path = p._raw.flattenedPath.replace(/^posts\//, "");
+    // Remove MM-YYYY/ prefix if present to get just the slug
+    const postSlug = path.replace(/^\d{2}-\d{4}\//, "");
+    return postSlug === slug;
+  });
+
   if (!post) return notFound();
 
   const Content = getMDXComponent(post.body.code);

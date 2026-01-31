@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 import BlogCard from "@/app/components/ui/BlogCard";
 import Tag from "@/app/components/ui/Tag";
 import FadeIn from "@/app/components/ui/FadeIn";
@@ -52,7 +53,7 @@ export default function TagsPageClient({
     const lc = selectedCategory.toLowerCase();
     return (
       allPosts.filter((post) =>
-        post.category?.some((cat) => cat.toLowerCase() === lc)
+        post.category?.some((cat) => cat.toLowerCase() === lc),
       ) || []
     );
   }, [selectedCategory, allPosts]);
@@ -60,7 +61,7 @@ export default function TagsPageClient({
   const handleTagClick = (tag: string) => {
     if (current) {
       router.push(
-        `/locations/${current.state}/${current.city}/tags/${slugifyTag(tag)}`
+        `/locations/${current.state}/${current.city}/tags/${slugifyTag(tag)}`,
       );
     } else {
       router.push(`/tags/${slugifyTag(tag)}`);
@@ -83,7 +84,7 @@ export default function TagsPageClient({
 
   const sortedPosts = useMemo(
     () => sortPosts(postsByCategory),
-    [postsByCategory]
+    [postsByCategory],
   );
 
   // 👇 Build the destination URL for each card.
@@ -91,13 +92,10 @@ export default function TagsPageClient({
   // Otherwise, fall back to the standard /posts/:slug.
   const buildPostHref = useMemo(() => {
     if (!current) {
-      return (post: Post) =>
-        `/posts/${post._raw.flattenedPath.replace(/^posts\//, "")}`;
+      return (post: Post) => `/posts/${getPostSlug(post._raw.flattenedPath)}`;
     }
     return (post: Post) =>
-      `/locations/${current.state}/${
-        current.city
-      }/posts/${post._raw.flattenedPath.replace(/^posts\//, "")}`;
+      `/locations/${current.state}/${current.city}/posts/${getPostSlug(post._raw.flattenedPath)}`;
   }, [current]);
 
   return (

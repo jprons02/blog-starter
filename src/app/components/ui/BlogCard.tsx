@@ -7,6 +7,7 @@ import Link from "next/link";
 import Tag from "@/app/components/ui/Tag";
 import type { Post } from "contentlayer/generated";
 import { formatDate } from "@/lib/utils/formatDate";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 
 type Props = {
   post: Post;
@@ -29,8 +30,9 @@ export default function BlogCard({
 
   // Build a slug fallback if Contentlayer’s post.url isn’t what we want
   const slug = useMemo(
-    () => post._raw?.flattenedPath?.replace(/^posts\//, "") ?? "",
-    [post._raw?.flattenedPath]
+    () =>
+      post._raw?.flattenedPath ? getPostSlug(post._raw.flattenedPath) : "",
+    [post._raw?.flattenedPath],
   );
 
   // ✅ prefer the explicit override, else contentlayer url, else /posts/:slug
