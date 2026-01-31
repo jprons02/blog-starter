@@ -6,7 +6,6 @@ import {
   extractReferencesFromMdx,
   findReplacementLink,
   type UrlValidationResult,
-  type ReferenceLink,
 } from "@/lib/admin/validateUrls";
 
 export async function POST(request: NextRequest) {

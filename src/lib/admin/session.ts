@@ -1,5 +1,6 @@
 // Shared session and code stores for admin authentication
 // In production, replace with Redis or database storage
+import crypto from "crypto";
 
 type CodeData = { code: string; expires: number };
 type SessionData = { email: string; expires: number };
@@ -57,7 +58,6 @@ export function createSession(
   email: string,
   expiresInMs: number = 24 * 60 * 60 * 1000,
 ): string {
-  const crypto = require("crypto");
   const token = crypto.randomBytes(32).toString("hex");
   sessionStore.set(token, {
     email: email.toLowerCase(),

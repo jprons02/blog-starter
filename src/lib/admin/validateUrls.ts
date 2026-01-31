@@ -40,7 +40,7 @@ export async function validateUrl(url: string): Promise<UrlValidationResult> {
       valid,
       status: response.status,
     };
-  } catch (error) {
+  } catch {
     // If HEAD fails, try GET (some servers don't support HEAD)
     try {
       const controller = new AbortController();

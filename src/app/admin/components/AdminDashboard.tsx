@@ -363,7 +363,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
     const withoutFrontmatter = content.replace(/^---[\s\S]*?---\n\n/, "");
 
     // Basic conversions for preview
-    let html = withoutFrontmatter
+    const html = withoutFrontmatter
       // H2
       .replace(
         /^## (.+)$/gm,
@@ -997,7 +997,7 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
 
                   {!urlValidation && !isValidatingUrls && (
                     <p className="text-xs text-muted-foreground">
-                      Click "Check Links" to verify all reference URLs are valid
+                      Click &quot;Check Links&quot; to verify all reference URLs are valid
                       and accessible.
                     </p>
                   )}
