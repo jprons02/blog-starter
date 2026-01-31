@@ -3,6 +3,7 @@
 
 import { useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 import BlogCard from "@/app/components/ui/BlogCard";
 import FadeIn from "@/app/components/ui/FadeIn";
 import TagFilterDisplay from "@/app/components/ui/TagFilterDisplay";
@@ -32,8 +33,8 @@ export default function TagPageClient({ posts, tag, current }: Props) {
     if (current) {
       router.push(
         `/locations/${current.state}/${current.city}/tags/${encodeURIComponent(
-          slug
-        )}`
+          slug,
+        )}`,
       );
     } else {
       router.push(`/tags/${encodeURIComponent(slug)}`);
@@ -42,13 +43,10 @@ export default function TagPageClient({ posts, tag, current }: Props) {
 
   const buildPostHref = useMemo(() => {
     if (!current) {
-      return (p: Post) =>
-        `/posts/${p._raw.flattenedPath.replace(/^posts\//, "")}`;
+      return (p: Post) => `/posts/${getPostSlug(p._raw.flattenedPath)}`;
     }
     return (p: Post) =>
-      `/locations/${current.state}/${
-        current.city
-      }/posts/${p._raw.flattenedPath.replace(/^posts\//, "")}`;
+      `/locations/${current.state}/${current.city}/posts/${getPostSlug(p._raw.flattenedPath)}`;
   }, [current]);
 
   return (
