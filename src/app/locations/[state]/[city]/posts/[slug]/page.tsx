@@ -13,6 +13,7 @@ import PostTags from "@/app/posts/[slug]/PostTags";
 import JsonLd from "@/app/components/JsonLd";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
 import { formatDate } from "@/lib/utils/formatDate";
+import { getPostSlug } from "@/lib/utils/getPostSlug";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import MDXClient from "@/app/components/MDXClient"; // "use client" wrapper
 import AdSlot from "@/app/components/ads/AdSlot";
@@ -49,7 +50,7 @@ function hasDateModified(x: unknown): x is WithDateModified {
 
 // Build legacy-friendly bags from typed localResources so your MDX keeps working
 function deriveFromLocalResources(
-  localResources: Record<string, LocalResource>
+  localResources: Record<string, LocalResource>,
 ) {
   const resources: Record<string, Record<string, string>> = {};
   const faqByTopic: Record<string, readonly QAItem[]> = {};
@@ -91,7 +92,7 @@ export default async function LocalizedPostPage({
   const c = city.toLowerCase();
 
   // 1) Find post + location
-  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
+  const post = allPosts.find((p) => getPostSlug(p._raw.flattenedPath) === slug);
   const loc = findLocation(s, c);
   if (!post || !loc) return notFound();
 
@@ -123,7 +124,7 @@ export default async function LocalizedPostPage({
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
   const modifiedISO = toISO(
-    hasDateModified(post) ? post.dateModified : post.date
+    hasDateModified(post) ? post.dateModified : post.date,
   );
 
   const imageAbs = post.image
@@ -329,7 +330,7 @@ export async function generateMetadata({
   const s = state.toLowerCase();
   const c = city.toLowerCase();
 
-  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
+  const post = allPosts.find((p) => getPostSlug(p._raw.flattenedPath) === slug);
   const loc = findLocation(s, c);
   if (!post || !loc) return {};
 
@@ -346,7 +347,7 @@ export async function generateMetadata({
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedTime = toISO(post.date as string);
   const modifiedTime = toISO(
-    hasDateModified(post) ? post.dateModified : post.date
+    hasDateModified(post) ? post.dateModified : post.date,
   );
 
   const imageAbs = post.image
