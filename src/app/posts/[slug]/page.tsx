@@ -1,5 +1,5 @@
 // /app/posts/[slug]/page.tsx
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import { getMDXComponent } from "next-contentlayer2/hooks";
 import Image from "next/image";
@@ -47,7 +47,7 @@ export default async function PostPage(props: {
   const { slug } = await props.params;
 
   // Find post by slug, ignoring the date folder prefix
-  const post = allPosts.find((p) => {
+  const post = getPublishedPosts().find((p) => {
     const path = p._raw.flattenedPath.replace(/^posts\//, "");
     // Remove MM-YYYY/ prefix if present to get just the slug
     const postSlug = path.replace(/^\d{2}-\d{4}\//, "");
@@ -231,7 +231,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  const post = allPosts.find((p) => p._raw.flattenedPath === `posts/${slug}`);
+  const post = getPublishedPosts().find(
+    (p) => p._raw.flattenedPath === `posts/${slug}`,
+  );
   if (!post) return {};
 
   const title = post.seoTitle ?? post.title;

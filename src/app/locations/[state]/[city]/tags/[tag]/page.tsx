@@ -1,7 +1,8 @@
 // app/locations/[state]/[city]/tags/[tag]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { allPosts, type Post } from "contentlayer/generated";
+import { type Post } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import { getPostSlug } from "@/lib/utils/getPostSlug";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteTitle, siteImage } from "@/lib/utils/constants";
@@ -31,7 +32,7 @@ export default async function LocalTagPage({
   if (!loc) return notFound();
 
   // Filter posts for this tag (by slug)
-  const posts = allPosts.filter((p) => postHasTag(p, tag));
+  const posts = getPublishedPosts().filter((p) => postHasTag(p, tag));
 
   const canonical = `${siteUrl}/locations/${s}/${c}/tags/${encodeURIComponent(
     tag,

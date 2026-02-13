@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMDXComponent } from "next-contentlayer2/hooks";
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 
 import Image from "next/image";
 import FadeIn from "@/app/components/ui/FadeIn";
@@ -92,7 +92,9 @@ export default async function LocalizedPostPage({
   const c = city.toLowerCase();
 
   // 1) Find post + location
-  const post = allPosts.find((p) => getPostSlug(p._raw.flattenedPath) === slug);
+  const post = getPublishedPosts().find(
+    (p) => getPostSlug(p._raw.flattenedPath) === slug,
+  );
   const loc = findLocation(s, c);
   if (!post || !loc) return notFound();
 
@@ -330,7 +332,9 @@ export async function generateMetadata({
   const s = state.toLowerCase();
   const c = city.toLowerCase();
 
-  const post = allPosts.find((p) => getPostSlug(p._raw.flattenedPath) === slug);
+  const post = getPublishedPosts().find(
+    (p) => getPostSlug(p._raw.flattenedPath) === slug,
+  );
   const loc = findLocation(s, c);
   if (!post || !loc) return {};
 

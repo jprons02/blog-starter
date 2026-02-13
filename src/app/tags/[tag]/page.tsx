@@ -1,9 +1,8 @@
 // app/tags/[tag]/page.tsx
-import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import TagPageClient from "@/app/tags/[tag]/TagPageClient";
-import { sortPosts } from "@/lib/posts";
+import { sortPosts, getPublishedPosts } from "@/lib/posts";
 import { siteUrl, siteTitle, siteImage } from "@/lib/utils/constants";
 import { getPostSlug } from "@/lib/utils/getPostSlug";
 import JsonLd from "@/app/components/JsonLd";
@@ -13,7 +12,7 @@ const unslug = (s: string) => decodeURIComponent(s).replace(/-/g, " ");
 
 export async function generateStaticParams() {
   const tags = new Set<string>();
-  for (const p of allPosts) {
+  for (const p of getPublishedPosts()) {
     for (const t of p.tags ?? []) tags.add(slugify(t));
   }
   return Array.from(tags).map((tag) => ({ tag }));
@@ -30,7 +29,7 @@ export async function generateMetadata({
   const canonicalAbs = `${siteUrl}${path}`;
 
   // newest related post -> freshness proxy
-  const newest = allPosts
+  const newest = getPublishedPosts()
     .filter((p) => (p.tags ?? []).some((t) => slugify(t) === tag))
     .map((p) => new Date(p.date))
     .sort((a, b) => b.getTime() - a.getTime())[0];
@@ -66,7 +65,7 @@ export default async function TagPage(props: {
   const { tag } = await props.params; // kebab-case
   const human = unslug(tag);
 
-  const taggedPosts = allPosts.filter((post) =>
+  const taggedPosts = getPublishedPosts().filter((post) =>
     (post.tags ?? []).some((t) => slugify(t) === tag),
   );
   if (!taggedPosts.length) return notFound();

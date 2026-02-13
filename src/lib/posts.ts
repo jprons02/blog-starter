@@ -1,7 +1,19 @@
 // Utility functions to help with common post operations like sorting, filtering, and extracting featured content.
 // These functions promote reuse and keep components clean.
 
-import type { Post } from "contentlayer/generated";
+import { allPosts, type Post } from "contentlayer/generated";
+
+/**
+ * Returns only posts whose date is today or in the past.
+ * This enables "scheduled publishing" — set a future date in frontmatter
+ * and the post stays hidden until that date arrives.
+ */
+export function getPublishedPosts(): Post[] {
+  const now = new Date();
+  // Compare date-only (ignoring time) so a post dated "today" is included
+  const todayStr = now.toISOString().slice(0, 10); // "YYYY-MM-DD"
+  return allPosts.filter((post) => post.date <= todayStr);
+}
 
 /**
  * Sorts blog posts in descending order by date (most recent first).
@@ -11,7 +23,7 @@ import type { Post } from "contentlayer/generated";
  */
 export function sortPosts(posts: Post[]): Post[] {
   return [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 }
 
@@ -24,7 +36,7 @@ export function sortPosts(posts: Post[]): Post[] {
  */
 export function filterPostsByTag(posts: Post[], tag: string) {
   return posts.filter((post) =>
-    post.tags?.some((t) => t.toLowerCase() === tag.toLowerCase())
+    post.tags?.some((t) => t.toLowerCase() === tag.toLowerCase()),
   );
 }
 
