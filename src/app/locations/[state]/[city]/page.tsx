@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import JsonLd from "@/app/components/JsonLd";
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
 import { getPostSlug } from "@/lib/utils/getPostSlug";
 
@@ -130,7 +130,7 @@ export default async function CityPage({
 
   // ItemList JSON-LD mirrors your initial visible grid
   const DEFAULT_CATEGORY = "Housing & Utilities"; // matches your client’s initial tab
-  const initialPosts = allPosts.filter((p) =>
+  const initialPosts = getPublishedPosts().filter((p) =>
     p.category?.some(
       (cat) => cat.toLowerCase() === DEFAULT_CATEGORY.toLowerCase(),
     ),
@@ -278,7 +278,7 @@ export default async function CityPage({
             stateName: loc.stateName,
             cityName: loc.cityName,
           }}
-          allPosts={allPosts}
+          allPosts={getPublishedPosts()}
         />
       </LocationProvider>
     </>

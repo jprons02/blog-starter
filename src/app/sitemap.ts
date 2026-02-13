@@ -1,6 +1,7 @@
 // app/sitemap.ts
 import type { MetadataRoute } from "next";
-import { allPosts, type Post } from "contentlayer/generated";
+import { type Post } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import { siteUrl } from "@/lib/utils/constants";
 import { getAllLocations } from "@/app/locations/_locationsData";
 import { localizedPostSlugs } from "@/constants/localizedPosts";
@@ -45,7 +46,7 @@ const make = (
   path: string,
   lastModified: Date,
   changeFrequency?: Entry["changeFrequency"],
-  priority?: number
+  priority?: number,
 ): Entry => ({
   url: join(siteUrl, path),
   lastModified,
@@ -81,7 +82,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ].forEach(add);
 
   // Visible posts + per-slug lastmod
-  const visiblePosts = allPosts.filter(isVisible);
+  const visiblePosts = getPublishedPosts().filter(isVisible);
 
   const lastModBySlug = new Map<string, Date>();
   visiblePosts.forEach((p) => {
@@ -105,7 +106,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     if (missing.length) {
       console.warn(
         "[sitemap] Missing localized post slugs in contentlayer:",
-        missing
+        missing,
       );
     }
   }
@@ -137,7 +138,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       if (!lmDate) return; // skip missing/renamed slugs to avoid 404s
       const lm = clampFuture(lmDate, now);
       add(
-        make(`/locations/${state}/${city}/posts/${slug}`, lm, "monthly", 0.55)
+        make(`/locations/${state}/${city}/posts/${slug}`, lm, "monthly", 0.55),
       );
     });
   });
@@ -159,12 +160,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .sort((a, b) => b[1].getTime() - a[1].getTime())
     .slice(0, MAX_TAGS)
     .forEach(([tagSlug, lm]) =>
-      add(make(`/tags/${tagSlug}`, clampFuture(lm, now), "weekly", 0.45))
+      add(make(`/tags/${tagSlug}`, clampFuture(lm, now), "weekly", 0.45)),
     );
 
   // 6) Return stable, alpha-sorted list (absolute URLs)
   return Array.from(entries.values()).sort((a, b) =>
-    a.url.localeCompare(b.url, "en")
+    a.url.localeCompare(b.url, "en"),
   );
 }
 

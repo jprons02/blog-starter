@@ -1,4 +1,4 @@
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import { siteUrl, siteTitle, siteDescription } from "@/lib/utils/constants";
 
 // Helper to escape XML special characters
@@ -13,7 +13,7 @@ function escapeXml(unsafe: string): string {
 
 export async function GET() {
   // Sort posts by date (newest first) for RSS
-  const sortedPosts = [...allPosts].sort(
+  const sortedPosts = [...getPublishedPosts()].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 

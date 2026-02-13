@@ -1,7 +1,7 @@
 // app/search/page.tsx
 import Link from "next/link";
 import type { Metadata } from "next";
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import { getPostSlug } from "@/lib/utils/getPostSlug";
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export default async function SearchPage(props: {
   const needle = query.toLowerCase();
 
   const results = query
-    ? allPosts.filter((p) => {
+    ? getPublishedPosts().filter((p) => {
         const haystack = [
           p.title,
           p.summary,

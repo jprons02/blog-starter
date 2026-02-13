@@ -1,4 +1,4 @@
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import BlogIndexClient from "@/app/posts/BlogIndexClient";
 import { getPageMeta } from "@/lib/utils/seo";
 import {
@@ -47,7 +47,7 @@ export default function BlogIndexPage() {
           inLanguage: "en-US",
         }}
       />
-      <BlogIndexClient posts={allPosts} />
+      <BlogIndexClient posts={getPublishedPosts()} />
     </>
   );
 }

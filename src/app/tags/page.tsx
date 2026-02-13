@@ -1,7 +1,7 @@
 // src/app/tags/page.tsx
 import type { Metadata } from "next";
 import TagsPageClient from "./TagsPageClient";
-import { allPosts } from "contentlayer/generated";
+import { getPublishedPosts } from "@/lib/posts";
 import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteImage } from "@/lib/utils/constants";
 
@@ -76,7 +76,7 @@ export default function TagsPage() {
           ],
         }}
       />
-      <TagsPageClient allPosts={allPosts} />
+      <TagsPageClient allPosts={getPublishedPosts()} />
     </>
   );
 }
