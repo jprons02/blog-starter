@@ -17,6 +17,11 @@ import { getPostSlug } from "@/lib/utils/getPostSlug";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import MDXClient from "@/app/components/MDXClient"; // "use client" wrapper
 import AdSlot from "@/app/components/ads/AdSlot";
+import {
+  extractFaqsFromResources,
+  detectFaqTopic,
+  buildFaqJsonLd,
+} from "@/lib/utils/extractFaqs";
 
 // server data (no "use client")
 import {
@@ -122,6 +127,18 @@ export default async function LocalizedPostPage({
 
   // 4) Canonical + JSON-LD (localized)
   const canonical = `${siteUrl}/locations/${s}/${c}/posts/${slug}`;
+
+  // 5) Extract FAQ pairs for FAQPage JSON-LD
+  const faqTopic = detectFaqTopic(post.body.raw);
+  const faqPairs = faqTopic
+    ? extractFaqsFromResources(
+        localResources,
+        faqTopic,
+        loc.cityName,
+        loc.stateName,
+      )
+    : [];
+
   const toISO = (d?: string) =>
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
@@ -227,6 +244,11 @@ export default async function LocalizedPostPage({
           ],
         }}
       />
+
+      {/* FAQPage JSON-LD (localized FAQs from city data) */}
+      {faqPairs.length > 0 && (
+        <JsonLd data={buildFaqJsonLd(faqPairs, canonical)!} />
+      )}
 
       {/* ⬇️ Identical visual output to /posts/[slug], just with LocationProvider */}
       <LocationProvider

@@ -13,6 +13,7 @@ import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
 import AdSlot from "@/app/components/ads/AdSlot";
+import { extractFaqsFromMdx, buildFaqJsonLd } from "@/lib/utils/extractFaqs";
 
 // ✅ bring back the MDX tokens so MDX can resolve them
 import {
@@ -71,6 +72,9 @@ export default async function PostPage(props: {
     ResourceLink,
     AdSlot,
   };
+
+  // Extract FAQ pairs from the raw MDX for FAQPage JSON-LD
+  const faqPairs = extractFaqsFromMdx(post.body.raw);
 
   const canonical = `${siteUrl}/posts/${slug}`;
   const toISO = (d?: string) =>
@@ -156,6 +160,11 @@ export default async function PostPage(props: {
           ],
         }}
       />
+
+      {/* FAQPage JSON-LD (if FAQs found in content) */}
+      {faqPairs.length > 0 && (
+        <JsonLd data={buildFaqJsonLd(faqPairs, canonical)!} />
+      )}
 
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <FadeIn>
