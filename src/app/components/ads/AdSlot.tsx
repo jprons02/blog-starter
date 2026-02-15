@@ -1,7 +1,7 @@
 // components/ads/AdSlot.tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -12,6 +12,7 @@ declare global {
 export default function AdSlot({ slot }: { slot: string }) {
   const adRef = useRef<HTMLModElement>(null);
   const isInitialized = useRef(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     // Prevent double initialization in development (React StrictMode)
@@ -39,7 +40,33 @@ export default function AdSlot({ slot }: { slot: string }) {
     }
   }, []);
 
+  // Watch for AdSense setting data-adsbygoogle-status="unfilled" and hide the slot
+  useEffect(() => {
+    const el = adRef.current;
+    if (!el) return;
+
+    const check = () => {
+      const status = el.getAttribute("data-ad-status");
+      if (status === "unfilled") setHidden(true);
+    };
+
+    // Check immediately in case it's already set
+    check();
+
+    const observer = new MutationObserver(check);
+    observer.observe(el, {
+      attributes: true,
+      attributeFilter: ["data-ad-status"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (hidden) return null;
+
   return (
+    <>
+      {/*
     <ins
       ref={adRef}
       className="adsbygoogle block my-8"
@@ -49,5 +76,7 @@ export default function AdSlot({ slot }: { slot: string }) {
       data-ad-format="auto"
       data-full-width-responsive="true"
     />
+    */}
+    </>
   );
 }
