@@ -55,6 +55,7 @@ export async function generateMetadata({
       description: `Articles on ${human}.`,
       images: [ogImage],
     },
+    robots: { index: false, follow: true },
     other: newest ? { lastmod: newest.toISOString() } : undefined,
   };
 }

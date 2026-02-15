@@ -5,6 +5,11 @@ import JsonLd from "@/app/components/JsonLd";
 import { getPublishedPosts } from "@/lib/posts";
 import { siteUrl, siteImage, siteTitle } from "@/lib/utils/constants";
 import { getPostSlug } from "@/lib/utils/getPostSlug";
+import {
+  extractFaqsFromResources,
+  buildFaqJsonLd,
+  type FaqPair,
+} from "@/lib/utils/extractFaqs";
 
 // Server-only data helpers
 import {
@@ -66,16 +71,6 @@ function deriveFromLocalResources(
   }
 
   return { resources, faqByTopic };
-}
-
-/* -------------------------- Simple FAQ tuple guard ------------------------- */
-function isTupleQA(x: unknown): x is readonly [string, string] {
-  return (
-    Array.isArray(x) &&
-    x.length === 2 &&
-    typeof x[0] === "string" &&
-    typeof x[1] === "string"
-  );
 }
 
 /* ---------------------------------- Page ---------------------------------- */
@@ -146,17 +141,20 @@ export default async function CityPage({
     };
   });
 
-  // Optional: aggregate tuple FAQs for FAQPage JSON-LD (limit to keep lean)
-  const faqTuples: Array<readonly [string, string]> = [];
-  for (const v of Object.values(localResources)) {
-    const faqs = (v as LocalResource).faqs;
-    if (Array.isArray(faqs)) {
-      for (const item of faqs) {
-        if (isTupleQA(item)) faqTuples.push(item);
-        if (faqTuples.length >= 10) break; // soft cap
-      }
+  // Aggregate FAQs across all topics for FAQPage JSON-LD (limit to keep lean)
+  const allFaqPairs: FaqPair[] = [];
+  for (const topicName of Object.keys(localResources)) {
+    if (allFaqPairs.length >= 10) break;
+    const pairs = extractFaqsFromResources(
+      localResources,
+      topicName,
+      loc.cityName,
+      loc.stateName,
+    );
+    for (const p of pairs) {
+      allFaqPairs.push(p);
+      if (allFaqPairs.length >= 10) break;
     }
-    if (faqTuples.length >= 10) break;
   }
 
   return (
@@ -235,20 +233,9 @@ export default async function CityPage({
         }}
       />
 
-      {/* Optional FAQPage JSON-LD (only if we found tuple Q&As) */}
-      {faqTuples.length > 0 && (
-        <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "@id": `${canonical}#faq`,
-            mainEntity: faqTuples.map(([q, a]) => ({
-              "@type": "Question",
-              name: q,
-              acceptedAnswer: { "@type": "Answer", text: a },
-            })),
-          }}
-        />
+      {/* FAQPage JSON-LD (aggregated from city resource data) */}
+      {allFaqPairs.length > 0 && (
+        <JsonLd data={buildFaqJsonLd(allFaqPairs, canonical)!} />
       )}
 
       {/* Provide location context so your tokens/components work */}

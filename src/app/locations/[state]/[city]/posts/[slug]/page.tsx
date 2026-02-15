@@ -17,6 +17,12 @@ import { getPostSlug } from "@/lib/utils/getPostSlug";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import MDXClient from "@/app/components/MDXClient"; // "use client" wrapper
 import AdSlot from "@/app/components/ads/AdSlot";
+import RelatedPosts from "@/app/components/RelatedPosts";
+import {
+  extractFaqsFromResources,
+  detectFaqTopic,
+  buildFaqJsonLd,
+} from "@/lib/utils/extractFaqs";
 
 // server data (no "use client")
 import {
@@ -122,6 +128,18 @@ export default async function LocalizedPostPage({
 
   // 4) Canonical + JSON-LD (localized)
   const canonical = `${siteUrl}/locations/${s}/${c}/posts/${slug}`;
+
+  // 5) Extract FAQ pairs for FAQPage JSON-LD
+  const faqTopic = detectFaqTopic(post.body.raw);
+  const faqPairs = faqTopic
+    ? extractFaqsFromResources(
+        localResources,
+        faqTopic,
+        loc.cityName,
+        loc.stateName,
+      )
+    : [];
+
   const toISO = (d?: string) =>
     d?.includes("T") ? d : d ? `${d}T00:00:00Z` : undefined;
   const publishedISO = toISO(post.date as string);
@@ -228,6 +246,11 @@ export default async function LocalizedPostPage({
         }}
       />
 
+      {/* FAQPage JSON-LD (localized FAQs from city data) */}
+      {faqPairs.length > 0 && (
+        <JsonLd data={buildFaqJsonLd(faqPairs, canonical)!} />
+      )}
+
       {/* ⬇️ Identical visual output to /posts/[slug], just with LocationProvider */}
       <LocationProvider
         value={{
@@ -248,13 +271,14 @@ export default async function LocalizedPostPage({
             <h1 className="text-3xl font-bold tracking-tight mb-2">
               {post.title}
             </h1>
-            <p
-              className="font-medium uppercase tracking-wide mb-6"
+            <time
+              dateTime={post.date}
+              className="font-medium uppercase tracking-wide mb-6 block"
               style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
             >
               {formatDate(post.date)}&nbsp;&nbsp;•&nbsp;&nbsp;
               {post.author?.toUpperCase() || "STAFF"}
-            </p>
+            </time>
           </FadeIn>
 
           {post.image && (
@@ -304,6 +328,12 @@ export default async function LocalizedPostPage({
               </MDXClient>
             </div>
           </FadeIn>
+
+          <RelatedPosts
+            currentSlug={slug}
+            tags={post.tags ?? []}
+            basePath={`/locations/${s}/${c}`}
+          />
         </article>
       </LocationProvider>
     </>
@@ -372,7 +402,7 @@ export async function generateMetadata({
       publishedTime,
       modifiedTime,
       images: imageAbs
-        ? [{ url: imageAbs, width: 1200, height: 630, alt: post.title }]
+        ? [{ url: imageAbs, width: 800, height: 400, alt: post.title }]
         : undefined,
     },
     twitter: {

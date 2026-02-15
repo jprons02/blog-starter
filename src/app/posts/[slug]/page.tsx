@@ -13,6 +13,8 @@ import JsonLd from "@/app/components/JsonLd";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import CrossLink from "@/app/components/mdxHelper/CrossLink";
 import AdSlot from "@/app/components/ads/AdSlot";
+import RelatedPosts from "@/app/components/RelatedPosts";
+import { extractFaqsFromMdx, buildFaqJsonLd } from "@/lib/utils/extractFaqs";
 
 // ✅ bring back the MDX tokens so MDX can resolve them
 import {
@@ -71,6 +73,9 @@ export default async function PostPage(props: {
     ResourceLink,
     AdSlot,
   };
+
+  // Extract FAQ pairs from the raw MDX for FAQPage JSON-LD
+  const faqPairs = extractFaqsFromMdx(post.body.raw);
 
   const canonical = `${siteUrl}/posts/${slug}`;
   const toISO = (d?: string) =>
@@ -157,18 +162,24 @@ export default async function PostPage(props: {
         }}
       />
 
+      {/* FAQPage JSON-LD (if FAQs found in content) */}
+      {faqPairs.length > 0 && (
+        <JsonLd data={buildFaqJsonLd(faqPairs, canonical)!} />
+      )}
+
       <article className="max-w-3xl mx-auto px-4 py-8 sm:py-16">
         <FadeIn>
           <h1 className="text-3xl font-bold tracking-tight mb-2">
             {post.title}
           </h1>
-          <p
-            className="font-medium uppercase tracking-wide mb-6"
+          <time
+            dateTime={post.date}
+            className="font-medium uppercase tracking-wide mb-6 block"
             style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
           >
             {formatDate(post.date)}&nbsp;&nbsp;•&nbsp;&nbsp;
             {post.author?.toUpperCase() || "STAFF"}
-          </p>
+          </time>
         </FadeIn>
 
         {post.image && (
@@ -216,9 +227,20 @@ export default async function PostPage(props: {
             <Content components={mdxComponents} />
           </div>
         </FadeIn>
+
+        <RelatedPosts currentSlug={slug} tags={post.tags ?? []} />
       </article>
     </>
   );
+}
+
+/* ---------------- static params (SSG) ---------------- */
+export async function generateStaticParams() {
+  return getPublishedPosts().map((p) => {
+    const path = p._raw.flattenedPath.replace(/^posts\//, "");
+    const slug = path.replace(/^\d{2}-\d{4}\//, "");
+    return { slug };
+  });
 }
 
 /* ---------------- metadata ---------------- */
@@ -266,7 +288,7 @@ export async function generateMetadata({
       authors: post.author ? [post.author] : [siteTitle],
       tags: post.tags ?? [],
       images: imageAbs
-        ? [{ url: imageAbs, width: 1200, height: 630, alt: title }]
+        ? [{ url: imageAbs, width: 800, height: 400, alt: title }]
         : undefined,
     },
     twitter: {
