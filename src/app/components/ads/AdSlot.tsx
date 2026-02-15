@@ -1,4 +1,12 @@
 // components/ads/AdSlot.tsx
+// Disabled until AdSense is approved — returns nothing so no empty space is rendered.
+// Uncomment the full implementation below once ads are live.
+
+export default function AdSlot({ slot: _slot }: { slot: string }) {
+  return null;
+}
+
+/*
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -15,12 +23,10 @@ export default function AdSlot({ slot }: { slot: string }) {
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    // Prevent double initialization in development (React StrictMode)
     if (isInitialized.current) return;
 
     try {
       if (typeof window !== "undefined" && adRef.current) {
-        // Check if this specific ad slot already has content
         if (adRef.current.innerHTML.trim() !== "") {
           return;
         }
@@ -30,7 +36,6 @@ export default function AdSlot({ slot }: { slot: string }) {
         isInitialized.current = true;
       }
     } catch (e) {
-      // Suppress duplicate ad errors in development
       if (
         e instanceof Error &&
         !e.message.includes("already have ads in them")
@@ -40,7 +45,6 @@ export default function AdSlot({ slot }: { slot: string }) {
     }
   }, []);
 
-  // Watch for AdSense setting data-adsbygoogle-status="unfilled" and hide the slot
   useEffect(() => {
     const el = adRef.current;
     if (!el) return;
@@ -50,7 +54,6 @@ export default function AdSlot({ slot }: { slot: string }) {
       if (status === "unfilled") setHidden(true);
     };
 
-    // Check immediately in case it's already set
     check();
 
     const observer = new MutationObserver(check);
@@ -65,8 +68,6 @@ export default function AdSlot({ slot }: { slot: string }) {
   if (hidden) return null;
 
   return (
-    <>
-      {/*
     <ins
       ref={adRef}
       className="adsbygoogle block my-8"
@@ -76,7 +77,6 @@ export default function AdSlot({ slot }: { slot: string }) {
       data-ad-format="auto"
       data-full-width-responsive="true"
     />
-    */}
-    </>
   );
 }
+*/
