@@ -20,6 +20,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Locations", href: "/locations", type: "link" },
   //{ label: "Check Benefits", modal: "benefit", type: "modal" },
   { label: "About", href: "/about", type: "link" },
+  { label: "Contact", href: "/contact", type: "link" },
 ];
 
 export default function NavBar() {
@@ -143,7 +144,7 @@ export default function NavBar() {
                   >
                     {item.label}
                   </span>
-                )
+                ),
               )}
             </div>
           </motion.div>
