@@ -9,7 +9,8 @@ import {
 
 export const metadata = {
   title: "Resources",
-  robots: "noindex, nofollow",
+  description:
+    "Helpful tools plus trusted links for government assistance programs — free phones, health insurance, tax help, and more.",
   alternates: {
     canonical: `${siteUrl}/resources`,
   },
@@ -44,7 +45,7 @@ export default function ResourcesPage() {
         <ul className="list-disc pl-5 sm:pl-10 space-y-2">
           <li>
             <a
-              href="https://your-affiliate-link.com/easywireless"
+              href="https://www.easywireless.com"
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-blue-600 dark:text-blue-400"
@@ -55,7 +56,7 @@ export default function ResourcesPage() {
           </li>
           <li>
             <a
-              href="https://your-affiliate-link.com/qlink"
+              href="https://www.qlinkwireless.com"
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-blue-600 dark:text-blue-400"
@@ -86,7 +87,7 @@ export default function ResourcesPage() {
           </li>
           <li>
             <a
-              href="https://your-affiliate-link.com/assurance"
+              href="https://www.assurance.com"
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-blue-600 dark:text-blue-400"
@@ -105,7 +106,7 @@ export default function ResourcesPage() {
         <ul className="list-disc pl-5 sm:pl-10 space-y-2">
           <li>
             <a
-              href="https://your-affiliate-link.com/freetaxusa"
+              href="https://www.freetaxusa.com"
               target="_blank"
               rel="noopener noreferrer"
               className="underline text-blue-600 dark:text-blue-400"

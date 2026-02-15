@@ -10,10 +10,10 @@ export default function AboutPage() {
         className="text-3xl font-bold mb-6"
         style={{ color: "var(--color-primary)" }}
       >
-        About Us
+        About {siteTitle}
       </h1>
       <p className="text-sm text-[var(--color-muted-text)] mb-8">
-        Last updated: June 2025
+        Last updated: February 2026
       </p>
 
       <section className="space-y-6 text-base leading-relaxed text-[var(--color-muted-text)]">
@@ -42,19 +42,95 @@ export default function AboutPage() {
           red tape.
         </p>
 
-        <ul className="list-disc pl-5 sm:pl-10 text-[var(--color-muted-text)]">
-          <li>Food & nutrition programs (SNAP, school lunches)</li>
-          <li>Internet assistance (Affordable Connectivity Program)</li>
-          <li>Utility relief & rent support</li>
-          <li>Medical & child care help</li>
-          <li>Phone programs like Lifeline</li>
-          <li>Education and job training resources</li>
-        </ul>
+        <div>
+          <h2 className="text-xl font-semibold mb-3 text-[var(--color-foreground)]">
+            What We Cover
+          </h2>
+          <ul className="list-disc pl-5 sm:pl-10 text-[var(--color-muted-text)]">
+            <li>Food &amp; nutrition programs (SNAP, WIC, school lunches)</li>
+            <li>Internet assistance (Affordable Connectivity Program)</li>
+            <li>Utility relief &amp; rent support (LIHEAP, ERA)</li>
+            <li>Medical &amp; child care help (Medicaid, CHIP)</li>
+            <li>Phone programs like Lifeline</li>
+            <li>Education and job training resources (WIOA, FAFSA)</li>
+            <li>Housing assistance (Section 8, VA housing)</li>
+            <li>Tax credits and financial aid (EITC, Child Tax Credit)</li>
+          </ul>
+        </div>
 
-        <p>
-          We&apos;re not a government agency — just a small team dedicated to
-          helping people find the right programs with confidence and clarity.
-        </p>
+        <div>
+          <h2 className="text-xl font-semibold mb-3 text-[var(--color-foreground)]">
+            Our Editorial Process
+          </h2>
+          <p>
+            Every article on {siteTitle} is researched using official government
+            sources including{" "}
+            <a
+              href="https://www.usa.gov"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+              style={{ color: "var(--color-primary)" }}
+            >
+              USA.gov
+            </a>
+            ,{" "}
+            <a
+              href="https://www.benefits.gov"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+              style={{ color: "var(--color-primary)" }}
+            >
+              Benefits.gov
+            </a>
+            , the{" "}
+            <a
+              href="https://www.fns.usda.gov"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+              style={{ color: "var(--color-primary)" }}
+            >
+              USDA Food and Nutrition Service
+            </a>
+            , and program-specific agency websites. We cross-reference
+            eligibility details, application procedures, and deadlines to ensure
+            accuracy.
+          </p>
+          <p className="mt-2">
+            We regularly review and update older articles when program rules
+            change, funding cycles shift, or new information becomes available.
+            Each article includes a publication date, and many include direct
+            links to the official sources we referenced.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-semibold mb-3 text-[var(--color-foreground)]">
+            Who We Are
+          </h2>
+          <p>
+            We&apos;re not a government agency — just a small, independent team
+            dedicated to helping people find the right programs with confidence
+            and clarity. Our writers and researchers have experience navigating
+            these systems and understand the real challenges people face when
+            trying to access benefits.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-semibold mb-3 text-[var(--color-foreground)]">
+            How We Sustain This Site
+          </h2>
+          <p>
+            {siteTitle} is free to use. We may earn a small commission through
+            affiliate links to trusted third-party services — at no additional
+            cost to you. These partnerships help us keep the site running and
+            the content free. We only recommend services that we believe are
+            genuinely useful.
+          </p>
+        </div>
 
         <p>
           If you&apos;re struggling or just want to explore your options,
@@ -73,7 +149,15 @@ export default function AboutPage() {
               style={{ color: "var(--color-primary)" }}
             >
               reach out to us
-            </span>
+            </span>{" "}
+            or visit our{" "}
+            <a
+              href="/contact"
+              className="underline"
+              style={{ color: "var(--color-primary)" }}
+            >
+              contact page
+            </a>
             .
           </p>
         </div>

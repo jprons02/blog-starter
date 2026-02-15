@@ -43,21 +43,19 @@ export default function Footer() {
         >
           Pexels
         </a>
-        . Content assisted by{" "}
-        <a
-          href="https://openai.com/chatgpt"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          ChatGPT
-        </a>
         .
       </p>
-      <p>
-        {siteTitle}{" "}
+      <p className="mb-1">
         <a href="/privacy-policy" className="underline">
           Privacy Policy
+        </a>
+        {" · "}
+        <a href="/terms-of-service" className="underline">
+          Terms of Service
+        </a>
+        {" · "}
+        <a href="/contact" className="underline">
+          Contact Us
         </a>
       </p>
     </footer>
