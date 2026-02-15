@@ -17,6 +17,7 @@ import { getPostSlug } from "@/lib/utils/getPostSlug";
 import { siteUrl, siteTitle } from "@/lib/utils/constants";
 import MDXClient from "@/app/components/MDXClient"; // "use client" wrapper
 import AdSlot from "@/app/components/ads/AdSlot";
+import RelatedPosts from "@/app/components/RelatedPosts";
 import {
   extractFaqsFromResources,
   detectFaqTopic,
@@ -270,13 +271,14 @@ export default async function LocalizedPostPage({
             <h1 className="text-3xl font-bold tracking-tight mb-2">
               {post.title}
             </h1>
-            <p
-              className="font-medium uppercase tracking-wide mb-6"
+            <time
+              dateTime={post.date}
+              className="font-medium uppercase tracking-wide mb-6 block"
               style={{ color: "var(--color-muted-text)", fontSize: "0.65rem" }}
             >
               {formatDate(post.date)}&nbsp;&nbsp;•&nbsp;&nbsp;
               {post.author?.toUpperCase() || "STAFF"}
-            </p>
+            </time>
           </FadeIn>
 
           {post.image && (
@@ -326,6 +328,12 @@ export default async function LocalizedPostPage({
               </MDXClient>
             </div>
           </FadeIn>
+
+          <RelatedPosts
+            currentSlug={slug}
+            tags={post.tags ?? []}
+            basePath={`/locations/${s}/${c}`}
+          />
         </article>
       </LocationProvider>
     </>
@@ -394,7 +402,7 @@ export async function generateMetadata({
       publishedTime,
       modifiedTime,
       images: imageAbs
-        ? [{ url: imageAbs, width: 1200, height: 630, alt: post.title }]
+        ? [{ url: imageAbs, width: 800, height: 400, alt: post.title }]
         : undefined,
     },
     twitter: {
