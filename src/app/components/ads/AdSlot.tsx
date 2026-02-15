@@ -2,7 +2,8 @@
 // Disabled until AdSense is approved — returns nothing so no empty space is rendered.
 // Uncomment the full implementation below once ads are live.
 
-export default function AdSlot({ slot: _slot }: { slot: string }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function AdSlot({ slot }: { slot: string }) {
   return null;
 }
 
