@@ -70,6 +70,21 @@ export function State({ fallback = "your state" }: { fallback?: string }) {
   return <>{v?.stateName ?? fallback}</>;
 }
 
+/* -------------- case-insensitive bag lookup -------------- */
+function ciGet<T>(
+  bag: Record<string, T> | undefined,
+  key: string,
+): T | undefined {
+  if (!bag) return undefined;
+  const direct = bag[key];
+  if (direct !== undefined) return direct;
+  const lc = key.toLowerCase();
+  for (const k of Object.keys(bag)) {
+    if (k.toLowerCase() === lc) return bag[k];
+  }
+  return undefined;
+}
+
 /* -------------- labels / fallbacks -------------- */
 const LABEL_ALIAS: Record<string, FocusSlug | string> = {
   snap: "snap",
@@ -84,14 +99,14 @@ const LABEL_ALIAS: Record<string, FocusSlug | string> = {
 };
 
 function defaultLabelFor(name: string) {
-  const key = LABEL_ALIAS[name] as FocusSlug | undefined;
+  const key = LABEL_ALIAS[name.toLowerCase()] as FocusSlug | undefined;
   return key
-    ? benefitsFocusMap[key]?.label ?? name.toUpperCase()
+    ? (benefitsFocusMap[key]?.label ?? name.toUpperCase())
     : name.toUpperCase();
 }
 
 function genericApplyUrl(name: string): string | undefined {
-  const key = LABEL_ALIAS[name] as FocusSlug | undefined;
+  const key = LABEL_ALIAS[name.toLowerCase()] as FocusSlug | undefined;
   const obj = key ? benefitsFocusMap[key] : undefined;
   return obj?.apply || obj?.learnMore;
 }
@@ -111,7 +126,7 @@ function isRecord(v: unknown): v is Record<string, unknown> {
 }
 function getStringField(
   obj: Record<string, unknown> | undefined,
-  key: string
+  key: string,
 ): string | null {
   if (!obj) return null;
   const v = obj[key];
@@ -142,7 +157,7 @@ function isHtmlBlock(x: unknown): x is { html: string } {
 function normalizeFaqs(faqs: unknown): readonly QAItem[] | null {
   if (!Array.isArray(faqs)) return null;
   const filtered = faqs.filter(
-    (item) => isTupleQA(item) || isHtmlPair(item) || isHtmlBlock(item)
+    (item) => isTupleQA(item) || isHtmlPair(item) || isHtmlBlock(item),
   ) as QAItem[];
   return filtered.length ? filtered : null;
 }
@@ -169,8 +184,8 @@ export function ResourceLink({
   const tokenize = (s: string) =>
     s.replaceAll("<City/>", cityName).replaceAll("<State/>", stateName);
 
-  const lr: LocalResource | undefined = v?.localResources?.[name];
-  const rs: LegacyResource | undefined = v?.resources?.[name];
+  const lr: LocalResource | undefined = ciGet(v?.localResources, name);
+  const rs: LegacyResource | undefined = ciGet(v?.resources, name);
 
   // FAQs
   if (field === "faqs") {
@@ -220,7 +235,7 @@ export function ResourceLink({
   if (field && field !== "faqs") {
     const fromLr = getStringField(
       lr as Record<string, unknown> | undefined,
-      field
+      field,
     );
     const fromRs = getStringField(rs, field);
     const raw = fromLr ?? fromRs;
@@ -230,8 +245,8 @@ export function ResourceLink({
       isPhoneLike(raw) || field.toLowerCase().includes("phone")
         ? `tel:${raw.replace(/[^\d\+]/g, "")}`
         : isEmailLike(raw) || field.toLowerCase().includes("email")
-        ? `mailto:${raw}`
-        : raw;
+          ? `mailto:${raw}`
+          : raw;
 
     const label = children ?? defaultLabelFor(name);
     const isExternal = isHttpUrl(href);
@@ -261,8 +276,8 @@ export function ResourceLink({
   const href = isPhoneLike(primary)
     ? `tel:${primary.replace(/[^\d\+]/g, "")}`
     : isEmailLike(primary)
-    ? `mailto:${primary}`
-    : primary;
+      ? `mailto:${primary}`
+      : primary;
 
   const label = children ?? defaultLabelFor(name);
   const isExternal = isHttpUrl(href);
