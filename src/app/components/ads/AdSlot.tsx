@@ -1,7 +1,16 @@
 // components/ads/AdSlot.tsx
+// Disabled until AdSense is approved — returns nothing so no empty space is rendered.
+// Uncomment the full implementation below once ads are live.
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function AdSlot({ slot }: { slot: string }) {
+  return null;
+}
+
+/*
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -12,14 +21,13 @@ declare global {
 export default function AdSlot({ slot }: { slot: string }) {
   const adRef = useRef<HTMLModElement>(null);
   const isInitialized = useRef(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    // Prevent double initialization in development (React StrictMode)
     if (isInitialized.current) return;
 
     try {
       if (typeof window !== "undefined" && adRef.current) {
-        // Check if this specific ad slot already has content
         if (adRef.current.innerHTML.trim() !== "") {
           return;
         }
@@ -29,7 +37,6 @@ export default function AdSlot({ slot }: { slot: string }) {
         isInitialized.current = true;
       }
     } catch (e) {
-      // Suppress duplicate ad errors in development
       if (
         e instanceof Error &&
         !e.message.includes("already have ads in them")
@@ -38,6 +45,28 @@ export default function AdSlot({ slot }: { slot: string }) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    const el = adRef.current;
+    if (!el) return;
+
+    const check = () => {
+      const status = el.getAttribute("data-ad-status");
+      if (status === "unfilled") setHidden(true);
+    };
+
+    check();
+
+    const observer = new MutationObserver(check);
+    observer.observe(el, {
+      attributes: true,
+      attributeFilter: ["data-ad-status"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  if (hidden) return null;
 
   return (
     <ins
@@ -51,3 +80,4 @@ export default function AdSlot({ slot }: { slot: string }) {
     />
   );
 }
+*/
